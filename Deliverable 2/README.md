@@ -13,5 +13,5 @@ The report structure is as follows:
 >> ##### 1.2 Irving Arnold
 
 > ### 2. User Stories
->> ##### 2.1 Adiministrator
+>> ##### 2.1 Administrator
 >> ##### 2.2 User
