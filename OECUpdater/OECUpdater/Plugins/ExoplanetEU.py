@@ -5,7 +5,7 @@ from System.IO import Directory, Path
 sys.path.append(Directory.GetCurrentDirectory())
 clr.AddReferenceToFile('OECLib.dll')
 
-from OECLib.WebRequests import WebRequest
+from OECLib.HTTPRequests import HTTPRequest
 
 def Initialize():
 	return
@@ -17,6 +17,6 @@ def GetDescription():
 	return "This plugin allows the extraction of data from the exoplanet.eu database"
 
 def Run():
-	webRequest = WebRequest()
-	print webRequest.MakeRequest()
+	webRequest = HTTPRequest()
+	print webRequest.RequestAsString("www.google.ca")
 	print "{0}: {1}".format(GetName(), GetDescription())

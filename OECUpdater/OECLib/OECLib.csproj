@@ -34,12 +34,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
-    <Compile Include="WebRequests\WebRequest.cs" />
+    <Compile Include="HTTPRequests\HTTPRequests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Plugins\" />
-    <Folder Include="WebRequests\" />
+    <Folder Include="HTTPRequests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
