@@ -16,13 +16,8 @@ namespace OECLib.HTTPRequests
 			return client.DownloadString (URL);
 		}
 
-		public bool DownloadFile (string URL, string filename) {
-			try {
-				client.DownloadFile (URL, filename);
-				return true;
-			} catch (WebException e) {
-				return false;
-			}
+		public void DownloadFile (string URL, string filename) {
+			client.DownloadFile (URL, filename);
 		}
 
 	}
