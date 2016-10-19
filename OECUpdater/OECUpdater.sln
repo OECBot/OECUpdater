@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OECUpdater", "OECUpdater\OECUpdater.csproj", "{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OECLib", "OECLib\OECLib.csproj", "{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OECGUI", "OECGUI\OECGUI.csproj", "{40D286BB-888A-4695-ADD3-3667CAC31440}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NASAExoplanetPlugin", "NASAExoplanetPlugin\NASAExoplanetPlugin.csproj", "{E4D58EFE-34ED-41F8-B6FC-8F0EB66A48FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExoplanetEU", "ExoplanetEU\ExoplanetEU.csproj", "{D961E3EF-579B-4905-8FE1-531E53E02B41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40D286BB-888A-4695-ADD3-3667CAC31440}.Debug|x86.ActiveCfg = Debug|x86
+		{40D286BB-888A-4695-ADD3-3667CAC31440}.Debug|x86.Build.0 = Debug|x86
+		{40D286BB-888A-4695-ADD3-3667CAC31440}.Release|x86.ActiveCfg = Release|x86
+		{40D286BB-888A-4695-ADD3-3667CAC31440}.Release|x86.Build.0 = Release|x86
+		{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}.Debug|x86.Build.0 = Debug|Any CPU
+		{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}.Release|x86.Build.0 = Release|Any CPU
+		{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}.Debug|x86.ActiveCfg = Debug|x86
+		{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}.Debug|x86.Build.0 = Debug|x86
+		{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}.Release|x86.ActiveCfg = Release|x86
+		{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}.Release|x86.Build.0 = Release|x86
+		{D961E3EF-579B-4905-8FE1-531E53E02B41}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D961E3EF-579B-4905-8FE1-531E53E02B41}.Debug|x86.Build.0 = Debug|Any CPU
+		{D961E3EF-579B-4905-8FE1-531E53E02B41}.Release|x86.ActiveCfg = Release|Any CPU
+		{D961E3EF-579B-4905-8FE1-531E53E02B41}.Release|x86.Build.0 = Release|Any CPU
+		{E4D58EFE-34ED-41F8-B6FC-8F0EB66A48FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4D58EFE-34ED-41F8-B6FC-8F0EB66A48FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4D58EFE-34ED-41F8-B6FC-8F0EB66A48FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4D58EFE-34ED-41F8-B6FC-8F0EB66A48FD}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

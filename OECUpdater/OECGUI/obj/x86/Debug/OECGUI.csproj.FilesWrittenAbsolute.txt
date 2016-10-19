@@ -1,0 +1,9 @@
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/obj/x86/Debug/OECGUI.gtk-gui.gui.stetic
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/bin/Debug/OECGUI.exe.mdb
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/bin/Debug/OECGUI.exe
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/obj/x86/Debug/OECGUI.exe
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/obj/x86/Debug/OECGUI.exe.mdb
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/bin/Debug/OECUpdater.exe
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/bin/Debug/OECUpdater.exe.mdb
+/home/mike/Documents/CSCC01/OECUpdater/OECGUI/bin/Debug/Plugins/ExoplanetEU.py
