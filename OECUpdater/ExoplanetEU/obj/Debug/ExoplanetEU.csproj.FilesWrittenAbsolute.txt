@@ -1,7 +1,0 @@
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/bin/Debug/ExoplanetEU.dll.mdb
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/bin/Debug/ExoplanetEU.dll
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/obj/Debug/ExoplanetEU.dll
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/obj/Debug/ExoplanetEU.dll.mdb
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/bin/Debug/OECLib.dll
-/home/mike/Documents/CSCC01/OECUpdater/ExoplanetEU/bin/Debug/OECLib.dll.mdb
