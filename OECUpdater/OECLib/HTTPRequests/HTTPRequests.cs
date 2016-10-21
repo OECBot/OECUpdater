@@ -5,6 +5,9 @@ using System.Net;
 
 namespace OECLib.HTTPRequests
 {
+	/// <summary>
+	/// HTTP request.
+	/// </summary>
 	public class HTTPRequest
 	{
 		WebClient client;
@@ -20,23 +23,16 @@ namespace OECLib.HTTPRequests
 		{
 			string result = "";
 
-			//add the protocol to the start of our URL if it doesn't contain it
-			if (!HttpsByDefault && !URL.StartsWith ("http://")) {
-				URL = "http://" + URL;
-			} else if (!URL.StartsWith ("https://")) {
-				URL = "https://" + URL;
-			}
+			string newUrl = AppendHTTPToURL (URL, HttpsByDefault);
 
 			//create a new webclient for the request
 			using (client = new WebClient ()) {
 				//add headers if specified
-				if(headers != null) {
-					foreach (string header in headers) {
-						client.Headers.Add (header);
-					}
+				if (headers != null) {
+					AddHeadersToRequest (client, headers);
 				}
 
-				result = client.DownloadString (URL);
+				result = client.DownloadString (newUrl);
 
 			}
 			return result;
@@ -53,21 +49,15 @@ namespace OECLib.HTTPRequests
 		public void DownloadFile (string URL, string filename, 
 			List<string> headers, bool HttpsByDefault=false) {
 
-			if (!HttpsByDefault && !URL.StartsWith ("http://")) {
-				URL = "http://" + URL;
-			} else if (!URL.StartsWith ("https://")) {
-				URL = "https://" + URL;
-			}
+			string newUrl = AppendHTTPToURL (URL, HttpsByDefault);
 
 			using (client = new WebClient ()) {
 				//add headers if specified
 				if (headers != null) {
-					foreach (string header in headers) {
-						client.Headers.Add (header);
-					}
+					AddHeadersToRequest (client, headers);
 				}
 
-				client.DownloadFile (URL, filename);
+				client.DownloadFile (newUrl, filename);
 			}
 		}
 
@@ -83,22 +73,48 @@ namespace OECLib.HTTPRequests
 		public async Task DownloadFileAsync (string URL, string filename, 
 			List<string> headers, bool HttpsByDefault=false) {
 
-			if (!HttpsByDefault && !URL.StartsWith ("http://")) {
-				URL = "http://" + URL;
-			} else if (!URL.StartsWith ("https://")) {
-				URL = "https://" + URL;
-			}
+			string newUrl = AppendHTTPToURL (URL, HttpsByDefault);
 
 			using (client = new WebClient ()) {
 				//add headers if specified
 				if (headers != null) {
-					foreach (string header in headers) {
-						client.Headers.Add (header);
-					}
+					AddHeadersToRequest (client, headers);
 				}
-
-				return client.DownloadFileTaskAsync (URL, filename);
+				return client.DownloadFileTaskAsync (newUrl, filename);
 			}
+		}
+
+		/// <summary>
+		/// Adds headers to the request.
+		/// </summary>
+		/// <param name="client">The web client instance.</param>
+		/// <param name="headers">The list of headers to add to the request.</param>
+		void AddHeadersToRequest(WebClient client, List<string> headers){
+			foreach (string header in headers) {
+				client.Headers.Add (header);	
+			}
+		}
+
+		/// <summary>
+		/// Appends the HTTP text to URL if the given string doesn't already contain it.
+		/// </summary>
+		/// <returns>The new URL with the http text added or the original URL if it was already there.</returns>
+		/// <param name="URL">The specified URL</param>
+		/// <param name="HttpsByDefault">If true, append HTTPS. If false, append HTTP. False by default.</param>
+		string AppendHTTPToURL(string URL, bool HttpsByDefault=false) {
+			string newUrl;
+			bool startsWithHeader = URL.StartsWith ("http://") || !URL.StartsWith ("https://");
+
+			if (startsWithHeader) {
+				if (!HttpsByDefault) {
+					newUrl = "http://" + URL;
+				} else {
+					newUrl = "https://" + URL;
+				}
+				return newUrl;
+			}
+
+			return URL;
 		}
 
 	}
