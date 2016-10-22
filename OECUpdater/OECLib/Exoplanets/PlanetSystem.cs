@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OECLib.Exoplanets
 {
-    class PlanetSystem
+    public class PlanetSystem
     {
     }
 }

@@ -23,6 +23,11 @@ namespace ExoplanetEU
 			return "This plugin allows the extraction of data from the exoplanet.eu database";
 		}
 
+		public String GetAuthor()
+		{
+			return "Spazio";
+		}
+
 		public Planet Run()
 		{
             return null;
