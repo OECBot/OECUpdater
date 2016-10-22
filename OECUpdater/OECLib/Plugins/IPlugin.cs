@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OECLib.Exoplanets;
+using System;
 
 namespace OECLib.Plugins
 {
@@ -8,9 +9,11 @@ namespace OECLib.Plugins
 
 		String GetDescription();
 
+        String GetAuthor();
+
 		void Initialize();
 
-		void Run();
+		Planet Run();
 	}
 }
 
