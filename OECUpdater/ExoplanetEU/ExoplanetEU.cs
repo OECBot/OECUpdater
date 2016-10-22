@@ -2,6 +2,7 @@
 using System.Xml;
 
 using OECLib.Plugins;
+using OECLib.Exoplanets;
 
 namespace ExoplanetEU
 {
@@ -22,9 +23,9 @@ namespace ExoplanetEU
 			return "This plugin allows the extraction of data from the exoplanet.eu database";
 		}
 
-		public void Run()
+		public Planet Run()
 		{
-			Console.WriteLine("{0}: {1}", GetName(), GetDescription());
+            return null;
 		}
 	}
 }
