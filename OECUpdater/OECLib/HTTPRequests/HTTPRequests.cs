@@ -70,6 +70,8 @@ namespace OECLib.HTTPRequests
 		/// <param name="filename">The name to save the file under.</param>
 		/// <param name="headers">Any HTTP headers the request should include. Okay to pass null.</param>
 		/// <param name="HttpsByDefault">If true, send request through HTTPS. If false, send through HTTP. False by default.</param>
+        ///
+        /*
 		public async Task DownloadFileAsync (string URL, string filename, 
 			List<string> headers, bool HttpsByDefault=false) {
 
@@ -83,6 +85,7 @@ namespace OECLib.HTTPRequests
 				return client.DownloadFileTaskAsync (newUrl, filename);
 			}
 		}
+        */
 		
 		/// <summary>
 		/// Adds headers to the request.
