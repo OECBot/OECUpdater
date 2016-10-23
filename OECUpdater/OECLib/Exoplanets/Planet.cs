@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace OECLib.Exoplanets
 {
@@ -18,12 +19,14 @@ namespace OECLib.Exoplanets
         public UnitError eccentricity { get; set; }
         public UnitError periastron { get; set; }
         public UnitError periastronTime { get; set; }
+        public String description { get; set; }
         public String discoveryMethod { get; set; }
         public String lastUpdate { get; set; }
-        public String discovery { get; set; }
+        public String discoveryYear { get; set; }
 
-        public Planet(List<String> names, UnitError mass, UnitError period, UnitError semimajoraxis, UnitError eccentricity,
-            UnitError periastron, UnitError periastrontime, String discoverymethod, String lastupdate, String discovery)
+        public Planet(List<String> names, UnitError mass, UnitError period, UnitError semimajoraxis,
+            UnitError eccentricity, UnitError periastron, UnitError periastronTime, String description,
+            String discoverymethod, String lastupdate, String discoveryYear)
         {
             this.names = names;
             this.mass = mass;
@@ -32,19 +35,34 @@ namespace OECLib.Exoplanets
             this.eccentricity = eccentricity;
             this.periastron = periastron;
             this.periastronTime = periastronTime;
+            this.description = description;
             this.discoveryMethod = discoverymethod;
             this.lastUpdate = lastupdate;
-            this.discovery = discovery;
+            this.discoveryYear = discoveryYear;
         }
 
-        public String toString()
-        {
-            return String.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}", names, mass, period, semiMajorAxis, eccentricity, periastron, periastronTime, discoveryMethod, lastUpdate, discovery);
-        }
 
         public void Write(XmlWriter w)
         {
+            w.WriteStartElement("planet");
 
+            foreach (var name in names)
+            {
+                w.WriteElementString("name", name);
+            }
+
+            mass.Write(w);
+            period.Write(w);
+            semiMajorAxis.Write(w);
+            eccentricity.Write(w);
+            periastron.Write(w);
+            periastronTime.Write(w);
+            w.WriteElementString("description", description);
+            w.WriteElementString("discovermethod", discoveryMethod);
+            w.WriteElementString("lastupdate", lastUpdate);
+            w.WriteElementString("discoveryear", discoveryYear);
+
+            w.WriteEndElement();
         }
     }
 }

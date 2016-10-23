@@ -29,7 +29,7 @@ namespace ExoplanetEU
 			return "Spazio";
 		}
 
-		public List<Planet> Run()
+		public Planet Run()
 		{
             return null;
 		}

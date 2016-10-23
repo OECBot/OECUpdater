@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="Exoplanets\Planet.cs" />
     <Compile Include="Exoplanets\PlanetSystem.cs" />
+    <Compile Include="Exoplanets\Star.cs" />
     <Compile Include="Exoplanets\Units\UnitError.cs" />
     <Compile Include="Interface\XMLWritable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
