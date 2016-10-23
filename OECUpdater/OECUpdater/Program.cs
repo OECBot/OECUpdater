@@ -53,7 +53,7 @@ namespace OECUpdater
             // Planet info
             List<String> p1Names = new List<string>();
             p1Names.Add("11 Com b");
-            UnitError p1Mass = new UnitError("mass", "19.4", "1.5", "1.5");
+            UnitError p1Mass = new UnitError("mass", "19.4", "1.5", "1.5", "msini");
             UnitError p1Period = new UnitError("perios", "326.03", "0.32", "0.32");
             UnitError p1Semimajor = new UnitError("semimajoraxis", "1.29", "0.05", "0.05");
             UnitError p1Ecc = new UnitError("eccentricity", "0.231", "0.05", "0.05");

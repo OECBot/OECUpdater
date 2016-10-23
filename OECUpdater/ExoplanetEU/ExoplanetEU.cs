@@ -53,9 +53,10 @@ namespace ExoplanetEU
                 List<String> names = new List<String>();
                 names.Add(fields[0]);
                 String[] altNames = fields[63].Split(',');
-                for (int i = 0; i < altNames.Length; i++)
+
+                foreach (String name in altNames)
                 {
-                    names.Add(altNames[i]);
+                    names.Add(name);
                 }
 
                 UnitError mass = new UnitError("mass", (fields[1]), (fields[2]), (fields[3]));
