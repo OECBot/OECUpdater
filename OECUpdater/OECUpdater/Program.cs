@@ -20,10 +20,12 @@ namespace OECUpdater
             XmlWriterSettings ws = new XmlWriterSettings();
             ws.Indent = true;
             ws.OmitXmlDeclaration = true;
-            XmlWriter xw = XmlWriter.Create(output, ws);
             UnitError test = new UnitError("test", 12.3, 0.4, 0.4);
-            test.Write(xw);
-            xw.Flush();
+            using (XmlWriter xw = XmlWriter.Create(output, ws))
+            {
+                test.Write(xw);
+                xw.Flush();
+            }
             Console.WriteLine(output.ToString());
             Console.ReadKey();
 		}
