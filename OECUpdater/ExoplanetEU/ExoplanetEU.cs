@@ -3,6 +3,7 @@ using System.Xml;
 
 using OECLib.Plugins;
 using OECLib.Exoplanets;
+using System.Collections.Generic;
 
 namespace ExoplanetEU
 {
@@ -28,7 +29,7 @@ namespace ExoplanetEU
 			return "Spazio";
 		}
 
-		public Planet Run()
+		public List<Planet> Run()
 		{
             return null;
 		}

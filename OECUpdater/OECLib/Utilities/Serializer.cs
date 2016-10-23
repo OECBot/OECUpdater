@@ -47,7 +47,7 @@ namespace OECLib.Utilities
             }
         }
 
-        public static void AttachPlugin(Type type)
+        private static void AttachPlugin(Type type)
         {
             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
             string name = plugin.GetName();
