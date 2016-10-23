@@ -1,13 +1,15 @@
 ﻿using OECLib.Exoplanets.Units;
+using OECLib.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace OECLib.Exoplanets
 {
-    public class Planet
+    public class Planet : XMLWritable
     {
         public List<String> names { get; set; }
         public UnitError mass { get; set; }
@@ -38,6 +40,11 @@ namespace OECLib.Exoplanets
         public String toString()
         {
             return String.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}", names, mass, period, semiMajorAxis, eccentricity, periastron, periastronTime, discoveryMethod, lastUpdate, discovery);
+        }
+
+        public void Write(XmlWriter w)
+        {
+
         }
     }
 }
