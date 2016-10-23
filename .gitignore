@@ -1,0 +1,4 @@
+*.cache
+*.exe
+*.manifest
+*Temp*.cs
