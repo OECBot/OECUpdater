@@ -2,3 +2,7 @@
 *.exe
 *.manifest
 *Temp*.cs
+*.dll
+*.pdb
+*.txt
+*.cache

@@ -23,7 +23,7 @@ namespace OECLib.HTTPRequests
 		{
 			string result = "";
 
-			string newUrl = AppendHTTPToURL (URL, HttpsByDefault);
+			string newUrl = URL;
 
 			//create a new webclient for the request
 			using (client = new WebClient ()) {

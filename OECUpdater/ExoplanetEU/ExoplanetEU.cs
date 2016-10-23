@@ -69,7 +69,7 @@ namespace ExoplanetEU
                 String lastUpdate = String.Format("{0}/{1}/{2}", time[0].Substring(2, 2), time[1], time[2]);
                 String discovery = fields[23];
 
-                Planet newPlanet = new Planet(names, mass, period, semiMajorAxis, eccentricity, periastron, periastronTime, detectionMethod, lastUpdate, discovery);
+                Planet newPlanet = new Planet(names, mass, period, semiMajorAxis, eccentricity, periastron, periastronTime, "", detectionMethod, lastUpdate, discovery);
                 planets.Add(newPlanet);
 
             }

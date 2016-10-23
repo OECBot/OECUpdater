@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Windows.Forms;
 
 namespace OECLib.Utilities
 {
@@ -14,9 +15,9 @@ namespace OECLib.Utilities
     {
         public static Dictionary<String, IPlugin> plugins = new Dictionary<String, IPlugin>();
 
-        public static void InitPlugins(String appPath)
+        public static void InitPlugins()
         {
-            string[] files = Directory.GetFiles(appPath + "/Plugins/", "*.dll", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(Application.StartupPath + "/Plugins/", "*.dll", SearchOption.AllDirectories);
             for (int i = 0; i < files.Length; i++)
             {
                 string fname = files[i];
