@@ -1,5 +1,6 @@
 ﻿using OECLib.Exoplanets;
 using System;
+using System.Collections.Generic;
 
 namespace OECLib.Plugins
 {
@@ -13,7 +14,7 @@ namespace OECLib.Plugins
 
 		void Initialize();
 
-		Planet Run();
+		List<Planet> Run();
 	}
 }
 
