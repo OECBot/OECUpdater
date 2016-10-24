@@ -13,14 +13,22 @@ namespace OECUpdater
 {
 	class MainClass
 	{
-		public static void Main (string[] args)
+        private static readonly String[] pluginNames = new String[1] {"Exoplanet.EU"};
+
+        public static void Main (string[] args)
 		{
             /*
 			var ipy = Python.CreateRuntime();
 			dynamic test = ipy.UseFile("Plugins/ExoplanetEU.py");
 			test.Run();
              * */
-            
+
+            XMLDemo();
+            runPlugins();
+        }
+
+        private static void XMLDemo()
+        {
             StringBuilder output = new StringBuilder();
             XmlWriterSettings ws = new XmlWriterSettings();
             ws.Indent = true;
@@ -77,6 +85,37 @@ namespace OECUpdater
             }
             Console.WriteLine(output.ToString());
             Console.ReadKey();
+        }
+
+        private static void runPlugins()
+        {
+            Serializer.InitPlugins();
+
+            // Run each plugin
+            foreach (var pluginName in pluginNames)
+            {
+                // Retrieve the list of planets that have been most recently updated
+                List<Planet> planets = Serializer.plugins[pluginName].Run();
+                Console.WriteLine("Running " + pluginName + " plugin");
+                Console.ReadKey();
+
+                // Demo showing each planet that has been updated since 09/01/2016
+                //foreach (var planet in planets)
+                //{
+                //    StringBuilder output = new StringBuilder();
+                //    XmlWriterSettings ws = new XmlWriterSettings();
+                //    ws.Indent = true;
+                //    ws.OmitXmlDeclaration = true;
+
+                //    using (XmlWriter xw = XmlWriter.Create(output, ws))
+                //    {
+                //        planet.Write(xw);
+                //        xw.Flush();
+                //    }
+                //    Console.WriteLine(output.ToString());
+                //    Console.ReadKey();
+                //}
+            }
         }
 	}
 }

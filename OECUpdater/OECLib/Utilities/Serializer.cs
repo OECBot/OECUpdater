@@ -22,7 +22,7 @@ namespace OECLib.Utilities
             {
                 string fname = files[i];
                 Assembly assembly = Assembly.LoadFrom(fname);
-                Console.WriteLine(fname);
+                //Console.WriteLine(fname);
                 Type[] types = assembly.GetTypes();
                 for (int j = 0; j < types.Length; j++)
                 {
