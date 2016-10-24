@@ -10,15 +10,17 @@ namespace OECLib.Exoplanets.Units
 {
     public class UnitError : XMLWritable
     {
-        public String value {get; set;}
-        public string name { get; set; }
-        public String errorPlus {get; set;}
-        public String errorMinus { get; set; }
+        public Double value { get; set;}
+        public String type { get; set; }
+        public String name { get; set; }
+        public Double errorPlus {get; set;}
+        public Double errorMinus { get; set; }
 
-        public UnitError(string name, String value, String errorplus, String errorminus)
+        public UnitError(String name, Double value, Double errorplus=0.0, Double errorminus=0.0, String type="")
         {
             this.name = name;
             this.value = value;
+            this.type = type;
             this.errorPlus = errorplus;
             this.errorMinus = errorminus;
         }
@@ -31,9 +33,19 @@ namespace OECLib.Exoplanets.Units
         public void Write(XmlWriter w)
         {
             w.WriteStartElement(name);
-            w.WriteAttributeString("errorminus", errorMinus);
-            w.WriteAttributeString("errorplus", errorPlus);
-            w.WriteString(value);
+            if (errorMinus != 0.0)
+            {
+                w.WriteAttributeString("errorminus", errorMinus.ToString());
+            }
+            if (errorPlus != 0.0)
+            {
+                w.WriteAttributeString("errorplus", errorPlus.ToString());
+            }
+            if (type != "")
+            {
+                w.WriteAttributeString("type", type);
+            }
+            w.WriteString(value.ToString());
             w.WriteEndElement();
         }
     }

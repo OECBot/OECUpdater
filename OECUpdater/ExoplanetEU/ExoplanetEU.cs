@@ -53,17 +53,18 @@ namespace ExoplanetEU
                 List<String> names = new List<String>();
                 names.Add(fields[0]);
                 String[] altNames = fields[63].Split(',');
-                for (int i = 0; i < altNames.Length; i++)
+
+                foreach (String name in altNames)
                 {
-                    names.Add(altNames[i]);
+                    names.Add(name);
                 }
 
-                UnitError mass = new UnitError("mass", (fields[1]), (fields[2]), (fields[3]));
-                UnitError period = new UnitError("period", (fields[10]), (fields[11]), (fields[12]));
-                UnitError semiMajorAxis = new UnitError("semimajoraxis", (fields[13]), (fields[14]), (fields[15]));
-                UnitError eccentricity = new UnitError("eccentricity", (fields[16]), (fields[17]), (fields[18]));
-                UnitError periastron = new UnitError("periastron", (fields[25]), (fields[26]), (fields[27]));
-                UnitError periastronTime = new UnitError("periastrontime", (fields[28]), (fields[29]), (fields[29]));
+                UnitError mass = new UnitError("mass", parseDouble(fields[1]), parseDouble(fields[2]), parseDouble(fields[3]));
+                UnitError period = new UnitError("period", parseDouble(fields[10]), parseDouble(fields[11]), parseDouble(fields[12]));
+                UnitError semiMajorAxis = new UnitError("semimajoraxis", parseDouble(fields[13]), parseDouble(fields[14]), parseDouble(fields[15]));
+                UnitError eccentricity = new UnitError("eccentricity", parseDouble(fields[16]), parseDouble(fields[17]), parseDouble(fields[18]));
+                UnitError periastron = new UnitError("periastron", parseDouble(fields[25]), parseDouble(fields[26]), parseDouble(fields[27]));
+                UnitError periastronTime = new UnitError("periastrontime", parseDouble(fields[28]), parseDouble(fields[29]), parseDouble(fields[29]));
                 String detectionMethod = fields[60] == "Radial Velocity" ? "RV" : "IDK";
                 String[] time = fields[24].Split('-');
                 String lastUpdate = String.Format("{0}/{1}/{2}", time[0].Substring(2, 2), time[1], time[2]);
@@ -76,6 +77,11 @@ namespace ExoplanetEU
             }
             return planets;
 		}
+
+        private Double parseDouble(String value)
+        {
+            return value == "" ? 0.0 : Double.Parse(value);
+        }
 	}
 }
 
