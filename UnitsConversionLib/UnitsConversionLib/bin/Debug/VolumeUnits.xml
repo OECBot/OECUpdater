@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UnitTable>
+  <Units>
+    <Unit code="1" name="Liter" symbol="l" plural="PCelcius"/>
+    <Unit code="2" name="USGallon" symbol="gallon (US)" plural="PUSGallon"/>
+  </Units>
+  <Conversions>
+    <Linear srcCode="1" destCode="2" deltha="0.264172"/>
+  </Conversions>
+</UnitTable>
