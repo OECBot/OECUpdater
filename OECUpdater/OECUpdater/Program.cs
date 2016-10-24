@@ -24,7 +24,7 @@ namespace OECUpdater
              * */
 
             XMLDemo();
-            runPlugins();
+            runLoop(new TimeSpan(23, 59, 59), TimeSpan.FromHours(24));
         }
 
         private static void XMLDemo()
@@ -84,9 +84,33 @@ namespace OECUpdater
                 xw.Flush();
             }
             Console.WriteLine(output.ToString());
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
+        /// <summary>
+		/// Runs all plugins at the specified time interval.
+		/// </summary>
+        /// <param name="startTime">The time when the timer will begin</param>
+		/// <param name="interval">The periodic length of time, after the initial startTime, that the plugins will run.</param>
+        private static void runLoop(TimeSpan startTime, TimeSpan interval)
+        {
+            TimeSpan current = DateTime.Now.TimeOfDay;
+            TimeSpan difference = startTime - current;
+
+            var timer = new System.Threading.Timer((e) => { runPlugins();}, null,
+                Convert.ToInt32(difference.TotalMilliseconds), 
+                Convert.ToInt32(interval.TotalMilliseconds));
+
+            while (true)
+            {
+
+            }
+            
+        }
+
+        /// <summary>
+		/// Run all of the plugins.
+		/// </summary>
         private static void runPlugins()
         {
             Serializer.InitPlugins();
