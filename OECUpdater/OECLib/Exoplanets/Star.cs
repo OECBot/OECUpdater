@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using OECLib.Exoplanets.Units;
 using OECLib.Interface;
 using System.Xml;
+using System.Collections;
 
 namespace OECLib.Exoplanets
 {
@@ -28,7 +29,27 @@ namespace OECLib.Exoplanets
 
         public void addElement(UnitError element)
         {
-            elements.Add(element.name, element);
+            if (elements.ContainsKey(element.name)){
+                // Check to see if there is already a list created with the new elements name
+                if (elements[element.name].value is IList<object>)
+                {
+                    IList collection = (IList)elements[element.name].value;
+                    collection.Add(element.value);
+                }
+                // Create a list if there are multiple elements which have the same name.
+                // For example a star with multiple names. 
+                else
+                {
+                    List<object> allElements = new List<object>();
+                    allElements.Add(elements[element.name].value);
+                    allElements.Add(element.value);
+                    elements[element.name].value = allElements;
+                }
+            }
+            else
+            {
+                elements.Add(element.name, element);
+            }
         }
 
 

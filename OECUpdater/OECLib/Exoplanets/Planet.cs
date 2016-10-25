@@ -12,10 +12,10 @@ namespace OECLib.Exoplanets
 {
     public class Planet : XMLWritable
     {
-        string[] order = { "name", "mass", "period", "semimajoraxis", "eccentricity",
+        public string[] order = { "name", "mass", "period", "semimajoraxis", "eccentricity",
             "periastron", "periastrontime", "description", "discovermethod", "lastupdate",
             "discoveryear"};
-        Dictionary<String, UnitError> elements;
+        public Dictionary<String, UnitError> elements;
 
 
         public Planet()
