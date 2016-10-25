@@ -17,11 +17,12 @@ namespace OECLib.Exoplanets
     public class PlanetSystem : XMLWritable
     {
         string[] order = { "name", "rightascension", "declination", "distance"};
-        Dictionary<String, UnitError> elements;
+        public Dictionary<String, UnitError> elements;
         public List<Star> stars { get; set; }
 
         public PlanetSystem(List<Star> stars)
         {
+            this.elements = new Dictionary<string, UnitError>();
             this.stars = stars;
         }
 

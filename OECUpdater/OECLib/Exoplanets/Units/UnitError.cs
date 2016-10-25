@@ -1,5 +1,6 @@
 ﻿using OECLib.Interface;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,21 @@ namespace OECLib.Exoplanets.Units
 
         public void Write(XmlWriter w)
         {
+            if (value is IList<object>)
+            {
+                foreach (object val in (IList)value)
+                {
+                    WriteElement(w, val);
+                }
+            }
+            else
+            {
+                WriteElement(w, value);
+            }
+        }
+
+        private void WriteElement(XmlWriter w, object val)
+        {
             w.WriteStartElement(name);
             if (errorMinus != 0.0)
             {
@@ -45,7 +61,7 @@ namespace OECLib.Exoplanets.Units
             //{
             //    w.WriteAttributeString("type", type);
             //}
-            w.WriteString(value.ToString());
+            w.WriteString(val.ToString());
             w.WriteEndElement();
         }
     }
