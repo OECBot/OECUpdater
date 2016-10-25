@@ -12,33 +12,21 @@ namespace OECLib.Exoplanets
 {
     public class Planet : XMLWritable
     {
-        public List<String> names { get; set; }
-        public UnitError mass { get; set; }
-        public UnitError period { get; set; }
-        public UnitError semiMajorAxis { get; set; }
-        public UnitError eccentricity { get; set; }
-        public UnitError periastron { get; set; }
-        public UnitError periastronTime { get; set; }
-        public String description { get; set; }
-        public String discoveryMethod { get; set; }
-        public String lastUpdate { get; set; }
-        public String discoveryYear { get; set; }
+        string[] order = { "name", "mass", "period", "semimajoraxis", "eccentricity",
+            "periastron", "periastrontime", "description", "discovermethod", "lastupdate",
+            "discoveryear"};
+        Dictionary<String, UnitError> elements;
 
-        public Planet(List<String> names, UnitError mass, UnitError period, UnitError semimajoraxis,
-            UnitError eccentricity, UnitError periastron, UnitError periastronTime, String description,
-            String discoverymethod, String lastupdate, String discoveryYear)
+
+        public Planet()
         {
-            this.names = names;
-            this.mass = mass;
-            this.period = period;
-            this.semiMajorAxis = semimajoraxis;
-            this.eccentricity = eccentricity;
-            this.periastron = periastron;
-            this.periastronTime = periastronTime;
-            this.description = description;
-            this.discoveryMethod = discoverymethod;
-            this.lastUpdate = lastupdate;
-            this.discoveryYear = discoveryYear;
+            this.elements = new Dictionary<string, UnitError>();
+        }
+
+
+        public void addElement(UnitError element)
+        {
+            elements.Add(element.name, element);
         }
 
 
@@ -46,21 +34,13 @@ namespace OECLib.Exoplanets
         {
             w.WriteStartElement("planet");
 
-            foreach (var name in names)
+            foreach (string element in order)
             {
-                w.WriteElementString("name", name);
+                if (elements.ContainsKey(element))
+                {
+                    elements[element].Write(w);
+                }
             }
-
-            mass.Write(w);
-            period.Write(w);
-            semiMajorAxis.Write(w);
-            eccentricity.Write(w);
-            periastron.Write(w);
-            periastronTime.Write(w);
-            w.WriteElementString("description", description);
-            w.WriteElementString("discovermethod", discoveryMethod);
-            w.WriteElementString("lastupdate", lastUpdate);
-            w.WriteElementString("discoveryear", discoveryYear);
 
             w.WriteEndElement();
         }

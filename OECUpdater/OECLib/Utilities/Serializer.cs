@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
+using OECLib.Exoplanets;
+using System.Xml;
 
 namespace OECLib.Utilities
 {
@@ -55,5 +57,42 @@ namespace OECLib.Utilities
             plugin.Initialize();
             plugins.Add(name, plugin);
         }
+
+
+        //public static PlanetSystem loadSystemXML(String filePath)
+        //{
+        //    PlanetSystem planetSystem;
+
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.Load(filePath);
+        //    XmlNode root = doc.FirstChild;
+
+        //    //Display the contents of the child nodes.
+        //    if (root.HasChildNodes)
+        //    {
+        //        for (int i = 0; i < root.ChildNodes.Count; i++)
+        //        {
+        //            Console.WriteLine(i + "START: " + root.ChildNodes[i].Name + " :END");
+
+        //            if (root.ChildNodes[i].Name.Equals("star"))
+        //            {
+        //                for (int j = 0; j < root.ChildNodes[i].ChildNodes.Count; j++)
+        //                {
+        //                    Console.WriteLine(j + "START: " + root.ChildNodes[i].ChildNodes[j].Name);
+
+        //                    if (root.ChildNodes[i].Name.Equals("planet"))
+        //                    {
+        //                        for (int j = 0; j < root.ChildNodes[i].ChildNodes.Count; j++)
+        //                        {
+        //                            Console.WriteLine(j + "START: " + root.ChildNodes[i].ChildNodes[j].Name);
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return planetSystem;
+        //}
     }
 }
