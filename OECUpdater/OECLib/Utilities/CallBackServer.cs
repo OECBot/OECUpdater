@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Octokit;
+using OECLib.GitHub;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,55 +14,64 @@ namespace OECLib.Utilities
     {
 
         private TcpListener listener;
+        public String Code;
+        public Session session;
+        private GitHubClient GHClient;
 
-        public CallBackServer(String ip, int port)
+        public CallBackServer(String ip, int port, GitHubClient client)
         {
             listener = new TcpListener(IPAddress.Parse(ip), port);
             Console.WriteLine("Server listening at {0} : {1}", ip, port);
+            this.GHClient = client;
         }
 
-        public void Start()
+        public async Task<Session> Start()
         {
             listener.Start();
-            listener.BeginAcceptTcpClient(onAcceptConnection, null);
-        }
+            //listener.BeginAcceptTcpClient(onAcceptConnection, null);
 
-        private void onAcceptConnection(IAsyncResult asyn)
-        {
-            TcpClient client = listener.EndAcceptTcpClient(asyn);
-            Console.WriteLine("Client connected.");
-
-            byte[] rq = new byte[8192];
-            NetworkStream stream = client.GetStream();
-
-            stream.Read(rq, 0, 8192);
-
-            byte[] resp;
-
-            if (!Encoding.UTF8.GetString(rq).Split(' ')[1].Contains("callback"))
+            bool gotCode = false;
+            do
             {
-                resp = Encoding.UTF8.GetBytes("Hello There!");
+                TcpClient client = await listener.AcceptTcpClientAsync();
+                Console.WriteLine("Client connected.");
+
+                byte[] rq = new byte[8192];
+                NetworkStream stream = client.GetStream();
+
+                stream.Read(rq, 0, 8192);
+
+                byte[] resp;
+
+                if (!Encoding.UTF8.GetString(rq).Split(' ')[1].Contains("callback"))
+                {
+                    resp = Encoding.UTF8.GetBytes("Hello There!");
+                    client.GetStream().Write(resp, 0, resp.Length);
+                    client.GetStream().Flush();
+                    client.Close();
+                    Console.WriteLine("Non-Callback detected. Nulling request.");
+                    continue;
+                }
+
+                Code = Encoding.UTF8.GetString(rq).Split(' ')[1].Split('=')[1].Split('&')[0];
+
+                resp = Encoding.UTF8.GetBytes("Authorization successful. You can now close this web page.");
+
                 client.GetStream().Write(resp, 0, resp.Length);
                 client.GetStream().Flush();
+
+                Console.WriteLine("Response Sent");
+
+                Console.WriteLine("Obtained Token: {0}", Code);
+                Console.WriteLine("Terminating Client & Listener...");
                 client.Close();
-                Console.WriteLine("Non-Callback detected. Nulling request.");
-                listener.BeginAcceptTcpClient(onAcceptConnection, null);
-                return;
-            }
+                session = new Session(Code, GHClient);
+                await session.ObtainNewToken();
+                gotCode = true;
+            } while (!gotCode);
 
-            String code = Encoding.UTF8.GetString(rq).Split(' ')[1].Split('=')[1].Split('&')[0];
-
-            resp = Encoding.UTF8.GetBytes("Authorization successful. You can now close this web page.\n" + code);
-
-            client.GetStream().Write(resp, 0, resp.Length);
-            client.GetStream().Flush();
-
-            Console.WriteLine("Response Sent");
-
-            Console.WriteLine("Obtained Token: {0}", code);
-            Console.WriteLine("Terminating Client & Listener...");
-            client.Close();
-            listener.Stop();
+            return session;
         }
+
     }
 }

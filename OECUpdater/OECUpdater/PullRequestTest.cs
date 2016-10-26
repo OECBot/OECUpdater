@@ -8,26 +8,25 @@ using System.Web.Security;
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
+using OECLib.Utilities;
+using OECLib.GitHub;
 
 namespace OECUpdater
 {
     class PullRequestTest
     {
         public static TcpListener listener;
+        public static string localHost = "127.0.0.1";
+        public static int port = 4567;
 
         public static void Main(string[] args)
         {
-            Dictionary<string, string> Session = new Dictionary<string, string>();
-            string clientId = "8c533ca43cbfba2e2268";
-            string clientSecret = "fdfa25888fb0f815c248114fba5f7f26d834743f";
-            string localHost = "localhost";
-            int port = 4567;
-            
+                       
             GitHubClient g = new GitHubClient(new ProductHeaderValue("SpazioApp"));
             string csrf = Membership.GeneratePassword(24, 1);
-            Session["CSRF:State"] = csrf;
+            //Session["CSRF:State"] = csrf;
 
-            var request = new OauthLoginRequest(clientId)
+            var request = new OauthLoginRequest(Session.clientId)
             {
                 Scopes = { "user", "notifications" },
                 State = csrf,
@@ -36,14 +35,21 @@ namespace OECUpdater
             String oauthLoginUrl = g.Oauth.GetGitHubLoginUrl(request).ToString();
             System.Diagnostics.Process.Start(oauthLoginUrl);
             
-            listener = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
-            listener.Start();
-            
-            listener.BeginAcceptTcpClient(onAcceptConnection, null);
 
+            Authorize(g);
+            
             Console.ReadKey();
         }
 
+
+        public async static void Authorize(GitHubClient client)
+        {
+            CallBackServer server = new CallBackServer(localHost, port, client);
+            Session s = await server.Start();
+            Console.WriteLine(s.ToString());
+        }
+
+        /*
         private static void onAcceptConnection(IAsyncResult asyn)
         {
             TcpClient client = listener.EndAcceptTcpClient(asyn);
@@ -82,5 +88,6 @@ namespace OECUpdater
             //listener.BeginAcceptTcpClient(onAcceptConnection, null);
             listener.Stop();
         }
+         */
     }
 }
