@@ -18,6 +18,7 @@ namespace OECUpdater
         public static TcpListener listener;
         public static string localHost = "127.0.0.1";
         public static int port = 4567;
+        public static Session session;
 
         public static void Main(string[] args)
         {
@@ -28,7 +29,7 @@ namespace OECUpdater
 
             var request = new OauthLoginRequest(Session.clientId)
             {
-                Scopes = { "user", "notifications" },
+                Scopes = { "user", "notifications", "repo" },
                 State = csrf,
             };
 
@@ -37,6 +38,7 @@ namespace OECUpdater
             
 
             Authorize(g);
+
             
             Console.ReadKey();
         }
@@ -47,6 +49,45 @@ namespace OECUpdater
             CallBackServer server = new CallBackServer(localHost, port, client);
             Session s = await server.Start();
             Console.WriteLine(s.ToString());
+            PullRequest(s);
+
+        }
+
+        public async static void PullRequest(Session s) {
+            bool hasAccess = await CheckAccessAsync(s);
+            Console.WriteLine(hasAccess ? "You are a contributer of this repo!" : "You don't have access to this repo and cannot use this application!");
+            if (!hasAccess)
+            {
+                return;
+            }
+            var repo = await s.client.Repository.Get("Gazing", "RedditPostsSaver");
+            try
+            {
+                NewPullRequest newPullRequest = new NewPullRequest("Test123", "test", "master");
+                PullRequest pr = await s.client.PullRequest.Create(repo.Id, newPullRequest);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        public async static Task<bool> CheckAccessAsync(Session s)
+        {
+            ApiOptions options = new ApiOptions();
+            var repos = await s.client.Repository.GetAllContributors("Gazing", "RedditPostsSaver");
+            User cur = await s.client.User.Current();
+            int id = cur.Id;
+            foreach (RepositoryContributor person in repos)
+            {
+                if (id == person.Id)
+                {
+                    return true;
+                }
+                //Console.WriteLine("{0} : {1}", person.Id, id);
+            }
+            return false;
         }
 
         /*

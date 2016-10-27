@@ -12,12 +12,12 @@ namespace OECLib.GitHub
         public const String clientId = "8c533ca43cbfba2e2268";
         public const String clientSecret = "fdfa25888fb0f815c248114fba5f7f26d834743f";
 
-        private Dictionary<String, String> sessionDict = new Dictionary<string, string>();
+        private Dictionary<String, String> session = new Dictionary<string, string>();
 
         private OauthToken Token;
         private String Code;
 
-        public GitHubClient client;
+        public GitHubClient client { get; set; }
 
         public Session(String code, GitHubClient client)
         {
@@ -29,7 +29,8 @@ namespace OECLib.GitHub
         {
             var request = new OauthTokenRequest(clientId, clientSecret, Code);
             Token = await client.Oauth.CreateAccessToken(request);
-            Console.WriteLine(Token.AccessToken);
+            session["OAuthToken"] = Token.AccessToken;
+            client.Credentials = new Credentials(Token.AccessToken);
         }
 
         public override string ToString()
