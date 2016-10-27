@@ -9,6 +9,7 @@ using OECLib.Exoplanets;
 using OECLib.Utilities;
 using OECLib.Plugins;
 
+
 namespace OECUpdater
 {
 	class MainClass
@@ -23,7 +24,12 @@ namespace OECUpdater
 			test.Run();
              * */
 
+
             XMLDemo();
+
+            PlanetSystem loadedSystem = Serializer.LoadXMLFile("test.xml");
+            Console.WriteLine(loadedSystem.stars[0].planets[0].elements["semimajoraxis"].value);
+
             runLoop(new TimeSpan(23, 59, 59), TimeSpan.FromHours(24));
         }
 
@@ -61,22 +67,57 @@ namespace OECUpdater
             // Planet info
             List<String> p1Names = new List<string>();
             p1Names.Add("11 Com b");
-            UnitError p1Mass = new UnitError("mass", 19.4, 1.5, 1.5, "msini");
-            UnitError p1Period = new UnitError("perios", 326.03, 0.32, 0.32);
+            UnitError p1Mass = new UnitError("mass", 19.4, 1.5, 1.5);
+            UnitError p1Period = new UnitError("period", 326.03, 0.32, 0.32);
             UnitError p1Semimajor = new UnitError("semimajoraxis", 1.29, 0.05, 0.05);
             UnitError p1Ecc = new UnitError("eccentricity", 0.231, 0.05, 0.05);
             UnitError p1Per = new UnitError("periastron", 94.8, 1.5, 1.5);
             UnitError p1PerTime = new UnitError("periastrontime", 2452899.6, 1.6, 1.6);
 
+            //Creating Planet
             List<Planet> s1Planets = new List<Planet>();
-            Planet planet1 = new Planet(p1Names, p1Mass, p1Period, p1Semimajor, p1Ecc, p1Per, p1PerTime,
-                "11 Com b is a brown dwarf-mass companion to the intermediate-mass star 11 Comae Berenices.",
-                "RV", "15/09/20", "2008");
+            Planet planet1 = new Planet();
+            planet1.addElement(new UnitError("name", "11 Com b"));
+            planet1.addElement(p1Mass);
+            planet1.addElement(p1Period);
+            planet1.addElement(p1Semimajor);
+            planet1.addElement(p1Ecc);
+            planet1.addElement(p1Per);
+            planet1.addElement(p1PerTime);
+            planet1.addElement(new UnitError("description", "11 Com b is a brown dwarf-mass companion to the intermediate-mass star 11 Comae Berenices."));
+            planet1.addElement(new UnitError("discovermethod", "RV"));
+            planet1.addElement(new UnitError("lastupdate", "15/09/20"));
+            planet1.addElement(new UnitError("discoveryear", "2008"));
             s1Planets.Add(planet1);
 
+            List<Star> ps1Stars = new List<Star>();
+            Star star1 = new Star(s1Planets);
+            star1.addElement(new UnitError("name", "11 Com"));
+            star1.addElement(new UnitError("name", "11 Comae Berenices"));
+            star1.addElement(new UnitError("name", "HD 107383"));
+            star1.addElement(new UnitError("name", "HIP 60202"));
+            star1.addElement(new UnitError("name", "TYC 1445-2560-1"));
+            star1.addElement(new UnitError("name", "SAO 100053"));
+            star1.addElement(new UnitError("name", "HR 4697"));
+            star1.addElement(new UnitError("name", "BD+18 2592"));
+            star1.addElement(new UnitError("name", "2MASS J12204305+1747341"));
+            star1.addElement(mass1);
+            star1.addElement(radius1);
+            star1.addElement(new UnitError("magV", "4.74"));
+            star1.addElement(magB1);
+            star1.addElement(magJ1);
+            star1.addElement(magH1);
+            star1.addElement(magK1);
+            star1.addElement(temeprature1);
+            star1.addElement(metallicity1);
+            star1.addElement(new UnitError("spectraltype", "G8 III"));
+            ps1Stars.Add(star1);
 
-            Star star1 = new Star(names, mass1, radius1, 4.74f, magB1, magJ1, magH1, magK1, temeprature1, metallicity1, "G8 III", s1Planets);
-            PlanetSystem system1 = new PlanetSystem("11 Com", "12 20 43", "+17 47 34", distance1, star1);
+            PlanetSystem system1 = new PlanetSystem(ps1Stars);
+            star1.addElement(new UnitError("name", "11 Com"));
+            star1.addElement(new UnitError("rightascension", "12 20 43"));
+            star1.addElement(new UnitError("declination", "+17 47 34"));
+            star1.addElement(distance1);
 
             using (XmlWriter xw = XmlWriter.Create(output, ws))
             {
@@ -85,6 +126,7 @@ namespace OECUpdater
             }
             Console.WriteLine(output.ToString());
             //Console.ReadKey();
+
         }
 
         /// <summary>

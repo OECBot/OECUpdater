@@ -7,60 +7,63 @@ using System.Threading.Tasks;
 using OECLib.Exoplanets.Units;
 using OECLib.Interface;
 using System.Xml;
+using System.Collections;
 
 namespace OECLib.Exoplanets
 {
     public class Star : XMLWritable
     {
-        public List<String> names { get; set; }
-        public UnitError mass { get; set; }
-        public UnitError radius { get; set; }
-        public float magV { get; set; }
-        public UnitError magB { get; set; }
-        public UnitError magJ { get; set; }
-        public UnitError magH { get; set; }
-        public UnitError magK { get; set; }
-        public UnitError temperature { get; set; }
-        public UnitError metallicity { get; set; }
-        public String spectralType { get; set; }
+        string[] order = { "name", "mass", "radius", "magV", "magB", "magJ", "magH",
+            "magK", "temperature", "metallicity", "spectralType", "planet"};
+
+        Dictionary<String, UnitError> elements;
         public List<Planet> planets { get; set; }
 
-        public Star(List<String> names, UnitError mass, UnitError radius, float magV,
-            UnitError magB, UnitError magJ, UnitError magH, UnitError magK, UnitError temperature,
-            UnitError metallicity, String spectralType, List<Planet> planets)
+
+        public Star(List<Planet> planets)
         {
-            this.names = names;
-            this.mass = mass;
-            this.radius = radius;
-            this.magV = magV;
-            this.magB = magB;
-            this.magJ = magJ;
-            this.magH = magH;
-            this.magK = magK;
-            this.temperature = temperature;
-            this.metallicity = metallicity;
-            this.spectralType = spectralType;
+            this.elements = new Dictionary<string, UnitError>();
             this.planets = planets;
         }
+
+
+        public void addElement(UnitError element)
+        {
+            if (elements.ContainsKey(element.name)){
+                // Check to see if there is already a list created with the new elements name
+                if (elements[element.name].value is IList<object>)
+                {
+                    IList collection = (IList)elements[element.name].value;
+                    collection.Add(element.value);
+                }
+                // Create a list if there are multiple elements which have the same name.
+                // For example a star with multiple names. 
+                else
+                {
+                    List<object> allElements = new List<object>();
+                    allElements.Add(elements[element.name].value);
+                    allElements.Add(element.value);
+                    elements[element.name].value = allElements;
+                }
+            }
+            else
+            {
+                elements.Add(element.name, element);
+            }
+        }
+
 
         public void Write(XmlWriter w)
         {
             w.WriteStartElement("star");
 
-            foreach (var name in names)
+            foreach (string element in order)
             {
-                w.WriteElementString("name", name);
+                if (elements.ContainsKey(element))
+                {
+                    elements[element].Write(w);
+                }
             }
-            mass.Write(w);
-            radius.Write(w);
-            w.WriteElementString("magV", magV.ToString());
-            magB.Write(w);
-            magJ.Write(w);
-            magH.Write(w);
-            magK.Write(w);
-            temperature.Write(w);
-            metallicity.Write(w);
-            w.WriteElementString("spectraltype", spectralType);
 
             foreach (var planet in planets)
             {
