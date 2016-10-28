@@ -34,6 +34,15 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Binary.cs" />
+    <Compile Include="Data\Measurements\Measurement.cs" />
+    <Compile Include="Data\Measurements\NumberErrorMeasurement.cs" />
+    <Compile Include="Data\Measurements\NumberMeasurement.cs" />
+    <Compile Include="Data\Measurements\StringMeasurement.cs" />
+    <Compile Include="Data\Planet.cs" />
+    <Compile Include="Data\SolarSystem.cs" />
+    <Compile Include="Data\Star.cs" />
+    <Compile Include="Data\StellarObject.cs" />
     <Compile Include="Exoplanets\Planet.cs" />
     <Compile Include="Exoplanets\PlanetSystem.cs" />
     <Compile Include="Exoplanets\Star.cs" />

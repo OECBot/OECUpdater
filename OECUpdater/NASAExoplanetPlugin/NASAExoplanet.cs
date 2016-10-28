@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using OECLib.Utilities;
+using OECLib.HTTPRequests;
 using OECLib.Data;
 using OECLib.Plugins;
 using System.IO;
 using System.Text.RegularExpressions;
+
 namespace NASAExoplanetPlugin
 {
     public class NASAExoplanet : INewPlugin
