@@ -9,6 +9,13 @@ namespace OECLib.GitHub
 {
     public class Session
     {
+        public static enum SessionType
+        {
+            BASIC_AUTH,
+            OAUTH
+        }
+
+        public SessionType type;
         public const String clientId = "8c533ca43cbfba2e2268";
         public const String clientSecret = "fdfa25888fb0f815c248114fba5f7f26d834743f";
 
@@ -23,10 +30,22 @@ namespace OECLib.GitHub
         {
             this.client = client;
             this.Code = code;
+            this.type = SessionType.OAUTH;
+        }
+
+        public Session(Credentials cred)
+        {
+            this.client = new GitHubClient(new ProductHeaderValue("SpazioApp"));
+            this.client.Credentials = cred;
+            this.type = SessionType.BASIC_AUTH;
         }
 
         public async Task ObtainNewToken()
         {
+            if (type != SessionType.OAUTH)
+            {
+                throw new InvalidOperationException("Cannot obtain new token for non-oauth session!");
+            }
             var request = new OauthTokenRequest(clientId, clientSecret, Code);
             Token = await client.Oauth.CreateAccessToken(request);
             session["OAuthToken"] = Token.AccessToken;
