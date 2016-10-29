@@ -15,8 +15,8 @@ namespace OECLib
     {
         public Session session;
         public RepositoryManager rm;
-        public static String userName = "";
-        public static String password = "";
+        public static String userName = "OECBot";
+        public static String password = "UoJ84XJTXphgO4F";
 
         public List<IPlugin> plugins;
 
@@ -53,7 +53,7 @@ namespace OECLib
                     {
                         newData.AddRange(await task);
                     }
-                    //Checks
+ 
                     StringBuilder output = new StringBuilder();
                     XmlWriterSettings ws = new XmlWriterSettings();
                     ws.Indent = true;
