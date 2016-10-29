@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using OECLib.Exoplanets;
 using OECLib.GitHub;
 using OECLib.Plugins;
 using System;
@@ -30,17 +31,27 @@ namespace OECLib
         public async Task Start()
         {
             this.On = true;
+            List<Task<List<Planet>>> tasks = new List<Task<List<Planet>>>(); 
             while (On)
             {
-                if (checkTime.CompareTo(DateTime.Now.TimeOfDay) == 0)
+                if (checkTime.CompareTo(DateTime.Now.TimeOfDay) >= 0)
                 {
                     foreach (IPlugin plugin in plugins)
                     {
-                        plugin.Run();
+                        tasks.Add(runPluginAsync(plugin));
                     }
                 }
-                System.Threading.Thread.Sleep(1000);
+                foreach (Task<List<Planet>> task in tasks) {
+                    List<Planet> newData = await task;
+                }
+                //Checks
+
+                System.Threading.Thread.Sleep(50);
             }
+        }
+
+        private async Task<List<Planet>> runPluginAsync(IPlugin plugin) {
+            return plugin.Run();
         }
 
         public void Stop()
