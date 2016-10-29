@@ -42,6 +42,7 @@
     <Compile Include="Exoplanets\PlanetSystem.cs" />
     <Compile Include="Exoplanets\Star.cs" />
     <Compile Include="Exoplanets\Units\UnitError.cs" />
+    <Compile Include="GitHub\RepositoryManager.cs" />
     <Compile Include="GitHub\Session.cs" />
     <Compile Include="Interface\XMLWritable.cs" />
     <Compile Include="OECBot.cs" />

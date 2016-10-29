@@ -22,6 +22,7 @@ namespace OECUpdater
         public static string menu = "1)Check Access\n2)Display all pull-requests for repository\n3)Create Pull-Request for a repository\n4)Set Current Repository\n5)Logout";
         public static Dictionary<String, Func<Task>> commands = new Dictionary<string, Func<Task>>();
         public static Session s;
+        public static OECBot bot;
 
         public static Dictionary<String, IPlugin> plugins = new Dictionary<string, IPlugin>();
 
@@ -66,20 +67,61 @@ namespace OECUpdater
         public static void initalizeCommands()
         {
             commands.Add("1", CheckAccess);
-            commands.Add("superduperhidensecret", runBot);
+            commands.Add("2", runBot);
+            commands.Add("3", getFile);
+            commands.Add("4", createRepo);
+        }
+
+        public async static Task createRepo()
+        {
+            Console.WriteLine("Enter a name for the new branch!");
+            String name = Console.ReadLine();
+            RepositoryManager rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
+            try
+            {
+                String branch = await rm.createBranch(name);
+                Console.WriteLine("Successfully created branch named: {0}", branch);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async static Task runBot()
         {
             Console.WriteLine("Starting Bot");
-            OECBot bot = new OECBot(getPlugins());
+            var repo = await s.client.Repository.Get("Gazing", "OECTest");
+            bot = new OECBot(getPlugins(), repo);
             bot.Start();
+        }
+
+        public async static Task getFile()
+        {
+            RepositoryManager rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
+            try
+            {
+                String content = await rm.getFile("24 Sex.xml");
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
 
         public async static Task BeginGitHubSession(GitHubClient client)
         {
             CallBackServer server = new CallBackServer(localHost, port, client);
-            s = await server.Start();
+            try
+            {
+                s = await server.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             Console.WriteLine(s.ToString());
             Console.WriteLine("GitHub session started...");
 

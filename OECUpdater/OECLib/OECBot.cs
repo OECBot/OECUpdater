@@ -14,18 +14,20 @@ namespace OECLib
     public class OECBot
     {
         public Session session;
-        public static String userName = "";
-        public static String password = "";
+        public RepositoryManager rm;
+        public static String userName = "OECBot";
+        public static String password = "UoJ84XJTXphgO4F";
 
         public List<IPlugin> plugins;
 
         public bool On;
 
-        public static TimeSpan checkTime = new TimeSpan(20, 53, 0);
+        public static DateTime checkTime = DateTime.Today.AddDays(1.0);
 
-        public OECBot(List<IPlugin> plugins)
+        public OECBot(List<IPlugin> plugins, Repository repo)
         {
-            //this.session = new Session(new Credentials(userName, password));
+            this.session = new Session(new Credentials(userName, password));
+            this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
         }
@@ -38,10 +40,10 @@ namespace OECLib
             Console.WriteLine("Running plugin: {0}", plugins[0].GetName());
             while (On)
             {
-                Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now.TimeOfDay);
-                //Console.WriteLine("Running plugin: {0}", plugins[0].GetName());
-                if (checkTime.CompareTo(DateTime.Now.TimeOfDay) <= 0)
+                Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
+                if (checkTime < DateTime.Now)
                 {
+                    checkTime = checkTime.AddDays(1.0);
                     foreach (IPlugin plugin in plugins)
                     {
                         Console.WriteLine("Running plugin: {0}", plugin.GetName());
@@ -51,7 +53,7 @@ namespace OECLib
                     {
                         newData.AddRange(await task);
                     }
-                    //Checks
+ 
                     StringBuilder output = new StringBuilder();
                     XmlWriterSettings ws = new XmlWriterSettings();
                     ws.Indent = true;
@@ -70,7 +72,7 @@ namespace OECLib
                     newData.Clear();
                 }
 
-                System.Threading.Thread.Sleep(500000);
+                System.Threading.Thread.Sleep(50);
             }
         }
 

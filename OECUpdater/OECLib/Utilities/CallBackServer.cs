@@ -21,14 +21,13 @@ namespace OECLib.Utilities
         public CallBackServer(String ip, int port, GitHubClient client)
         {
             listener = new TcpListener(IPAddress.Parse(ip), port);
-            Console.WriteLine("Server listening at {0} : {1}", ip, port);
+            Console.WriteLine("Server listening at {0}:{1}", ip, port);
             this.GHClient = client;
         }
 
         public async Task<Session> Start()
         {
             listener.Start();
-            //listener.BeginAcceptTcpClient(onAcceptConnection, null);
 
             bool gotCode = false;
             do
@@ -59,8 +58,6 @@ namespace OECLib.Utilities
 
                 client.GetStream().Write(resp, 0, resp.Length);
                 client.GetStream().Flush();
-
-                Console.WriteLine("Response Sent");
 
                 Console.WriteLine("Obtained Token: {0}", Code);
                 Console.WriteLine("Terminating Client & Listener...");

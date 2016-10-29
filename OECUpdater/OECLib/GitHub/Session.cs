@@ -9,13 +9,6 @@ namespace OECLib.GitHub
 {
     public class Session
     {
-        public enum SessionType
-        {
-            BASIC_AUTH,
-            OAUTH
-        }
-
-        public SessionType type;
         public const String clientId = "8c533ca43cbfba2e2268";
         public const String clientSecret = "fdfa25888fb0f815c248114fba5f7f26d834743f";
 
@@ -30,21 +23,19 @@ namespace OECLib.GitHub
         {
             this.client = client;
             this.Code = code;
-            this.type = SessionType.OAUTH;
         }
 
         public Session(Credentials cred)
         {
             this.client = new GitHubClient(new ProductHeaderValue("SpazioApp"));
             this.client.Credentials = cred;
-            this.type = SessionType.BASIC_AUTH;
         }
 
         public async Task ObtainNewToken()
         {
-            if (type != SessionType.OAUTH)
+            if (client.Credentials.AuthenticationType == AuthenticationType.Basic)
             {
-                throw new InvalidOperationException("Cannot obtain new token for non-oauth session!");
+                throw new Exception("Cannot obtain new token for non-oauth session!");
             }
             var request = new OauthTokenRequest(clientId, clientSecret, Code);
             Token = await client.Oauth.CreateAccessToken(request);
@@ -54,7 +45,11 @@ namespace OECLib.GitHub
 
         public override string ToString()
         {
-            return String.Format("Session: Authorization Code: {0} - Access Token: {1}", Code, Token.AccessToken);
+            if (client.Credentials.AuthenticationType == AuthenticationType.Oauth)
+            {
+                return String.Format("Session ({2}): Authorization Code: {0} - Access Token: {1}", Code, Token.AccessToken, client.Credentials.AuthenticationType);
+            }
+            return String.Format("Session ({1}): Username: {0} - Password: {2}", client.Credentials.Login, client.Credentials.AuthenticationType, client.Credentials.Password);
         }
     }
 }
