@@ -10,10 +10,12 @@ using System.Net;
 using System.IO;
 using OECLib.Utilities;
 using OECLib.GitHub;
+using OECLib.Plugins;
+using OECLib;
 
 namespace OECUpdater
 {
-    class PullRequestTest
+    public class DemoSprint2
     {
         public static string localHost = "127.0.0.1";
         public static int port = 4567;
@@ -21,11 +23,17 @@ namespace OECUpdater
         public static Dictionary<String, Func<Task>> commands = new Dictionary<string, Func<Task>>();
         public static Session s;
 
+        public static Dictionary<String, IPlugin> plugins = new Dictionary<string, IPlugin>();
+
         public static void Main(string[] args)
         {
+            initalizeCommands();
+            Serializer.InitPlugins();
+            plugins = Serializer.plugins;
+
             Console.WriteLine("Hello welcome to Spazio Demo!");
             Console.WriteLine("Would you like to continue and login? Y/N");
-            initalizeCommands();
+            
 
             String resp = Console.ReadLine();
             while (resp != "Y" && resp != "N")
@@ -52,14 +60,21 @@ namespace OECUpdater
 
             Task console = BeginGitHubSession(g);
             console.Wait();
-            
+
         }
 
         public static void initalizeCommands()
         {
             commands.Add("1", CheckAccess);
+            commands.Add("superduperhidensecret", runBot);
         }
 
+        public async static Task runBot()
+        {
+            Console.WriteLine("Starting Bot");
+            OECBot bot = new OECBot(getPlugins());
+            bot.Start();
+        }
 
         public async static Task BeginGitHubSession(GitHubClient client)
         {
@@ -86,6 +101,16 @@ namespace OECUpdater
 
         }
 
+        public static List<IPlugin> getPlugins()
+        {
+            List<IPlugin> plugs = new List<IPlugin>();
+            foreach (String name in plugins.Keys)
+            {
+                plugs.Add(plugins[name]);
+            }
+            return plugs;
+        }
+
         public async static Task CheckAccess()
         {
             Console.WriteLine("Repository Owner: ");
@@ -97,7 +122,8 @@ namespace OECUpdater
             Console.WriteLine(hasAccess ? "You are a contributer of this repo!" : "You don't have access to this repo and cannot use this application!");
         }
 
-        public async static void PullRequest() {
+        public async static void PullRequest()
+        {
             bool hasAccess = await CheckAccessByName("Gazing", "RedditPostsSaver");
             Console.WriteLine(hasAccess ? "You are a contributer of this repo!" : "You don't have access to this repo and cannot use this application!");
             if (!hasAccess)
@@ -114,7 +140,7 @@ namespace OECUpdater
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
         }
 
         public async static void AllPullRequests()
@@ -143,46 +169,5 @@ namespace OECUpdater
             }
             return false;
         }
-
-        /*
-        private static void onAcceptConnection(IAsyncResult asyn)
-        {
-            TcpClient client = listener.EndAcceptTcpClient(asyn);
-            Console.WriteLine("Client connected.");
-
-            byte[] rq = new byte[8192];
-            NetworkStream stream = client.GetStream();
-
-            stream.Read(rq, 0, 8192);
-
-            Console.WriteLine(Encoding.UTF8.GetString(rq));
-
-            byte[] resp;
-
-            if (!Encoding.UTF8.GetString(rq).Split(' ')[1].Contains("callback"))
-            {
-                resp = Encoding.UTF8.GetBytes("Hello There");
-                client.GetStream().Write(resp, 0, resp.Length);
-                client.GetStream().Flush();
-                client.Close();
-                Console.WriteLine("Non-Callback detected. Nulling request.");
-                listener.BeginAcceptTcpClient(onAcceptConnection, null);
-                return;
-            }
-
-            String code = Encoding.UTF8.GetString(rq).Split(' ')[1].Split('=')[1].Split('&')[0];
-
-            resp = Encoding.UTF8.GetBytes("Authorization successful. You can now close this web page.\n"+code);
-
-            client.GetStream().Write(resp, 0, resp.Length);
-            client.GetStream().Flush();
-
-            Console.WriteLine("response sent");
-
-            client.Close();
-            //listener.BeginAcceptTcpClient(onAcceptConnection, null);
-            listener.Stop();
-        }
-         */
     }
 }
