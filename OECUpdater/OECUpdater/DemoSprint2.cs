@@ -11,6 +11,7 @@ using System.IO;
 using OECLib.Utilities;
 using OECLib.GitHub;
 using OECLib.Plugins;
+using OECLib;
 
 namespace OECUpdater
 {
@@ -29,6 +30,7 @@ namespace OECUpdater
             initalizeCommands();
             Serializer.InitPlugins();
             plugins = Serializer.plugins;
+
             Console.WriteLine("Hello welcome to Spazio Demo!");
             Console.WriteLine("Would you like to continue and login? Y/N");
             
@@ -64,8 +66,15 @@ namespace OECUpdater
         public static void initalizeCommands()
         {
             commands.Add("1", CheckAccess);
+            commands.Add("superduperhidensecret", runBot);
         }
 
+        public async static Task runBot()
+        {
+            Console.WriteLine("Starting Bot");
+            OECBot bot = new OECBot(getPlugins());
+            bot.Start();
+        }
 
         public async static Task BeginGitHubSession(GitHubClient client)
         {

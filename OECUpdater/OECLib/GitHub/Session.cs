@@ -9,7 +9,7 @@ namespace OECLib.GitHub
 {
     public class Session
     {
-        public static enum SessionType
+        public enum SessionType
         {
             BASIC_AUTH,
             OAUTH
