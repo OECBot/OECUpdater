@@ -66,14 +66,22 @@ namespace OECUpdater
         public static void initalizeCommands()
         {
             commands.Add("1", CheckAccess);
-            commands.Add("superduperhidensecret", runBot);
+            commands.Add("2", runBot);
+            commands.Add("3", getFile);
         }
 
         public async static Task runBot()
         {
             Console.WriteLine("Starting Bot");
-            OECBot bot = new OECBot(getPlugins());
+            var repo = await s.client.Repository.Get("Gazing", "RedditPostsSaver");
+            OECBot bot = new OECBot(getPlugins(), repo);
             bot.Start();
+        }
+
+        public async static Task getFile()
+        {
+            var repo = await s.client.Repository.Get("Gazing", "RedditPostsSaver");
+
         }
 
         public async static Task BeginGitHubSession(GitHubClient client)
