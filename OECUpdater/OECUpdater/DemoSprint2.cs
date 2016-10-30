@@ -19,10 +19,11 @@ namespace OECUpdater
     {
         public static string localHost = "127.0.0.1";
         public static int port = 4567;
-        public static string menu = "1)Check Access\n2)Display all pull-requests for repository\n3)Create Pull-Request for a repository\n4)Set Current Repository\n5)Logout";
+        public static string menu = "1)Run bot\n2)Check access\n3)Display all pull-requests for repository\n4)Set Current Repository\n5)Get file from repository\n6)Create branch\n7)Logout";
         public static Dictionary<String, Func<Task>> commands = new Dictionary<string, Func<Task>>();
         public static Session s;
         public static OECBot bot;
+        public static RepositoryManager rm;
 
         public static Dictionary<String, IPlugin> plugins = new Dictionary<string, IPlugin>();
 
@@ -32,51 +33,78 @@ namespace OECUpdater
             Serializer.InitPlugins();
             plugins = Serializer.plugins;
 
-            Console.WriteLine("Hello welcome to Spazio Demo!");
-            Console.WriteLine("Would you like to continue and login? Y/N");
-            
-
-            String resp = Console.ReadLine();
-            while (resp != "Y" && resp != "N")
+            while (1 == 1)
             {
-                Console.WriteLine("Enter either Y or N.");
-                resp = Console.ReadLine();
+                Console.WriteLine("Hello welcome to Spazio Demo!");
+                Console.WriteLine("Would you like to continue and login? Y/N");
+
+
+                String resp = Console.ReadLine();
+                while (resp != "Y" && resp != "N")
+                {
+                    Console.WriteLine("Enter either Y or N.");
+                    resp = Console.ReadLine();
+                }
+                if (resp == "N")
+                {
+                    return;
+                }
+
+                GitHubClient g = new GitHubClient(new ProductHeaderValue("SpazioApp"));
+                string csrf = Membership.GeneratePassword(24, 1);
+
+                var request = new OauthLoginRequest(Session.clientId)
+                {
+                    Scopes = { "user", "notifications", "repo" },
+                    State = csrf,
+                };
+
+                String oauthLoginUrl = g.Oauth.GetGitHubLoginUrl(request).ToString();
+                System.Diagnostics.Process.Start(oauthLoginUrl);
+
+                Task console = BeginGitHubSession(g);
+                console.Wait();
             }
-            if (resp == "N")
-            {
-                return;
-            }
-
-            GitHubClient g = new GitHubClient(new ProductHeaderValue("SpazioApp"));
-            string csrf = Membership.GeneratePassword(24, 1);
-
-            var request = new OauthLoginRequest(Session.clientId)
-            {
-                Scopes = { "user", "notifications", "repo" },
-                State = csrf,
-            };
-
-            String oauthLoginUrl = g.Oauth.GetGitHubLoginUrl(request).ToString();
-            System.Diagnostics.Process.Start(oauthLoginUrl);
-
-            Task console = BeginGitHubSession(g);
-            console.Wait();
 
         }
 
         public static void initalizeCommands()
         {
-            commands.Add("1", CheckAccess);
-            commands.Add("2", runBot);
-            commands.Add("3", getFile);
-            commands.Add("4", createRepo);
+            commands.Add("2", CheckAccess);
+            commands.Add("1", runBot);
+            commands.Add("5", getFile);
+            commands.Add("6", createBranch);
+            commands.Add("3", getAllPullRequest);
+            commands.Add("7", doNothing);
         }
 
-        public async static Task createRepo()
+        public async static Task doNothing()
+        {
+
+        }
+
+        public async static Task getAllPullRequest()
+        {
+            try
+            {
+                var list = await rm.getAllPullRequests();
+                Console.WriteLine(list[0].Title);
+                foreach (PullRequest pr in list)
+                {
+                    Console.WriteLine("Pull-Request: {0} - {1}, created by: {2} on {3}, status: {4}", pr.Title, pr.Body, pr.User.Name, pr.CreatedAt, pr.State);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        public async static Task createBranch()
         {
             Console.WriteLine("Enter a name for the new branch!");
             String name = Console.ReadLine();
-            RepositoryManager rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
             try
             {
                 String branch = await rm.createBranch(name);
@@ -98,10 +126,11 @@ namespace OECUpdater
 
         public async static Task getFile()
         {
-            RepositoryManager rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
+            Console.WriteLine("Enter the name of the file: ");
+            String name = Console.ReadLine();
             try
             {
-                String content = await rm.getFile("24 Sex.xml");
+                String content = await rm.getFile(name);
                 Console.WriteLine(content);
             }
             catch (Exception ex)
@@ -117,6 +146,7 @@ namespace OECUpdater
             try
             {
                 s = await server.Start();
+                rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
             }
             catch (Exception ex)
             {
@@ -137,6 +167,10 @@ namespace OECUpdater
                     Console.WriteLine(menu);
                     Console.WriteLine("Command: ");
                     cmd = Console.ReadLine();
+                }
+                if (cmd == "7")
+                {
+                    break;
                 }
                 await commands[cmd]();
             }
