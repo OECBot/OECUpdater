@@ -10,7 +10,7 @@ namespace OECLib.GitHub
     public class RepositoryManager
     {
         private Session session;
-        private Repository repo;
+        public Repository repo { get; set; }
         private Dictionary<String, String> shaKeys;
         private Random r;
 
@@ -22,24 +22,30 @@ namespace OECLib.GitHub
             r = new Random();
         }
 
-        public async Task<String> getFile(String fileName)
+        public async Task<String> getFile(String filePath)
         {
-            var contentCollection = await session.client.Repository.Content.GetAllContents(repo.Id, "/systems/"+fileName);
+            var contentCollection = await session.client.Repository.Content.GetAllContents(repo.Id, filePath);
             if (contentCollection.Count == 0)
             {
-                throw new Exception(String.Format("File: {0} not found in {1} - {2}", fileName, repo.Name, "/systems/"));
+                throw new Exception(String.Format("File: {0} not found in {1}", filePath, repo.Name));
             }
             var content = contentCollection[0];
             shaKeys[content.Name] = content.Sha;
             return content.Content;
         }
 
-        public async Task updateFile(String fileName, String content, String branch)
+        public async Task<IReadOnlyList<PullRequest>> getAllPullRequests()
         {
-            UpdateFileRequest ufr = new UpdateFileRequest("Update", content, shaKeys[fileName], branch);
-            var changeSet = await session.client.Repository.Content.UpdateFile(repo.Id, "/systems/", ufr);
+            var prs = await session.client.PullRequest.GetAllForRepository(repo.Id, new ApiOptions());
+            return prs;
+        }
+
+        public async Task updateFile(String filePath, String content, String branch)
+        {
+            UpdateFileRequest ufr = new UpdateFileRequest("Update "+filePath, content, shaKeys[filePath], branch);
+            var changeSet = await session.client.Repository.Content.UpdateFile(repo.Id, filePath, ufr);
             Console.WriteLine(changeSet.Content);
-            shaKeys.Remove(fileName);
+            shaKeys.Remove(filePath);
         }
 
         public async Task<String> createBranch(String name)
