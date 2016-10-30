@@ -55,18 +55,19 @@ namespace OECLib.GitHub
             return name;
         }
 
-        public async Task createPullRequest(String title, String branch)
+        public async Task createPullRequest(String title, String branch, String content)
         {
             NewPullRequest newPullRequest = new NewPullRequest(title, branch, "master");
+            newPullRequest.Body = content;
             PullRequest pr = await session.client.PullRequest.Create(repo.Id, newPullRequest);
-
+            
         }
 
-        public async Task BeginCommitAndPull(String fileName, String content)
+        public async Task BeginCommitAndPull(String fileName, String content, String source)
         {
             String branch = await createBranch(fileName + getRandString(5));
             await updateFile(fileName, content, branch);
-            await createPullRequest(branch, branch);
+            await createPullRequest(branch, branch, source);
         }
 
         private String getRandString(int length)

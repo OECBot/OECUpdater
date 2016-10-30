@@ -59,6 +59,7 @@ namespace ExoplanetEU
             //        names.Add(name);
             //    }
 
+            //   String source = String.Format("http://exoplanet.eu/catalog/{0}/", names[0].Replace(" ", "_"));
             //    UnitError mass = new UnitError("mass", parseDouble(fields[1]), parseDouble(fields[2]), parseDouble(fields[3]));
             //    UnitError period = new UnitError("period", parseDouble(fields[10]), parseDouble(fields[11]), parseDouble(fields[12]));
             //    UnitError semiMajorAxis = new UnitError("semimajoraxis", parseDouble(fields[13]), parseDouble(fields[14]), parseDouble(fields[15]));

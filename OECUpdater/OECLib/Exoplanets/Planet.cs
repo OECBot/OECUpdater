@@ -16,13 +16,17 @@ namespace OECLib.Exoplanets
             "periastron", "periastrontime", "description", "discovermethod", "lastupdate",
             "discoveryear"};
         public Dictionary<String, UnitError> elements;
-
+        public String source;
 
         public Planet()
         {
             this.elements = new Dictionary<string, UnitError>();
         }
 
+        public void setSource(String source)
+        {
+            this.source = source;
+        }
 
         public void addElement(UnitError element)
         {
