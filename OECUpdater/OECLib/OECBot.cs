@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -17,12 +18,13 @@ namespace OECLib
         public RepositoryManager rm;
         public static String userName = "OECBot";
         public static String password = "UoJ84XJTXphgO4F";
+        private CancellationTokenSource cts;
 
         public List<IPlugin> plugins;
 
         public bool On;
 
-        public static DateTime checkTime = DateTime.Today.AddDays(1.0);
+        public static DateTime checkTime = DateTime.Today.AddHours(15);
 
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
@@ -32,48 +34,76 @@ namespace OECLib
             this.On = false;
         }
 
-        public async void Start()
+        public void Start()
         {
             this.On = true;
+            this.cts = new CancellationTokenSource();
+            checkTime = checkTime.AddMinutes(33);
+            if (checkTime < DateTime.Now)
+            {
+                checkTime = checkTime.AddDays(1.0);
+            }
+            scheduleCheck(runChecks);
+            Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
+            
+        }
+
+        private async void scheduleCheck(Func<CancellationToken, Task> check)
+        {
+            await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
+            try
+            {
+                await check(cts.Token);
+            }
+            catch (OperationCanceledException oce)
+            {
+                Console.WriteLine("OECBot stopped..."+oce.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        public async Task runChecks(CancellationToken token)
+        {
             List<Task<List<Planet>>> tasks = new List<Task<List<Planet>>>();
             List<Planet> newData = new List<Planet>();
-            Console.WriteLine("Running plugin: {0}", plugins[0].GetName());
-            while (On)
+
+            checkTime = checkTime.AddDays(1.0);
+            scheduleCheck(runChecks);
+
+            foreach (IPlugin plugin in plugins)
             {
-                Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
-                if (checkTime < DateTime.Now)
+                Console.WriteLine("Running plugin: {0}", plugin.GetName());
+                tasks.Add(runPluginAsync(plugin));
+            }
+
+            foreach (Task<List<Planet>> task in tasks)
+            {
+                token.ThrowIfCancellationRequested();
+                List<Planet> planets = await task;
+                newData.AddRange(planets);
+            }
+
+            StringBuilder output = new StringBuilder();
+            XmlWriterSettings ws = new XmlWriterSettings();
+            ws.Indent = true;
+            ws.OmitXmlDeclaration = true;
+            foreach (Planet planet in newData)
+            {
+                using (XmlWriter xw = XmlWriter.Create(output, ws))
                 {
-                    checkTime = checkTime.AddDays(1.0);
-                    foreach (IPlugin plugin in plugins)
-                    {
-                        Console.WriteLine("Running plugin: {0}", plugin.GetName());
-                        tasks.Add(runPluginAsync(plugin));
-                    }
-                    foreach (Task<List<Planet>> task in tasks)
-                    {
-                        newData.AddRange(await task);
-                    }
- 
-                    StringBuilder output = new StringBuilder();
-                    XmlWriterSettings ws = new XmlWriterSettings();
-                    ws.Indent = true;
-                    ws.OmitXmlDeclaration = true;
-                    foreach (Planet planet in newData)
-                    {
-                        using (XmlWriter xw = XmlWriter.Create(output, ws))
-                        {
-                            planet.Write(xw);
-                            xw.Flush();
-                        }
-                        
-                        Console.WriteLine(output.ToString());
-                        output.Clear();
-                    }
-                    newData.Clear();
+                    planet.Write(xw);
+                    xw.Flush();
                 }
 
-                System.Threading.Thread.Sleep(50);
+                Console.WriteLine(output.ToString());
+                output.Clear();
             }
+            newData.Clear();
+            
         }
 
         private async Task<List<Planet>> runPluginAsync(IPlugin plugin) {
@@ -83,6 +113,8 @@ namespace OECLib
         public void Stop()
         {
             this.On = false;
+            cts.Cancel();
+            cts.Dispose();
         }
     }
 }
