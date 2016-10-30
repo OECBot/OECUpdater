@@ -69,6 +69,8 @@ namespace NASAExoplanetPlugin
 
                 //string[] altNames = fields[63].Split(',');
 
+                String source = fields[1];
+
                 planet.AddNumberMeasurement("mass", parseDouble(fields[2]));
                 planet.AddNumberMeasurement("period", parseDouble(fields[3]));
                 planet.AddNumberMeasurement("semimajoraxis", parseDouble(fields[4]));
