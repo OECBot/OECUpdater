@@ -51,7 +51,19 @@ namespace OECLib
         private async void scheduleCheck(Func<CancellationToken, Task> check)
         {
             await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
-            await check(cts.Token);
+            try
+            {
+                await check(cts.Token);
+            }
+            catch (OperationCanceledException oce)
+            {
+                Console.WriteLine("OECBot stopped..."+oce.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
 
         public async Task runChecks(CancellationToken token)
@@ -101,7 +113,6 @@ namespace OECLib
         public void Stop()
         {
             this.On = false;
-            this.timer.Change(Timeout.Infinite, Timeout.Infinite);
             cts.Cancel();
             cts.Dispose();
         }
