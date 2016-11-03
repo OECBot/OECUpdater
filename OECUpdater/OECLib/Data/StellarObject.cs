@@ -81,5 +81,52 @@ namespace OECLib.Data
             get;
             protected set;
         }
+
+		public void Write(XmlWriter w)
+		{
+			if (IsASystem) {
+				w.WriteStartElement("system");
+			}
+			else if (IsAStar) {
+				w.WriteStartElement("star");
+			}
+			else if (IsABinary) {
+				w.WriteStartElement("binary");
+			}
+			else if (IsAPlanet) {
+				w.WriteStartElement("planet");
+			}
+
+			foreach (Measurement entry in names) {
+				w.WriteStartElement("name");
+				w.WriteString((string) entry.getValue().value);
+				w.WriteEndElement();
+			}
+
+			foreach (KeyValuePair<string, Measurement> entry in measurements) {
+				w.WriteStartElement(entry.Value.MeasurementName);
+				if(entry.Value.getValue().errorMinus != 0.0){
+					w.WriteAttributeString("errorminus", entry.Value.getValue().errorMinus.ToString());
+				}
+				if(entry.Value.getValue().errorPlus != 0.0){
+					w.WriteAttributeString("errorplus", entry.Value.getValue().errorPlus.ToString());
+				}
+
+				if (entry.Value.getValue ().value is double) {
+					w.WriteString (((double)entry.Value.getValue ().value).ToString());
+
+				} else {
+					w.WriteString ((string)entry.Value.getValue ().value);
+				}
+
+				w.WriteEndElement();
+			}
+
+			foreach(StellarObject entry in children){
+				entry.Write (w);
+			}
+
+			w.WriteEndElement();
+		}
     }
 }

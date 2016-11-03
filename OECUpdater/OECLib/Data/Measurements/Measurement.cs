@@ -26,5 +26,6 @@ namespace OECLib.Data.Measurements
 
 		public abstract MeasurementUnit getValue ();
         public abstract XmlElement WriteXmlTag(XmlElement element);
+
     }
 }

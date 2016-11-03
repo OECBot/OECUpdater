@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using OECLib.Exoplanets;
 using System.Xml;
 using OECLib.Exoplanets.Units;
+using OECLib.Data;
 
 namespace OECLib.Utilities
 {
@@ -59,121 +60,22 @@ namespace OECLib.Utilities
             plugins.Add(name, plugin);
         }
 
-		public static void writeToXML(string fileName){
+
+		public static void writeToXML(string fileName, SolarSystem system){
+			StringBuilder output = new StringBuilder();
+			XmlWriterSettings ws = new XmlWriterSettings();
+			ws.Indent = true;
+			ws.OmitXmlDeclaration = true;
+
+			using (XmlWriter xw = XmlWriter.Create(fileName, ws))
+			{
+				system.Write (xw);
+				xw.Flush();
+			}
+
+//			Console.WriteLine(output.ToString());
 
 		}
 
-        public static PlanetSystem LoadXMLFile(string fileName)
-        {
-            PlanetSystem system = null;
-            XmlDocument doc = new XmlDocument();
-            doc.Load(fileName);
-            XmlNode root = doc.FirstChild;
-            
-            if (root.HasChildNodes)
-            {
-               system = getSystemFromNode(root);
-            }
-
-            return system;
-        }
-
-        private static PlanetSystem getSystemFromNode(XmlNode systemNode)
-        {
-            List<Star> xmlStars = new List<Star>();
-            PlanetSystem newSystem = new PlanetSystem(xmlStars);
-            foreach (XmlNode systemElement in systemNode)
-            {
-                if (systemElement.Name.Equals("star"))
-                {
-                    Star newStar = getStarFromNode(systemElement);
-                    xmlStars.Add(newStar);
-                }
-                else
-                {
-                    String errorMinus = "0.0", errorPlus = "0.0";
-                    foreach (XmlAttribute attribute in systemElement.Attributes)
-                    {
-                        switch (attribute.Name)
-                        {
-                            case "errorminus":
-                                errorMinus = attribute.InnerText;
-                                break;
-                            case "errorplus":
-                                errorPlus = attribute.InnerText;
-                                break;
-                        }
-                    }
-                    UnitError element = new UnitError(systemElement.Name, systemElement.InnerText,
-                        Double.Parse(errorMinus), Double.Parse(errorPlus));
-
-                    newSystem.addElement(element);
-                }
-            }
-
-            return newSystem;
-        }
-
-        private static Star getStarFromNode(XmlNode starNode)
-        {
-            List<Planet> xmlPlanets = new List<Planet>();
-            Star newStar = new Star(xmlPlanets);
-            foreach (XmlNode starElement in starNode.ChildNodes)
-            {
-                if (starElement.Name.Equals("planet"))
-                {
-                    Planet newPlanet = getPlanetFromNode(starElement);
-                    xmlPlanets.Add(newPlanet);
-                }
-                else
-                {
-                    String errorMinus = "0.0", errorPlus = "0.0";
-                    foreach (XmlAttribute attribute in starElement.Attributes)
-                    {
-                        switch (attribute.Name)
-                        {
-                            case "errorminus":
-                                errorMinus = attribute.InnerText;
-                                break;
-                            case "errorplus":
-                                errorPlus = attribute.InnerText;
-                                break;
-                        }
-                    }
-                    UnitError element = new UnitError(starElement.Name, starElement.InnerText,
-                        Double.Parse(errorMinus), Double.Parse(errorPlus));
-                    newStar.addElement(element);
-                }
-            }
-
-            return newStar;
-        }
-
-        private static Planet getPlanetFromNode(XmlNode planetNode)
-        {
-            Planet newPlanet = new Planet();
-
-            foreach (XmlNode planetElement in planetNode.ChildNodes)
-            {
-                String errorMinus = "0.0", errorPlus = "0.0";
-                foreach (XmlAttribute attribute in planetElement.Attributes)
-                {
-                    switch (attribute.Name)
-                    {
-                        case "errorminus":
-                            errorMinus = attribute.InnerText;
-                            break;
-                        case "errorplus":
-                            errorPlus = attribute.InnerText;
-                            break;
-                    }
-                }
-                UnitError element = new UnitError(planetElement.Name, planetElement.InnerText,
-                    Double.Parse(errorMinus), Double.Parse(errorPlus));
-                newPlanet.addElement(element);
-            }
-
-            return newPlanet;
-        }
-    }
+	}
 }
