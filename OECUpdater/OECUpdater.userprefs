@@ -1,15 +1,20 @@
-﻿<Properties StartupConfiguration="{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}|Default">
-  <MonoDevelop.Ide.ItemProperties.OECUpdater PreferredExecutionTarget="MonoDevelop.Default" />
+﻿<Properties StartupConfiguration="{BE5E1AC0-3845-4394-B4AF-12140F1F5CE5}|Default" StartupItem="OECUpdater/OECUpdater.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="OECUpdater\Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="OECUpdater/Program.cs">
     <Files>
-      <File FileName="OECLib\HTTPRequests\HTTPRequests.cs" Line="86" Column="5" />
-      <File FileName="ExoplanetEU\ExoplanetEU.cs" Line="27" Column="4" />
-      <File FileName="OECUpdater\Program.cs" Line="17" Column="15" />
+      <File FileName="OECLib/Utilities/XMLDeserializer.cs" Line="1" Column="1" />
+      <File FileName="OECLib/Data/Binary.cs" Line="1" Column="1" />
+      <File FileName="OECLib/Data/Planet.cs" Line="1" Column="1" />
+      <File FileName="OECLib/Data/SolarSystem.cs" Line="1" Column="1" />
+      <File FileName="OECLib/Data/Star.cs" Line="1" Column="1" />
+      <File FileName="OECLib/Data/StellarObject.cs" Line="1" Column="1" />
+      <File FileName="OECUpdater/DeserializeTest.cs" Line="14" Column="4" />
+      <File FileName="OECUpdater/Program.cs" Line="35" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.OECUpdater PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

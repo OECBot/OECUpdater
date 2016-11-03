@@ -35,7 +35,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Binary.cs" />
@@ -60,6 +60,7 @@
     <Compile Include="HTTPRequests\HTTPRequests.cs" />
     <Compile Include="Utilities\CallBackServer.cs" />
     <Compile Include="Utilities\Serializer.cs" />
+    <Compile Include="Utilities\XMLDeserializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
