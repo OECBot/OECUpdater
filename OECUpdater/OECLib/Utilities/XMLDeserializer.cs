@@ -17,44 +17,43 @@ namespace OECLib.Utilities
 		}
 
 		public StellarObject ParseXML(XmlNode node=null, StellarObject root=null) {
-			if (node == null) {
-				node = doc.FirstChild;
-			}
-			foreach (XmlNode child in node.ChildNodes) {
-				switch (child.Name) {
-				case "system":
-					{
-						SolarSystem system = new SolarSystem ();
-						system.AddChild (ParseXML (child, system));
-						root = system;
-						break;
-					}
-				case "binary":
-					{
-						Binary binary = new Binary ();
-						root.AddChild (ParseXML (child, binary));
-						break;
-					}
-				case "star":
-					{
-						Star star = new Star ();
-						root.AddChild (ParseXML (child, star));
-						break;
-					}
-				case "planet":
-					{
-						Planet planet = new Planet ();
-						root.AddChild(ParseXML(child, planet));
-						break;
-					}
-				default:
-					{
-						Measurement measure = CreateMeasurement (node);
-						root.AddMeasurement (measure);
-						break;
-					}
-				}
-			}
+            if (node == null)
+            {
+                node = doc.FirstChild;
+                SolarSystem system = new SolarSystem();
+                system.AddChild(ParseXML(node, system));
+                return system;
+            }
+            else
+            {
+                foreach (XmlNode child in node.ChildNodes)
+                {
+                    switch (child.Name)
+                    {
+                        case "binary":
+                            {
+                                Binary binary = new Binary();
+                                root.AddChild(ParseXML(child, binary));
+                                break;
+                            }
+                        case "star":
+                            {
+                                Star star = new Star();
+                                root.AddChild(ParseXML(child, star));
+                                break;
+                            }
+                        case "planet":
+                            {
+                                Planet planet = new Planet();
+                                root.AddChild(ParseXML(child, planet));
+                                break;
+                            }
+                        default:
+                            root.AddMeasurement(CreateMeasurement(child));
+                            break;
+                    }
+                }
+            }
 			return root;
 		}
 
@@ -63,7 +62,7 @@ namespace OECLib.Utilities
 			Measurement measurement;
 			string name = node.Name;
 
-			if (node.Attributes.Count > 0) {
+            if (node.Attributes != null && node.Attributes["errorminus"] != null) {
 				double errminus = parseDouble (node.Attributes.GetNamedItem ("errorminus").InnerText);
 				double errplus = parseDouble (node.Attributes.GetNamedItem ("errorplus").InnerText);
 				double nummeasurement = parseDouble (node.InnerText);

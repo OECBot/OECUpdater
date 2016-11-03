@@ -10,7 +10,7 @@ namespace OECUpdater
 		{
 			XMLDeserializer xml = new XMLDeserializer (filename);
 			StellarObject obj = xml.ParseXML ();
-			Console.Write(obj.XMLTag(new System.Xml.XmlDocument()));
+			Console.Write(obj.XMLTag(new System.Xml.XmlDocument()).OuterXml);
 		}
 	}
 }

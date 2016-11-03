@@ -31,12 +31,9 @@ namespace OECLib.Data
         public override XmlElement XMLTag(XmlDocument root)
         {
             XmlElement currentElement = root.CreateElement("system");
-            foreach (Measurements.Measurement measurement in measurements.Values)
-            {
-                XmlElement element = root.CreateElement(measurement.MeasurementName);
-                element = measurement.WriteXmlTag(element);
-                currentElement.AppendChild(element);
-            }
+
+            AddMeasurementTags(currentElement, root);
+
             foreach (StellarObject child in children)
             {
                 currentElement.AppendChild(child.XMLTag(root));
