@@ -59,6 +59,9 @@ namespace OECLib.Utilities
             plugins.Add(name, plugin);
         }
 
+		public static void writeToXML(string fileName){
+
+		}
 
         public static PlanetSystem LoadXMLFile(string fileName)
         {

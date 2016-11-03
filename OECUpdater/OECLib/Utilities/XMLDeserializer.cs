@@ -20,10 +20,10 @@ namespace OECLib.Utilities
 			if (node == null) {
 				node = doc.FirstChild;
 				root = new SolarSystem ();
-				Console.WriteLine ("firstChild = " + node.Name);
+				//Console.WriteLine ("firstChild = " + node.Name);
 			}
 			foreach (XmlNode child in node.ChildNodes) {
-				Console.WriteLine ("node: " + node.Name + "\tchild: " + child.Name + "\tvalue: " + child.InnerText);
+				//Console.WriteLine ("node: " + node.Name + "\tchild: " + child.Name + "\tvalue: " + child.InnerText);
 				switch (child.Name) {
 				case "system":
 					{
@@ -53,7 +53,7 @@ namespace OECLib.Utilities
 				default:
 					{
 						Measurement measure = CreateMeasurement (child);
-						Console.WriteLine ("Addind measurement: " + measure.MeasurementName);
+						//Console.WriteLine ("Addind measurement: " + measure.MeasurementName);
 						root.AddMeasurement (measure);
 						break;
 					}

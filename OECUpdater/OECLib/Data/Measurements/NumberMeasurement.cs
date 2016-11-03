@@ -19,5 +19,9 @@ namespace OECLib.Data.Measurements
             element.InnerText = measurement.ToString();
             return element;
         }
+
+		public override MeasurementUnit getValue(){
+			return new MeasurementUnit (measurement);
+		}
     }
 }

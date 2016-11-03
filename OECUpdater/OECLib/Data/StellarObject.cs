@@ -7,9 +7,9 @@ namespace OECLib.Data
 {
     public abstract class StellarObject
     {
-        protected List<StellarObject> children;
-		 List<StringMeasurement> names;
-        protected Dictionary<string, Measurement> measurements;
+        public List<StellarObject> children;
+		public List<StringMeasurement> names;
+       	public Dictionary<string, Measurement> measurements;
 
         public StellarObject()
         {
