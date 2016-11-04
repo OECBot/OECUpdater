@@ -8,6 +8,7 @@ namespace OECLib.Data
     public abstract class StellarObject
     {
         protected List<StellarObject> children;
+		 List<StringMeasurement> names;
         protected Dictionary<string, Measurement> measurements;
 
         public StellarObject()
@@ -17,7 +18,8 @@ namespace OECLib.Data
             IsAStar = false;
             IsASystem = false;
             children = new List<StellarObject>();
-            measurements = new Dictionary<string, Measurement>();
+			names = new List<StringMeasurement> ();
+			measurements = new Dictionary<string, Measurement>();
         }
 
         public abstract bool AddChild(StellarObject child);
@@ -25,8 +27,14 @@ namespace OECLib.Data
         public abstract XmlElement XMLTag(XmlDocument root);
         
         public void AddStringMeasurement(string name, string measurement)
-        {
-            measurements.Add(name, new StringMeasurement(name, measurement));
+		{
+			StringMeasurement strmeasurement = new StringMeasurement (name, measurement);
+				
+			if (name == "name") {
+					names.Add(strmeasurement);
+			} else {  
+				measurements.Add (name, strmeasurement);
+			}
         }
 
         public void AddNumberMeasurement(string name, double measurement)
@@ -38,6 +46,17 @@ namespace OECLib.Data
         {
             measurements.Add(name, new NumberErrorMeasurement(name, measurement, errPlus, errMinus));
         }
+
+		public void AddMeasurement(Measurement measurement)
+		{
+			if (measurement.MeasurementName == "name") {
+				if(measurement.GetMeasurementType == MeasurementType.StringMeasurement) {
+					names.Add((StringMeasurement)measurement);
+				}
+			} else {  
+				measurements.Add (measurement.MeasurementName, measurement);
+			}
+		}
 
         public bool IsABinary
         {
