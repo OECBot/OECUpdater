@@ -76,11 +76,29 @@ namespace OECUpdater
             commands.Add("6", createBranch);
             commands.Add("3", getAllPullRequest);
             commands.Add("7", doNothing);
+            commands.Add("4", setCurrentRepo);
         }
 
         public async static Task doNothing()
         {
 
+        }
+
+        public async static Task setCurrentRepo()
+        {
+            Console.WriteLine("Enter the name of the owner of the repo:");
+            String owner = Console.ReadLine();
+            Console.WriteLine("Enter the repository name:");
+            String name = Console.ReadLine();
+            try
+            {
+                rm.repo = await s.client.Repository.Get(owner, name);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            Console.WriteLine("Successfully set the current working repository to: {0}/{1}", rm.repo.Owner.Login, rm.repo.Name);
         }
 
         public async static Task getAllPullRequest()
@@ -91,7 +109,7 @@ namespace OECUpdater
                 Console.WriteLine(list[0].Title);
                 foreach (PullRequest pr in list)
                 {
-                    Console.WriteLine("Pull-Request: {0} - {1}, created by: {2} on {3}, status: {4}", pr.Title, pr.Body, pr.User.Name, pr.CreatedAt, pr.State);
+                    Console.WriteLine("Pull-Request: {0} - {1}Created by: {2} on {3}, Status: {4}", pr.Title, pr.Body, pr.User.Login, pr.CreatedAt, pr.State);
                 }
             }
             catch (Exception ex)

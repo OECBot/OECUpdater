@@ -2,9 +2,9 @@
 *.exe
 *.manifest
 *Temp*.cs
-*.dll
 *.pdb
 *.txt
 *.cache
 *.suo
 *.force
+*.dll
