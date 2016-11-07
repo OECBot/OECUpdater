@@ -31,6 +31,12 @@ namespace OECLib.GitHub
             this.client.Credentials = cred;
         }
 
+		public Session(String uname, String password)
+		{
+			this.client = new GitHubClient(new ProductHeaderValue("SpazioApp"));
+			this.client.Credentials = new Credentials(uname, password);
+		}
+
         public async Task ObtainNewToken()
         {
             if (client.Credentials.AuthenticationType == AuthenticationType.Basic)

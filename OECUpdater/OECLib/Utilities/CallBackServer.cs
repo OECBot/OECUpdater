@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace OECLib.Utilities
 {
@@ -17,12 +18,14 @@ namespace OECLib.Utilities
         public String Code;
         public Session session;
         private GitHubClient GHClient;
+		private CancellationTokenSource cts;
 
         public CallBackServer(String ip, int port, GitHubClient client)
         {
             listener = new TcpListener(IPAddress.Parse(ip), port);
             Console.WriteLine("Server listening at {0}:{1}", ip, port);
             this.GHClient = client;
+			cts = new CancellationTokenSource();
         }
 
         public async Task<Session> Start()
@@ -32,7 +35,8 @@ namespace OECLib.Utilities
             bool gotCode = false;
             do
             {
-                TcpClient client = await listener.AcceptTcpClientAsync();
+				var token = cts.Token;
+				TcpClient client = await Task.Run(() => listener.AcceptTcpClientAsync(), token);
                 Console.WriteLine("Client connected.");
 
                 byte[] rq = new byte[8192];
@@ -70,5 +74,8 @@ namespace OECLib.Utilities
             return session;
         }
 
+		public void Stop() {
+			cts.Cancel ();
+		}
     }
 }

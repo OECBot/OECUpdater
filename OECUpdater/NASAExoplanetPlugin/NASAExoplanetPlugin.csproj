@@ -36,7 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OECLib\OECLib.csproj">
-      <Project>{61c0dc38-7500-4da8-93a4-5dc4d2c0aac3}</Project>
+      <Project>{61C0DC38-7500-4DA8-93A4-5DC4D2C0AAC3}</Project>
       <Name>OECLib</Name>
     </ProjectReference>
   </ItemGroup>

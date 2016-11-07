@@ -1,0 +1,37 @@
+.button {
+	background-color: #9ECE08;
+	color: #FFFFFF;
+	background-image: none;
+	border-image: none;
+	border-radius: 0;
+}
+
+.button:hover {
+	background-color: #4A9586;
+	color: #FFFFFF;
+}
+
+.button:active {
+	background-color: #5EAE9E;
+	color: #FFFFFF;
+}
+
+.transparent {
+	background-color: #FFFFFF;
+}
+
+.font {
+	color: #FFFFFF;
+}
+
+.bg {
+	background-image: url("/home/wannie/Downloads/PxtaE4S.png");
+}
+
+
+.loginBox {
+	border-image: none;
+	border-radius: 0;
+	background-color: #FFFFFF;
+	background-image: none;
+}

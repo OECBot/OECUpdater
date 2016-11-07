@@ -8,9 +8,10 @@ namespace OECGUI
 		public static void Main (string[] args)
 		{
 			Application.Init ();
-			MainWindow win = new MainWindow ();
-			win.Show ();
+			LoginWindow main = LoginWindow.Create ();
+			main.Show ();
 			Application.Run ();
 		}
+			
 	}
 }
