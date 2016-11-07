@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace OECLib.Data.Measurements
 {
-    internal class StringMeasurement : Measurement
+	public class StringMeasurement : Measurement
     {
         string value;
 
@@ -20,6 +20,8 @@ namespace OECLib.Data.Measurements
             return element;
         }
 
-
+		public override MeasurementUnit getValue(){
+			return new MeasurementUnit (value);
+		}
     }
 }

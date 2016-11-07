@@ -24,6 +24,8 @@ namespace OECLib.Data.Measurements
             protected set;
         }
 
+		public abstract MeasurementUnit getValue ();
         public abstract XmlElement WriteXmlTag(XmlElement element);
+
     }
 }

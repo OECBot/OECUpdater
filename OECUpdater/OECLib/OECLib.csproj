@@ -60,6 +60,8 @@
     <Compile Include="HTTPRequests\HTTPRequests.cs" />
     <Compile Include="Utilities\CallBackServer.cs" />
     <Compile Include="Utilities\Serializer.cs" />
+    <Compile Include="Utilities\XMLDeserializer.cs" />
+    <Compile Include="Data\Measurements\MeasurementUnit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

@@ -28,5 +28,9 @@ namespace OECLib.Data.Measurements
             element.SetAttribute("errorminus", errMinus.ToString());
             return element;
         }
+
+		public override MeasurementUnit getValue(){
+			return new MeasurementUnit (measurement, errPlus, errMinus);
+		}
     }
 }
