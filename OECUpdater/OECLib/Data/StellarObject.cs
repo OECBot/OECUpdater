@@ -75,6 +75,14 @@ namespace OECLib.Data
 			}
 		}
 
+
+
+        public void ResetMeasurement()
+        {
+            this.measurements.Clear();
+        }
+
+
         public bool IsABinary
         {
             get;

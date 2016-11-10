@@ -47,10 +47,10 @@
     <Compile Include="Data\SolarSystem.cs" />
     <Compile Include="Data\Star.cs" />
     <Compile Include="Data\StellarObject.cs" />
-    <Compile Include="Exoplanets\Planet.cs" />
-    <Compile Include="Exoplanets\PlanetSystem.cs" />
-    <Compile Include="Exoplanets\Star.cs" />
-    <Compile Include="Exoplanets\Units\UnitError.cs" />
+    <Compile Include="Data\Exoplanets\Planet.cs" />
+    <Compile Include="Data\Exoplanets\PlanetSystem.cs" />
+    <Compile Include="Data\Exoplanets\Star.cs" />
+    <Compile Include="Data\Exoplanets\Units\UnitError.cs" />
     <Compile Include="GitHub\RepositoryManager.cs" />
     <Compile Include="GitHub\Session.cs" />
     <Compile Include="Interface\XMLWritable.cs" />

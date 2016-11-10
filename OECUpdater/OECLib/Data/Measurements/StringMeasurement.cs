@@ -23,5 +23,12 @@ namespace OECLib.Data.Measurements
 		public override MeasurementUnit getValue(){
 			return new MeasurementUnit (value);
 		}
+
+
+        public void setValue(String name)
+        {
+            this.value = name;
+        }
+
     }
 }
