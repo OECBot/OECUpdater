@@ -25,6 +25,23 @@ namespace OECLib.Data
         public abstract bool AddChild(StellarObject child);
 
         public abstract XmlElement XMLTag(XmlDocument root);
+
+        protected void AddMeasurementTags(XmlElement node, XmlDocument root)
+        {
+            foreach (Measurement name in names)
+            {
+                XmlElement element = root.CreateElement(name.MeasurementName);
+                element = name.WriteXmlTag(element);
+                node.AppendChild(element);
+            }
+
+            foreach (Measurement measurement in measurements.Values)
+            {
+                XmlElement element = root.CreateElement(measurement.MeasurementName);
+                element = measurement.WriteXmlTag(element);
+                node.AppendChild(element);
+            }
+        }
         
         public void AddStringMeasurement(string name, string measurement)
 		{
