@@ -12,7 +12,6 @@ namespace OECUpdater
 		{
 			XMLDeserializer xml = new XMLDeserializer (filename);
 			StellarObject obj = xml.ParseXML ();
-
 			printMeasurements (obj);
 			Serializer.writeToXML ("test2.xml",(SolarSystem)obj);
 		}

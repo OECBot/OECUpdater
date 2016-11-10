@@ -25,13 +25,6 @@ namespace OECLib.Utilities
 			foreach (XmlNode child in node.ChildNodes) {
 				//Console.WriteLine ("node: " + node.Name + "\tchild: " + child.Name + "\tvalue: " + child.InnerText);
 				switch (child.Name) {
-				case "system":
-					{
-						SolarSystem system = new SolarSystem ();
-						system.AddChild (ParseXML (child, system));
-						root = system;
-						break;
-					}
 				case "binary":
 					{
 						Binary binary = new Binary ();
@@ -67,7 +60,7 @@ namespace OECLib.Utilities
 			Measurement measurement;
 			string name = node.Name;
 
-			if (node.Attributes.Count > 0) {
+            if (node.Attributes != null && node.Attributes["errorminus"] != null) {
 				double errminus = parseDouble (node.Attributes.GetNamedItem ("errorminus").InnerText);
 				double errplus = parseDouble (node.Attributes.GetNamedItem ("errorplus").InnerText);
 				double nummeasurement = parseDouble (node.InnerText);
