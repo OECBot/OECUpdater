@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace OECLib.HTTPRequests
+namespace OECLib.Utilities
 {
 	/// <summary>
 	/// HTTP request.

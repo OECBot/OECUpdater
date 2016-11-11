@@ -48,13 +48,13 @@ namespace OECLib.Data
 			StringMeasurement strmeasurement = new StringMeasurement (name, measurement);
 				
 			if (name == "name") {
-				if (!names.Contains (name))
+				if (!names.Contains (strmeasurement))
 					names.Add(strmeasurement);
 			} else { 
 				if (!measurements.ContainsKey (name))
 					measurements.Add (name, strmeasurement);
 				else
-					measurement [name] = strmeasurement;
+					measurements [name] = strmeasurement;
 			}
         }
 
@@ -65,17 +65,17 @@ namespace OECLib.Data
 			if (!measurements.ContainsKey (name))
 				measurements.Add (name, numMeasure);
 			else
-				measurement [name] = numMeasure;
+				measurements [name] = numMeasure;
         }
 
         public void AddNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
         {			
-			NumberMeasurement numErrMeasure = new NumberErrorMeasurement(name, measurement, errPlus, errMinus);	
+			NumberErrorMeasurement numErrMeasure = new NumberErrorMeasurement(name, measurement, errPlus, errMinus);	
 
 			if (!measurements.ContainsKey (name))
 				measurements.Add (name, numErrMeasure);
 			else
-				measurement [name] = numErrMeasure;
+				measurements [name] = numErrMeasure;
         }
 
 		public void AddMeasurement(Measurement measurement)
