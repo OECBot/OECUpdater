@@ -82,10 +82,15 @@ namespace OECLib.Data
 		{
 			if (measurement.MeasurementName == "name") {
 				if(measurement.GetMeasurementType == MeasurementType.StringMeasurement) {
-					names.Add((StringMeasurement)measurement);
+					StringMeasurement strmeasure = (StringMeasurement)measurement;
+					if (!names.Contains (strmeasure))
+						names.Add (strmeasure);
 				}
-			} else {  
-				measurements.Add (measurement.MeasurementName, measurement);
+			} else {
+				if (!measurements.ContainsKey (measurement.MeasurementName))
+					measurements.Add (measurement.MeasurementName, measurement);
+				else
+					measurements [measurement.MeasurementName] = measurement;
 			}
 		}
 

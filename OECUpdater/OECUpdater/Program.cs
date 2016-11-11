@@ -7,7 +7,7 @@ using System.Text;
 using System.Collections.Generic;
 using OECLib.Exoplanets;
 using OECLib.Utilities;
-using OECLib.Plugins;
+using OECLib.Interface;
 using System.IO;
 
 
