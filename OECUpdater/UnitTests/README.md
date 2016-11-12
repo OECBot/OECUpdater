@@ -24,3 +24,8 @@ Getting started
 ### Looking at the results:
 - Once finished, NUnit will provide a summary of the test results, **ONLY** the failed tests will show up, NUnit will not display infomation of a test if it succeeded.
 - DONE!
+
+Selecting specific classes to test
+-----
+- Use the following parameter to select the classs to test:
+  - --where=[Class Name]
