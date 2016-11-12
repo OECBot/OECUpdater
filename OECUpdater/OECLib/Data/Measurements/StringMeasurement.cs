@@ -23,5 +23,19 @@ namespace OECLib.Data.Measurements
 		public override MeasurementUnit getValue(){
 			return new MeasurementUnit (value);
 		}
+
+		public override bool Equals(object obj) {
+			if (obj == null || GetType() != obj.GetType()) 
+				return false;
+
+			StringMeasurement measure = (StringMeasurement)obj;
+			return measure.value == value;
+		}
+
+        public void setValue(String name)
+        {
+            this.value = name;
+        }
+
     }
 }

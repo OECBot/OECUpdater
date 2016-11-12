@@ -48,32 +48,59 @@ namespace OECLib.Data
 			StringMeasurement strmeasurement = new StringMeasurement (name, measurement);
 				
 			if (name == "name") {
+				if (!names.Contains (strmeasurement))
 					names.Add(strmeasurement);
-			} else {  
-				measurements.Add (name, strmeasurement);
+			} else { 
+				if (!measurements.ContainsKey (name))
+					measurements.Add (name, strmeasurement);
+				else
+					measurements [name] = strmeasurement;
 			}
         }
 
         public void AddNumberMeasurement(string name, double measurement)
-        {
-            measurements.Add(name, new NumberMeasurement(name, measurement));
+		{
+			NumberMeasurement numMeasure = new NumberMeasurement (name, measurement);
+				
+			if (!measurements.ContainsKey (name))
+				measurements.Add (name, numMeasure);
+			else
+				measurements [name] = numMeasure;
         }
 
         public void AddNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
-        {
-            measurements.Add(name, new NumberErrorMeasurement(name, measurement, errPlus, errMinus));
+        {			
+			NumberErrorMeasurement numErrMeasure = new NumberErrorMeasurement(name, measurement, errPlus, errMinus);	
+
+			if (!measurements.ContainsKey (name))
+				measurements.Add (name, numErrMeasure);
+			else
+				measurements [name] = numErrMeasure;
         }
 
 		public void AddMeasurement(Measurement measurement)
 		{
 			if (measurement.MeasurementName == "name") {
 				if(measurement.GetMeasurementType == MeasurementType.StringMeasurement) {
-					names.Add((StringMeasurement)measurement);
+					StringMeasurement strmeasure = (StringMeasurement)measurement;
+					if (!names.Contains (strmeasure))
+						names.Add (strmeasure);
 				}
-			} else {  
-				measurements.Add (measurement.MeasurementName, measurement);
+			} else {
+				if (!measurements.ContainsKey (measurement.MeasurementName))
+					measurements.Add (measurement.MeasurementName, measurement);
+				else
+					measurements [measurement.MeasurementName] = measurement;
 			}
 		}
+
+
+
+        public void ResetMeasurement()
+        {
+            this.measurements.Clear();
+        }
+
 
         public bool IsABinary
         {

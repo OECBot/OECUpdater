@@ -47,26 +47,29 @@
     <Compile Include="Data\SolarSystem.cs" />
     <Compile Include="Data\Star.cs" />
     <Compile Include="Data\StellarObject.cs" />
-    <Compile Include="Exoplanets\Planet.cs" />
-    <Compile Include="Exoplanets\PlanetSystem.cs" />
-    <Compile Include="Exoplanets\Star.cs" />
-    <Compile Include="Exoplanets\Units\UnitError.cs" />
+    <Compile Include="Data\Exoplanets\Planet.cs" />
+    <Compile Include="Data\Exoplanets\PlanetSystem.cs" />
+    <Compile Include="Data\Exoplanets\Star.cs" />
+    <Compile Include="Data\Exoplanets\Units\UnitError.cs" />
     <Compile Include="GitHub\RepositoryManager.cs" />
     <Compile Include="GitHub\Session.cs" />
     <Compile Include="Interface\XMLWritable.cs" />
     <Compile Include="OECBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Plugins\IPlugin.cs" />
-    <Compile Include="HTTPRequests\HTTPRequests.cs" />
     <Compile Include="Utilities\CallBackServer.cs" />
     <Compile Include="Utilities\Serializer.cs" />
     <Compile Include="Utilities\XMLDeserializer.cs" />
     <Compile Include="Data\Measurements\MeasurementUnit.cs" />
     <Compile Include="Utilities\PlanetMerger.cs" />
+    <Compile Include="Utilities\HTTPRequests.cs" />
+    <Compile Include="Interface\IPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\" />
   </ItemGroup>
 </Project>
