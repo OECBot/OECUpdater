@@ -1,7 +1,7 @@
 ﻿using Octokit;
-using OECLib.Exoplanets;
+using OECLib.Data;
 using OECLib.GitHub;
-using OECLib.Plugins;
+using OECLib.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,8 +68,8 @@ namespace OECLib
 
         public async Task runChecks(CancellationToken token)
         {
-            List<Task<List<Planet>>> tasks = new List<Task<List<Planet>>>();
-            List<Planet> newData = new List<Planet>();
+			List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
+			List<StellarObject> newData = new List<StellarObject>();
 
             checkTime = checkTime.AddDays(1.0);
             scheduleCheck(runChecks);
@@ -80,10 +80,10 @@ namespace OECLib
                 tasks.Add(runPluginAsync(plugin));
             }
 
-            foreach (Task<List<Planet>> task in tasks)
+			foreach (Task<List<StellarObject>> task in tasks)
             {
                 token.ThrowIfCancellationRequested();
-                List<Planet> planets = await task;
+				List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
 
@@ -106,7 +106,7 @@ namespace OECLib
             
         }
 
-        private async Task<List<Planet>> runPluginAsync(IPlugin plugin) {
+        private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin) {
             return plugin.Run();
         }
 

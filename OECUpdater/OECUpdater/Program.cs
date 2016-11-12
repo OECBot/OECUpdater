@@ -7,7 +7,7 @@ using System.Text;
 using System.Collections.Generic;
 using OECLib.Exoplanets;
 using OECLib.Utilities;
-using OECLib.Plugins;
+using OECLib.Interface;
 using System.IO;
 
 
@@ -37,8 +37,38 @@ namespace OECUpdater
 //			Console.WriteLine (doc.ToString ());
 
 
+			OECLib.Data.SolarSystem mergeTo = new OECLib.Data.SolarSystem ();
+			OECLib.Data.Star testStar1 = new OECLib.Data.Star ();
+			OECLib.Data.Star testStar2 = new OECLib.Data.Star ();
 
-			DeserializeTest test = new DeserializeTest("11 Com.xml");
+			OECLib.Data.Planet testPlanet1 = new OECLib.Data.Planet ();
+			OECLib.Data.Planet testPlanet2 = new OECLib.Data.Planet ();
+			OECLib.Data.Planet testPlanet3 = new OECLib.Data.Planet ();
+
+			testStar1.AddStringMeasurement ("name", "star1");
+			testStar2.AddStringMeasurement ("name", "star1");
+
+			testPlanet1.AddStringMeasurement ("name", "planet1");
+			testPlanet2.AddStringMeasurement ("name", "planet2");
+			testPlanet3.AddStringMeasurement ("name", "planet3");
+
+			testPlanet1.AddNumberMeasurement ("mass", 3.22);
+			testPlanet2.AddNumberMeasurement ("mass", 5.4);
+			testPlanet3.AddNumberMeasurement ("mass", 4.22);
+
+			testStar1.AddChild (testPlanet1);
+			testStar1.AddChild (testPlanet2);
+			testStar2.AddChild (testPlanet1);
+			testStar2.AddChild (testPlanet2);
+			testStar2.AddChild (testPlanet3);
+
+			mergeTo.AddChild (testStar1);
+
+			OECLib.Data.StellarObject merged = OECLib.Utilities.PlanetMerger.Merge (testStar2, mergeTo);
+
+			Console.WriteLine (mergeTo.XMLTag (new System.Xml.XmlDocument ()).OuterXml);
+			Console.Write ('\n');
+			Console.WriteLine(merged.XMLTag(new System.Xml.XmlDocument()).OuterXml);
         }
 
 //        private static void XMLDemo()

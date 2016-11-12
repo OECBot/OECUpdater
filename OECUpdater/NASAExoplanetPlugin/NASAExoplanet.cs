@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using OECLib.HTTPRequests;
+using OECLib.Utilities;
 using OECLib.Data;
-using OECLib.Plugins;
+using OECLib.Interface;
 using System.IO;
 using System.Text.RegularExpressions;
 
 namespace NASAExoplanetPlugin
 {
-    public class NASAExoplanet : INewPlugin
+    public class NASAExoplanet : IPlugin
     {
         private string baseURL = "http://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&select={0}&where={1}";
 
@@ -33,7 +33,7 @@ namespace NASAExoplanetPlugin
             return "Spazio";
         }
 
-        public List<Star> Run()
+		public List<StellarObject> Run()
         {
             Dictionary<string, Star> stars = new Dictionary<string, Star>();
             HTTPRequest req = new HTTPRequest();
@@ -86,7 +86,7 @@ namespace NASAExoplanetPlugin
 
             }
 
-            List<Star> sys = new List<Star>();
+			List<StellarObject> sys = new List<StellarObject>();
             sys.AddRange(stars.Values);
             return sys;
         }
