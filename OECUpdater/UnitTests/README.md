@@ -22,5 +22,5 @@ Getting started
 - Additional information can be found here: [Wiki](https://github.com/nunit/docs/wiki/Console-Command-Line)
 
 ### Looking at the results:
-- Once finished, NUnit will provide a summary of the test results, --ONLY-- the failed tests will show up, NUnit will not display infomation of a test if it succeeded.
+- Once finished, NUnit will provide a summary of the test results, **ONLY** the failed tests will show up, NUnit will not display infomation of a test if it succeeded.
 - DONE!
