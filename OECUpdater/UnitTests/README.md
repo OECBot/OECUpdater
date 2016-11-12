@@ -13,3 +13,4 @@ Getting started
 - Run tests with NUnit Console Runner (Can be found in .\team06-Project\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools)
   - YOU MUST USE TERMINAL(OR CMD IN WINDOWS) TO RUN IT!
   - Select the assemblies(.dlls, .exes, etc) in the debug(or build) folder and run!
+- DONE!
