@@ -41,7 +41,7 @@ namespace OECLib.GitHub
         {
             if (client.Credentials.AuthenticationType == AuthenticationType.Basic)
             {
-                throw new Exception("Cannot obtain new token for non-oauth session!");
+                throw new InvalidOperationException("Cannot obtain new token for non-oauth session!");
             }
             var request = new OauthTokenRequest(clientId, clientSecret, Code);
             Token = await client.Oauth.CreateAccessToken(request);
