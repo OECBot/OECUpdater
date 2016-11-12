@@ -4,9 +4,8 @@ UnitTests
 This project of the solution is dedicated to creating unit tests under the NUnit Framework.
 
 
-Getting started:
+Getting started
 ------
-
 - Create a new class xxxUnitTests.cs
 - [Familiarize with NUnit API](https://github.com/nunit/docs/wiki)
 - Look at the sample project for reference/ideas [Link](https://github.com/nunit/nunit-csharp-samples/blob/master/)
