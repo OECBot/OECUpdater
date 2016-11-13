@@ -16,7 +16,8 @@ Getting started
 
 ### Running the Tests:
 - First build the project, make sure there is a UnitTests.dll in the debug folder
-- Run tests with NUnit Console Runner (Can be found in \n
+- Run tests with NUnit Console Runner (Can be found in
+
 `.\team06-Project\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools`)
   - YOU MUST USE TERMINAL(OR CMD IN WINDOWS) TO RUN IT!
   - Syntax(For windows only) = `nunit3-console [input assembly location]`
