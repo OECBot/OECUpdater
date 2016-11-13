@@ -70,6 +70,7 @@ namespace OECLib.GitHub
             String branch = await createBranch(fileName + getRandString(5));
             if (isNew)
             {
+                await addFile(fileName, content, branch);
             }
             else
             {
@@ -84,7 +85,9 @@ namespace OECLib.GitHub
             return files;
         }
 
+        public async Task addFile(String filePath, String content, String branch)
         {
+            CreateFileRequest cfr = new CreateFileRequest("Adding new " + filePath, content, branch);
             await session.client.Repository.Content.CreateFile(repo.Id, filePath, cfr);
         }
 
