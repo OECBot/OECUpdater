@@ -10,7 +10,7 @@ using System.Net;
 using System.IO;
 using OECLib.Utilities;
 using OECLib.GitHub;
-using OECLib.Plugins;
+using OECLib.Interface;
 using OECLib;
 
 namespace OECUpdater
