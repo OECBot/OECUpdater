@@ -61,15 +61,23 @@ namespace OECLib.GitHub
 
         public async Task<bool> CheckAccess(int id, String owner, String name)
         {
-            var repos = await client.Repository.Collaborator.GetAll(owner, name);
-            User cur = await client.User.Current();
-            foreach (User person in repos)
+            try
             {
-                if (id == person.Id)
+                var repos = await client.Repository.Collaborator.GetAll(owner, name);
+                User cur = await client.User.Current();
+                foreach (User person in repos)
                 {
-                    return true;
+                    if (id == person.Id)
+                    {
+                        return true;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
             return false;
         }
     }
