@@ -65,11 +65,27 @@ namespace OECLib.GitHub
             
         }
 
-        public async Task BeginCommitAndPull(String fileName, String content, String source)
+        public async Task BeginCommitAndPull(String fileName, String content, String source, bool isNew)
         {
             String branch = await createBranch(fileName + getRandString(5));
-            await updateFile(fileName, content, branch);
-            await createPullRequest(branch, branch, source);
+            if (isNew)
+            {
+            }
+            else
+            {
+                await updateFile(fileName, content, branch);
+            }
+            await createPullRequest(branch, branch, source); 
+        }
+
+        public async Task<IReadOnlyList<RepositoryContent>> getAllFiles(String path)
+        {
+            IReadOnlyList<RepositoryContent> files = await session.client.Repository.Content.GetAllContents(repo.Id, path);
+            return files;
+        }
+
+        {
+            await session.client.Repository.Content.CreateFile(repo.Id, filePath, cfr);
         }
 
         private String getRandString(int length)

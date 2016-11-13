@@ -77,6 +77,12 @@ namespace OECUpdater
             commands.Add("3", getAllPullRequest);
             commands.Add("7", doNothing);
             commands.Add("4", setCurrentRepo);
+            commands.Add("8", getAllFiles);
+        }
+
+        public async static Task getAllFiles()
+        {
+            await rm.getAllFiles("systems/");
         }
 
         public async static Task doNothing()
