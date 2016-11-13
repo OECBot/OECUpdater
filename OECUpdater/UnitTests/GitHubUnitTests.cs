@@ -45,6 +45,7 @@ namespace UnitTests
 
         [TestCase("OECTest", "Gazing", true)]
         [TestCase("SpazioTest", "OECBot", false)]
+        [TestCase("open_exoplanet_catalogue", "OpenExoplanetCatalogue", false)]
         public void IsCollaboratorTest(String name, String owner, bool isCollab)
         {
             Task<User> current = s2.client.User.Current();
@@ -65,7 +66,7 @@ namespace UnitTests
         {
             Task<IReadOnlyList<PullRequest>> prs = rm.getAllPullRequests();
             prs.Wait();
-            Assert.AreEqual(prs.Result.Count, 1);
+            Assert.AreEqual(prs.Result.Count, 0);
         }
 
         [Test]
@@ -74,6 +75,29 @@ namespace UnitTests
             Task<String> branch = rm.createBranch(getRandString(10));
             branch.Wait();
             Assert.DoesNotThrowAsync(async () => await session.client.Repository.Branch.Get(rm.repo.Id, branch.Result));         
+        }
+
+        [Test]
+        public void UpdateFileTest()
+        {
+            Task<String> getFile = rm.getFile("test.txt");
+            getFile.Wait();
+            String test = getRandString(10);
+            Assert.DoesNotThrowAsync(async () => await rm.updateFile("test.txt", test, "master"));
+            getFile = rm.getFile("test.txt");
+            getFile.Wait();
+            Assert.AreEqual(getFile.Result, test);
+        }
+
+        [Test]
+        public void CreateFileTest()
+        {
+            String fileName = getRandString(7)+".txt";
+            String content = getRandString(1337);
+            Assert.DoesNotThrowAsync(async () => await rm.addFile(fileName, content, "master"));
+            Task<String> getFile = rm.getFile(fileName);
+            getFile.Wait();
+            Assert.AreEqual(getFile.Result, content);
         }
 
         public String getRandString(int length)
