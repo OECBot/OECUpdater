@@ -52,7 +52,7 @@ namespace UnitTests
         {
             NumberErrorMeasurement mUnit = new NumberErrorMeasurement(name, measurement, errPlus, errMinus);
             mUnit.setValue(newMeasurement, newErrPlus, newErrMinus);
-            Assert.AreEqual(newMeasurement, mUnit.getValue().value);
+            Assert.AreEqual(newMeasurement, (double)mUnit.getValue().value);
         }
 
         // NumberMeasurement unit tests
@@ -84,7 +84,39 @@ namespace UnitTests
         {
             NumberMeasurement mUnit = new NumberMeasurement(name, measurement);
             mUnit.setValue(newMeasurement);
-            Assert.AreEqual(newMeasurement, mUnit.getValue().value);
+            Assert.AreEqual(newMeasurement, (double)mUnit.getValue().value);
+        }
+
+        // StringMeasurement unit tests
+
+        [TestCase("lastupdate", "15/09/20")]
+        public void CreateStringMeasurement(string name, string measurement)
+        {
+            StringMeasurement mUnit = new StringMeasurement(name, measurement);
+        }
+
+        [TestCase("lastupdate", "15/09/20")]
+        public void CheckStringMeasurementXML(string name, string measurement)
+        {
+            StringMeasurement mUnit = new StringMeasurement(name, measurement);
+            XmlElement element = doc.CreateElement(mUnit.MeasurementName);
+            element = mUnit.WriteXmlTag(element);
+            Assert.AreEqual(measurement.ToString(), element.InnerText);
+        }
+
+        [TestCase("lastupdate", "15/09/20")]
+        public void CheckStringMeasurementGetValue(string name, string measurement)
+        {
+            StringMeasurement mUnit = new StringMeasurement(name, measurement);
+            Assert.AreEqual(measurement, mUnit.getValue().value);
+        }
+
+        [TestCase("lastupdate", "15/09/20", "16/10/21")]
+        public void CheckSStringMeasurementSetValue(string name, string measurement, string newMeasurement)
+        {
+            StringMeasurement mUnit = new StringMeasurement(name, measurement);
+            mUnit.setValue(newMeasurement);
+            Assert.AreEqual(newMeasurement, (string)mUnit.getValue().value);
         }
     }
 }
