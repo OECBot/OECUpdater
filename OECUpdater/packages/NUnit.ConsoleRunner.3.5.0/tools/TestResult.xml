@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="2" result="Failed" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="2" engine-version="3.5.0.0" clr-version="4.0.30319.18408" start-time="2016-11-12 21:26:22Z" end-time="2016-11-12 21:26:23Z" duration="0.893550">
+  <command-line><![CDATA[nunit3-console  C:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\UnitTests\bin\Debug\UnitTests.dll -v]]></command-line>
+  <test-suite type="Assembly" id="0-1003" name="UnitTests.dll" fullname="C:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\UnitTests\bin\Debug\UnitTests.dll" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2016-11-12 21:26:23Z" end-time="2016-11-12 21:26:23Z" duration="0.757185" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="2">
+    <environment framework-version="3.5.0.0" clr-version="4.0.30319.18408" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="C:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools" machine-name="MININT-3ICL6ES" user="Fen" user-domain="MININT-3ICL6ES" culture="en-CA" uiculture="en-US" os-architecture="x64" />
+    <settings>
+      <setting name="DisposeRunners" value="True" />
+      <setting name="WorkDirectory" value="C:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools" />
+      <setting name="ImageRuntimeVersion" value="4.0.30319" />
+      <setting name="ImageTargetFrameworkName" value=".NETFramework,Version=v4.5" />
+      <setting name="ImageRequiresX86" value="False" />
+      <setting name="ImageRequiresDefaultAppDomainAssemblyResolver" value="False" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="5664" />
+      <property name="_APPDOMAIN" value="test-domain-" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="TestSuite" id="0-1004" name="UnitTests" fullname="UnitTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2016-11-12 21:26:23Z" end-time="2016-11-12 21:26:23Z" duration="0.707290" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="2">
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="0-1000" name="GitHubUnitTests" fullname="UnitTests.GitHubUnitTests" classname="UnitTests.GitHubUnitTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2016-11-12 21:26:23Z" end-time="2016-11-12 21:26:23Z" duration="0.696211" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="2">
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="0-1001" name="SessionTypeTest" fullname="UnitTests.GitHubUnitTests.SessionTypeTest" methodname="SessionTypeTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="1440497922" result="Passed" start-time="2016-11-12 21:26:23Z" end-time="2016-11-12 21:26:23Z" duration="0.588715" asserts="1" />
+        <test-case id="0-1002" name="ValidSessionTypeTest" fullname="UnitTests.GitHubUnitTests.ValidSessionTypeTest" methodname="ValidSessionTypeTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="877678227" result="Failed" start-time="2016-11-12 21:26:23Z" end-time="2016-11-12 21:26:23Z" duration="0.078035" asserts="1">
+          <failure>
+            <message><![CDATA[  Expected: <System.InvalidCastException>
+  But was:  <System.InvalidOperationException: Cannot obtain new token for non-oauth session!
+   at OECLib.GitHub.Session.<ObtainNewToken>d__0.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\GitHub\Session.cs:line 46
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at UnitTests.GitHubUnitTests.<>c__DisplayClass1.<<ValidSessionTypeTest>b__0>d__3.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\UnitTests\GitHubUnitTests.cs:line 35
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at NUnit.Framework.Internal.AsyncInvocationRegion.AsyncTaskInvocationRegion.WaitForPendingOperationsToComplete(Object invocationResult)
+   at NUnit.Framework.Assert.ThrowsAsync(IResolveConstraint expression, AsyncTestDelegate code, String message, Object[] args)>
+]]></message>
+            <stack-trace><![CDATA[at UnitTests.GitHubUnitTests.ValidSessionTypeTest() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\UnitTests\GitHubUnitTests.cs:line 35
+]]></stack-trace>
+          </failure>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
