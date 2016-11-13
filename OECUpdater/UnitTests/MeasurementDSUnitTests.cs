@@ -118,5 +118,70 @@ namespace UnitTests
             mUnit.setValue(newMeasurement);
             Assert.AreEqual(newMeasurement, (string)mUnit.getValue().value);
         }
+
+        // MeasurementUnit unit tests
+
+        [TestCase("12 20 43")]
+        [TestCase(5.74)]
+        public void CreateMeasurementUnit1Input(object value)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value);
+        }
+
+        [TestCase("12 20 43", 0.02)]
+        [TestCase(5.74, 0.02)]
+        public void CreateMeasurementUnit2Input(object value, double errorplus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus);
+        }
+
+        [TestCase("12 20 43", 0.02, 0.03)]
+        [TestCase(5.74, 0.02, 0.03)]
+        public void CreateMeasurementUnit3Input(object value, double errorplus, double errorminus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus, errorminus);
+        }
+
+        [TestCase("12 20 43")]
+        public void CheckMeasurementUnitStrValue1Input(object value)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value);
+            Assert.AreEqual((string)value, (string)mUnit.value);
+        }
+
+        [TestCase("12 20 43", 0.02)]
+        public void CheckMeasurementUnitStrValue2Input(object value, double errorplus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus);
+            Assert.AreEqual((string)value, (string)mUnit.value);
+        }
+
+        [TestCase("12 20 43", 0.02, 0.03)]
+        public void CheckMeasurementUnitStrValue3Input(object value, double errorplus, double errorminus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus, errorminus);
+            Assert.AreEqual((string)value, (string)mUnit.value);
+        }
+
+        [TestCase(5.74)]
+        public void CheckMeasurementUnitDoubleValue1Input(object value)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value);
+            Assert.AreEqual((double)value, (double)mUnit.value);
+        }
+
+        [TestCase(5.74, 0.02)]
+        public void CheckMeasurementUnitDoubleValue2Input(object value, double errorplus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus);
+            Assert.AreEqual((double)value, (double)mUnit.value);
+        }
+
+        [TestCase(5.74, 0.02, 0.03)]
+        public void CheckMeasurementUnitDoubleValue3Input(object value, double errorplus, double errorminus)
+        {
+            MeasurementUnit mUnit = new MeasurementUnit(value, errorplus, errorminus);
+            Assert.AreEqual((double)value, (double)mUnit.value);
+        }
     }
 }

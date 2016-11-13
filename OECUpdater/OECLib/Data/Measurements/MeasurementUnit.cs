@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Xml;
 
-namespace OECLib
+namespace OECLib.Data.Measurements
 {
 	public class MeasurementUnit
 	{
