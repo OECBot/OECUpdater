@@ -81,7 +81,7 @@ namespace UnitTests
             String result = "";
             String a = "abcdefghijklmnopqrstuvwxyz1234567890";
 
-            for (int i = 0; i < r.Next(1, length); i++)
+            for (int i = 0; i < length; i++)
             {
                 int ran = r.Next(36);
 
