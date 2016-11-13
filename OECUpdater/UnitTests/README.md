@@ -23,7 +23,7 @@ Getting started
     - The assemblies should be located in the debug folder of the UnitTests project
 - Additional information can be found here: [Wiki](https://github.com/nunit/docs/wiki/Console-Command-Line)
 
-### NEW:
+#### NEW:
 - On windows you can now use the runtests.cmd located in the main directory to run tests!
 
 ### Looking at the results:
