@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace OECLib.Data.Measurements
 {
-    internal class NumberMeasurement : Measurement
+    public class NumberMeasurement : Measurement
     {
         double measurement;
 

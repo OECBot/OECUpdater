@@ -20,6 +20,8 @@ namespace UnitTests
             doc = new XmlDocument();
         }
 
+        // NumberErrorMeasurement unit tests
+
         [TestCase("magB", 5.74, 0.02, 0.02)]
         public void CreateNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
         {
@@ -53,6 +55,36 @@ namespace UnitTests
             Assert.AreEqual(newMeasurement, mUnit.getValue().value);
         }
 
+        // NumberMeasurement unit tests
 
+        [TestCase("magB", 5.74)]
+        public void CreateNumberErrorMeasurement(string name, double measurement)
+        {
+            NumberMeasurement mUnit = new NumberMeasurement(name, measurement);
+        }
+
+        [TestCase("magB", 5.74)]
+        public void CheckNumberErrorMeasurementXML(string name, double measurement)
+        {
+            NumberMeasurement mUnit = new NumberMeasurement(name, measurement);
+            XmlElement element = doc.CreateElement(mUnit.MeasurementName);
+            element = mUnit.WriteXmlTag(element);
+            Assert.AreEqual(measurement.ToString(), element.InnerText);
+        }
+
+        [TestCase("magB", 5.74)]
+        public void CheckNumberErrorMeasurementGetValue(string name, double measurement)
+        {
+            NumberMeasurement mUnit = new NumberMeasurement(name, measurement);
+            Assert.AreEqual(measurement, mUnit.getValue().value);
+        }
+
+        [TestCase("magB", 5.74, 5.75)]
+        public void CheckNumberErrorMeasurementSetValue(string name, double measurement, double newMeasurement)
+        {
+            NumberMeasurement mUnit = new NumberMeasurement(name, measurement);
+            mUnit.setValue(newMeasurement);
+            Assert.AreEqual(newMeasurement, mUnit.getValue().value);
+        }
     }
 }
