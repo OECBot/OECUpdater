@@ -25,10 +25,6 @@ namespace OECLib.GitHub
         public async Task<String> getFile(String filePath)
         {
             var contentCollection = await session.client.Repository.Content.GetAllContents(repo.Id, filePath);
-            if (contentCollection.Count == 0)
-            {
-                throw new Exception(String.Format("File: {0} not found in {1}", filePath, repo.Name));
-            }
             var content = contentCollection[0];
             shaKeys[content.Name] = content.Sha;
             return content.Content;
@@ -36,8 +32,14 @@ namespace OECLib.GitHub
 
         public async Task<IReadOnlyList<PullRequest>> getAllPullRequests()
         {
-            var prs = await session.client.PullRequest.GetAllForRepository(repo.Id, new ApiOptions());
+            var prs = await session.client.PullRequest.GetAllForRepository(repo.Id);
             return prs;
+        }
+
+        public async Task<IReadOnlyList<Branch>> getAllBranches()
+        {
+            var branches = await session.client.Repository.Branch.GetAll(repo.Id);
+            return branches;
         }
 
         public async Task updateFile(String filePath, String content, String branch)

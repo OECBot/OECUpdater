@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="7" engine-version="3.5.0.0" clr-version="4.0.30319.18408" start-time="2016-11-13 01:35:27Z" end-time="2016-11-13 01:35:32Z" duration="5.413784">
+  <command-line><![CDATA[.\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools\nunit3-console.exe  .\OECUpdater\UnitTests\bin\Debug\UnitTests.dll]]></command-line>
+  <test-suite type="Assembly" id="0-1009" name="UnitTests.dll" fullname="C:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\UnitTests\bin\Debug\UnitTests.dll" runstate="Runnable" testcasecount="7" result="Passed" start-time="2016-11-13 01:35:27Z" end-time="2016-11-13 01:35:32Z" duration="5.292442" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="7">
+    <environment framework-version="3.5.0.0" clr-version="4.0.30319.18408" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="C:\Users\Fen\Documents\GitHub\team06-Project" machine-name="MININT-3ICL6ES" user="Fen" user-domain="MININT-3ICL6ES" culture="en-CA" uiculture="en-US" os-architecture="x64" />
+    <settings>
+      <setting name="DisposeRunners" value="True" />
+      <setting name="WorkDirectory" value="C:\Users\Fen\Documents\GitHub\team06-Project" />
+      <setting name="ImageRuntimeVersion" value="4.0.30319" />
+      <setting name="ImageTargetFrameworkName" value=".NETFramework,Version=v4.5" />
+      <setting name="ImageRequiresX86" value="False" />
+      <setting name="ImageRequiresDefaultAppDomainAssemblyResolver" value="False" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="3240" />
+      <property name="_APPDOMAIN" value="test-domain-" />
+    </properties>
+    <test-suite type="TestSuite" id="0-1010" name="UnitTests" fullname="UnitTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2016-11-13 01:35:27Z" end-time="2016-11-13 01:35:32Z" duration="5.240000" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="7">
+      <test-suite type="TestFixture" id="0-1000" name="GitHubUnitTests" fullname="UnitTests.GitHubUnitTests" classname="UnitTests.GitHubUnitTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2016-11-13 01:35:27Z" end-time="2016-11-13 01:35:32Z" duration="5.231994" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="7">
+        <test-case id="0-1008" name="CreateBranchTest" fullname="UnitTests.GitHubUnitTests.CreateBranchTest" methodname="CreateBranchTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="1790135924" result="Passed" start-time="2016-11-13 01:35:27Z" end-time="2016-11-13 01:35:30Z" duration="2.990821" asserts="1" />
+        <test-case id="0-1006" name="GetFileTest" fullname="UnitTests.GitHubUnitTests.GetFileTest" methodname="GetFileTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="711174070" result="Passed" start-time="2016-11-13 01:35:30Z" end-time="2016-11-13 01:35:30Z" duration="0.361848" asserts="1" />
+        <test-suite type="ParameterizedMethod" id="0-1005" name="IsCollaboratorTest" fullname="UnitTests.GitHubUnitTests.IsCollaboratorTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2016-11-13 01:35:30Z" end-time="2016-11-13 01:35:32Z" duration="1.112497" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="2">
+          <test-case id="0-1003" name="IsCollaboratorTest(&quot;OECTest&quot;,&quot;Gazing&quot;,True)" fullname="UnitTests.GitHubUnitTests.IsCollaboratorTest(&quot;OECTest&quot;,&quot;Gazing&quot;,True)" methodname="IsCollaboratorTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="466106662" result="Passed" start-time="2016-11-13 01:35:31Z" end-time="2016-11-13 01:35:31Z" duration="0.588256" asserts="1" />
+          <test-case id="0-1004" name="IsCollaboratorTest(&quot;SpazioTest&quot;,&quot;OECBot&quot;,False)" fullname="UnitTests.GitHubUnitTests.IsCollaboratorTest(&quot;SpazioTest&quot;,&quot;OECBot&quot;,False)" methodname="IsCollaboratorTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="1753850247" result="Passed" start-time="2016-11-13 01:35:31Z" end-time="2016-11-13 01:35:32Z" duration="0.513499" asserts="1" />
+        </test-suite>
+        <test-case id="0-1007" name="PullRequestTest" fullname="UnitTests.GitHubUnitTests.PullRequestTest" methodname="PullRequestTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="798486855" result="Passed" start-time="2016-11-13 01:35:32Z" end-time="2016-11-13 01:35:32Z" duration="0.347705" asserts="1" />
+        <test-case id="0-1001" name="SessionStringTest" fullname="UnitTests.GitHubUnitTests.SessionStringTest" methodname="SessionStringTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="684334323" result="Passed" start-time="2016-11-13 01:35:32Z" end-time="2016-11-13 01:35:32Z" duration="0.185994" asserts="1" />
+        <test-case id="0-1002" name="ValidSessionTypeTest" fullname="UnitTests.GitHubUnitTests.ValidSessionTypeTest" methodname="ValidSessionTypeTest" classname="UnitTests.GitHubUnitTests" runstate="Runnable" seed="1754959273" result="Passed" start-time="2016-11-13 01:35:32Z" end-time="2016-11-13 01:35:32Z" duration="0.198295" asserts="1" />
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

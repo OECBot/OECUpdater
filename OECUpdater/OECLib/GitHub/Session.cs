@@ -11,6 +11,7 @@ namespace OECLib.GitHub
     {
         public const String clientId = "8c533ca43cbfba2e2268";
         public const String clientSecret = "fdfa25888fb0f815c248114fba5f7f26d834743f";
+        public static ProductHeaderValue Header = new ProductHeaderValue("SpazioApp");
 
         private Dictionary<String, String> session = new Dictionary<string, string>();
 
@@ -27,13 +28,13 @@ namespace OECLib.GitHub
 
         public Session(Credentials cred)
         {
-            this.client = new GitHubClient(new ProductHeaderValue("SpazioApp"));
+            this.client = new GitHubClient(Header);
             this.client.Credentials = cred;
         }
 
 		public Session(String uname, String password)
 		{
-			this.client = new GitHubClient(new ProductHeaderValue("SpazioApp"));
+			this.client = new GitHubClient(Header);
 			this.client.Credentials = new Credentials(uname, password);
 		}
 
@@ -56,6 +57,20 @@ namespace OECLib.GitHub
                 return String.Format("Session ({2}): Authorization Code: {0} - Access Token: {1}", Code, Token.AccessToken, client.Credentials.AuthenticationType);
             }
             return String.Format("Session ({1}): Username: {0} - Password: {2}", client.Credentials.Login, client.Credentials.AuthenticationType, client.Credentials.Password);
+        }
+
+        public async Task<bool> CheckAccess(int id, String owner, String name)
+        {
+            var repos = await client.Repository.Collaborator.GetAll(owner, name);
+            User cur = await client.User.Current();
+            foreach (User person in repos)
+            {
+                if (id == person.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
