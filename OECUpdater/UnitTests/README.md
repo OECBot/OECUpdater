@@ -34,4 +34,4 @@ Getting started
 Selecting specific classes to test
 -----
 - Use the following parameter to select the class to test:
-  - `--where "test =~ \Class Name\"
+  - `--where "test =~ \Class Name\"`
