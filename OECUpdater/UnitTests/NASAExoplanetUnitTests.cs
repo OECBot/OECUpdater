@@ -9,7 +9,13 @@ namespace UnitTests
 	[TestFixture]
 	public class NASAExoplanetUnitTests
 	{
-		NASAExoplanet nasaexoplanet = new NASAExoplanet();
+		private NASAExoplanet nasaexoplanet;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			nasaexoplanet = new NASAExoplanet();
+		}
 
 		[Test]
 		public void GetNameTest()
