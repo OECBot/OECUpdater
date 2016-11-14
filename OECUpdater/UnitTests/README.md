@@ -33,5 +33,5 @@ Getting started
 
 Selecting specific classes to test
 -----
-- Use the following parameter to select the classs to test:
+- Use the following parameter to select the class to test:
   - `--where=[Class Name]`
