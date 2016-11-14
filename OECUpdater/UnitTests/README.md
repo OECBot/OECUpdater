@@ -19,7 +19,7 @@ Getting started
 - Run tests with NUnit Console Runner, which can be found in:
 
 `.\team06-Project\OECUpdater\packages\NUnit.ConsoleRunner.3.5.0\tools`
-  - YOU MUST USE TERMINAL(OR CMD IN WINDOWS) TO RUN IT!
+  - You MUST USE Terminal or cmd(windows) to run it!
   - Syntax(For windows only) = `nunit3-console [input assembly location]`
     - The assemblies should be located in the debug folder of the UnitTests project
 - Additional information can be found here: [Wiki](https://github.com/nunit/docs/wiki/Console-Command-Line)
