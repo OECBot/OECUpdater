@@ -9,7 +9,13 @@ namespace UnitTests
 	[TestFixture]
 	public class ExoplanetEUUnitTests
 	{
-		ExoplanetEUPlugin exoplaneteu = new ExoplanetEUPlugin();
+		private ExoplanetEUPlugin exoplaneteu;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			exoplaneteu = new ExoplanetEUPlugin();
+		}
 
 		[Test]
 		public void GetNameTest()
