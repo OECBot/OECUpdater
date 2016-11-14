@@ -10,9 +10,10 @@ using System.Xml;
 
 namespace UnitTests
 {
+    [TestFixture]
     class MeasurementDSUnitTests
     {
-        XmlDocument doc;
+        private XmlDocument doc;
 
         [SetUp]
         protected void SetUp()
