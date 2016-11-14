@@ -91,6 +91,11 @@ namespace OECLib.GitHub
             await session.client.Repository.Content.CreateFile(repo.Id, filePath, cfr);
         }
 
+        public async Task deleteBranch(String branch)
+        {
+            await session.client.Git.Reference.Delete(repo.Id, branch);
+        }
+
         private String getRandString(int length)
         {
             String result = "";

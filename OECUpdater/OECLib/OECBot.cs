@@ -24,7 +24,7 @@ namespace OECLib
 
         public bool On;
 
-        public static DateTime checkTime = DateTime.Today.AddHours(15);
+        public DateTime checkTime = DateTime.Today.AddHours(15);
 
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
@@ -38,7 +38,6 @@ namespace OECLib
         {
             this.On = true;
             this.cts = new CancellationTokenSource();
-            checkTime = checkTime.AddMinutes(33);
             if (checkTime < DateTime.Now)
             {
                 checkTime = checkTime.AddDays(1.0);
