@@ -18,7 +18,7 @@ namespace OECLib.Data
 
         public override bool AddChild(StellarObject child)
         {
-            if(numOfChildren == 0 || child.IsAPlanet)
+            if((numOfChildren == 0 || child.IsAPlanet) && !child.IsASystem)
             {
                 children.Add(child);
                 if(!child.IsAPlanet)
