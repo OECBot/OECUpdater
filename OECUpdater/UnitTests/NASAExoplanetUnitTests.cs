@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NASAExoplanetPlugin;
 using OECLib.Data;
 using NUnit.Framework;
@@ -6,34 +6,41 @@ using System.Collections.Generic;
 
 namespace UnitTests
 {
+	[TestFixture]
 	public class NASAExoplanetUnitTests
 	{
-		NASAExoplanet nasaexoplanet = new NASAExoplanet();
+		private NASAExoplanet nasaexoplanet;
 
+		[SetUp]
+		protected void SetUp()
+		{
+			nasaexoplanet = new NASAExoplanet();
+		}
+
+		[Test]
 		public void GetNameTest()
 		{
 			string value = nasaexoplanet.GetName();
 			Assert.AreEqual("Exoplanet.NASA", value);
 		}
 
+		[Test]
 		public void GetDescriptionTest()
 		{
 			string value = nasaexoplanet.GetDescription();
 			Assert.AreEqual("This plugin allows the extraction of data from the NASA Exoplanet Archive", value);
 		}
 
+		[Test]
 		public void GetAuthorTest()
 		{
 			string value = nasaexoplanet.GetAuthor();
 			Assert.AreEqual("Spazio", value);
 		}
 
+		[Test]
 		public void RunTest()
 		{
-			//Dictionary<string, Star> stars = new Dictionary<string, Star>();
-			//List<Star> starlist = new List<Star>();
-			//starlist.AddRange(stars.Values);
-
 			List<Star> starlist = nasaexoplanet.Run();
 			List<Star> expectedlist = nasaexoplanet.Run();
 
