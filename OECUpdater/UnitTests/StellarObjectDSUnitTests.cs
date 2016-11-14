@@ -249,5 +249,217 @@ namespace UnitTests
             Assert.AreEqual("G8 III", element.ChildNodes[2].InnerText);
         }
 
+        // Unit tests for Binary
+
+        [Test]
+        public void BinaryAddChild()
+        {
+            Binary currentBinary = new Binary();
+
+            Binary tempBinary = new Binary();
+            bool addBinary = currentBinary.AddChild(tempBinary);
+            Assert.AreEqual(true, addBinary);
+
+            Star tempStar = new Star();
+            bool addStar = currentBinary.AddChild(tempStar);
+            Assert.AreEqual(true, addStar);
+
+            Planet tempPlanet = new Planet();
+            bool addPlanet = currentBinary.AddChild(tempPlanet);
+            Assert.AreEqual(true, addPlanet);
+
+            SolarSystem tempSolarSystem = new SolarSystem();
+            bool addSolarSystem = currentBinary.AddChild(tempSolarSystem);
+            Assert.AreEqual(false, addSolarSystem);
+        }
+
+        [Test]
+        public void BinaryStarType()
+        {
+            Binary tempBinary = new Binary();
+            Assert.AreEqual(false, tempBinary.IsASystem);
+            Assert.AreEqual(true, tempBinary.IsABinary);
+            Assert.AreEqual(false, tempBinary.IsAStar);
+            Assert.AreEqual(false, tempBinary.IsAPlanet);
+        }
+
+        [TestCase("spectraltype", "G8 III")]
+        public void CheckBinaryAddStringMeasurement(string name, string measurement)
+        {
+            Binary tempBinary = new Binary();
+            tempBinary.AddStringMeasurement(name, measurement);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (string)tempBinary.measurements[name].getValue().value);
+        }
+
+        [TestCase("magB", 5.74)]
+        public void CheckBinaryAddNumberMeasurement(string name, double measurement)
+        {
+            Binary tempBinary = new Binary();
+            tempBinary.AddNumberMeasurement(name, measurement);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (double)tempBinary.measurements[name].getValue().value);
+        }
+
+        [TestCase("magB", 5.74, 0.02, 0.02)]
+        public void CheckBinaryAddNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
+        {
+            Binary tempBinary = new Binary();
+            tempBinary.AddNumberErrorMeasurement(name, measurement, errPlus, errMinus);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (double)tempBinary.measurements[name].getValue().value);
+            Assert.AreEqual(errPlus, tempBinary.measurements[name].getValue().errorPlus);
+            Assert.AreEqual(errMinus, tempBinary.measurements[name].getValue().errorMinus);
+        }
+
+        [Test]
+        public void CheckBinaryAddMeasurement()
+        {
+            Binary tempBinary = new Binary();
+            tempBinary.AddMeasurement(numErrMeasurement);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey("magB"));
+            Assert.AreEqual(5.74, (double)tempBinary.measurements["magB"].getValue().value);
+            Assert.AreEqual(0.02, (double)tempBinary.measurements["magB"].getValue().errorPlus);
+            Assert.AreEqual(0.03, (double)tempBinary.measurements["magB"].getValue().errorMinus);
+
+            tempBinary.AddMeasurement(numMeasurement);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey("magJ"));
+            Assert.AreEqual(2.943, (double)tempBinary.measurements["magJ"].getValue().value);
+
+            tempBinary.AddMeasurement(strMeasurement);
+            Assert.AreEqual(true, tempBinary.measurements.ContainsKey("spectraltype"));
+            Assert.AreEqual("G8 III", (string)tempBinary.measurements["spectraltype"].getValue().value);
+        }
+
+        [Test]
+        public void CheckBinaryXMLTag()
+        {
+            Binary tempBinary = new Binary();
+            XmlDocument doc = new XmlDocument();
+            tempBinary.AddMeasurement(numErrMeasurement);
+            tempBinary.AddMeasurement(numMeasurement);
+            tempBinary.AddMeasurement(strMeasurement);
+            XmlElement element = tempBinary.XMLTag(doc);
+
+            Assert.AreEqual("binary", element.Name);
+
+            Assert.AreEqual("magB", element.ChildNodes[0].Name);
+            Assert.AreEqual("5.74", element.ChildNodes[0].InnerText);
+            Assert.AreEqual("0.02", element.ChildNodes[0].Attributes[0].InnerText);
+            Assert.AreEqual("0.03", element.ChildNodes[0].Attributes[1].InnerText);
+
+            Assert.AreEqual("magJ", element.ChildNodes[1].Name);
+            Assert.AreEqual("2.943", element.ChildNodes[1].InnerText);
+
+            Assert.AreEqual("spectraltype", element.ChildNodes[2].Name);
+            Assert.AreEqual("G8 III", element.ChildNodes[2].InnerText);
+        }
+
+        // Unit tests for SolarSystem
+
+        [Test]
+        public void SolarSystemAddChild()
+        {
+            SolarSystem currentSolarSystem = new SolarSystem();
+
+            SolarSystem tempSolarSystem = new SolarSystem();
+            bool addSolarSystem = currentSolarSystem.AddChild(tempSolarSystem);
+            Assert.AreEqual(false, addSolarSystem);
+
+            Binary tempBinary = new Binary();
+            bool addBinary = currentSolarSystem.AddChild(tempBinary);
+            Assert.AreEqual(true, addBinary);
+
+            Star tempStar = new Star();
+            bool addStar = currentSolarSystem.AddChild(tempStar);
+            Assert.AreEqual(false, addStar);
+
+            Planet tempPlanet = new Planet();
+            bool addPlanet = currentSolarSystem.AddChild(tempPlanet);
+            Assert.AreEqual(true, addPlanet);
+        }
+
+        [Test]
+        public void CheckSolarSystemType()
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            Assert.AreEqual(true, tempSolarSystem.IsASystem);
+            Assert.AreEqual(false, tempSolarSystem.IsABinary);
+            Assert.AreEqual(false, tempSolarSystem.IsAStar);
+            Assert.AreEqual(false, tempSolarSystem.IsAPlanet);
+        }
+
+        [TestCase("spectraltype", "G8 III")]
+        public void CheckSolarSystemAddStringMeasurement(string name, string measurement)
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            tempSolarSystem.AddStringMeasurement(name, measurement);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (string)tempSolarSystem.measurements[name].getValue().value);
+        }
+
+        [TestCase("magB", 5.74)]
+        public void CheckSolarSystemAddNumberMeasurement(string name, double measurement)
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            tempSolarSystem.AddNumberMeasurement(name, measurement);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (double)tempSolarSystem.measurements[name].getValue().value);
+        }
+
+        [TestCase("magB", 5.74, 0.02, 0.02)]
+        public void CheckSolarSystemAddNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            tempSolarSystem.AddNumberErrorMeasurement(name, measurement, errPlus, errMinus);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey(name));
+            Assert.AreEqual(measurement, (double)tempSolarSystem.measurements[name].getValue().value);
+            Assert.AreEqual(errPlus, tempSolarSystem.measurements[name].getValue().errorPlus);
+            Assert.AreEqual(errMinus, tempSolarSystem.measurements[name].getValue().errorMinus);
+        }
+
+        [Test]
+        public void CheckSolarSystemAddMeasurement()
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            tempSolarSystem.AddMeasurement(numErrMeasurement);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey("magB"));
+            Assert.AreEqual(5.74, (double)tempSolarSystem.measurements["magB"].getValue().value);
+            Assert.AreEqual(0.02, (double)tempSolarSystem.measurements["magB"].getValue().errorPlus);
+            Assert.AreEqual(0.03, (double)tempSolarSystem.measurements["magB"].getValue().errorMinus);
+
+            tempSolarSystem.AddMeasurement(numMeasurement);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey("magJ"));
+            Assert.AreEqual(2.943, (double)tempSolarSystem.measurements["magJ"].getValue().value);
+
+            tempSolarSystem.AddMeasurement(strMeasurement);
+            Assert.AreEqual(true, tempSolarSystem.measurements.ContainsKey("spectraltype"));
+            Assert.AreEqual("G8 III", (string)tempSolarSystem.measurements["spectraltype"].getValue().value);
+        }
+
+        [Test]
+        public void CheckSolarSystemXMLTag()
+        {
+            SolarSystem tempSolarSystem = new SolarSystem();
+            XmlDocument doc = new XmlDocument();
+            tempSolarSystem.AddMeasurement(numErrMeasurement);
+            tempSolarSystem.AddMeasurement(numMeasurement);
+            tempSolarSystem.AddMeasurement(strMeasurement);
+            XmlElement element = tempSolarSystem.XMLTag(doc);
+
+            Assert.AreEqual("system", element.Name);
+
+            Assert.AreEqual("magB", element.ChildNodes[0].Name);
+            Assert.AreEqual("5.74", element.ChildNodes[0].InnerText);
+            Assert.AreEqual("0.02", element.ChildNodes[0].Attributes[0].InnerText);
+            Assert.AreEqual("0.03", element.ChildNodes[0].Attributes[1].InnerText);
+
+            Assert.AreEqual("magJ", element.ChildNodes[1].Name);
+            Assert.AreEqual("2.943", element.ChildNodes[1].InnerText);
+
+            Assert.AreEqual("spectraltype", element.ChildNodes[2].Name);
+            Assert.AreEqual("G8 III", element.ChildNodes[2].InnerText);
+        }
+
     }
 }
