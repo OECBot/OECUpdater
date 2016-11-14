@@ -32,6 +32,11 @@ namespace OECUpdater
             initalizeCommands();
             Serializer.InitPlugins();
             plugins = Serializer.plugins;
+            Console.WriteLine(plugins.Count + " plugins loaded:");
+            foreach (IPlugin plugin in getPlugins())
+            {
+                Console.WriteLine(plugin.GetName() + ": " + plugin.GetDescription());
+            }
             while (1 == 1)
             {
                 Console.WriteLine("Hello welcome to Spazio Demo!");

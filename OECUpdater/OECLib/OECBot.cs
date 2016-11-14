@@ -90,7 +90,7 @@ namespace OECLib
             XmlWriterSettings ws = new XmlWriterSettings();
             ws.Indent = true;
             ws.OmitXmlDeclaration = true;
-            foreach (Planet planet in newData)
+            foreach (StellarObject planet in newData)
             {
                 using (XmlWriter xw = XmlWriter.Create(output, ws))
                 {

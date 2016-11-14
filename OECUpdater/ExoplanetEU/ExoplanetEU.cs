@@ -60,7 +60,7 @@ namespace ExoplanetEU
 					planet.AddStringMeasurement("name", name);
                 }
 
-				planet.AddStringMeasurement("source", string.Format("http://exoplanet.eu/catalog/{0}/", names[0].Replace(" ", "_")));
+				planet.AddStringMeasurement("source", string.Format("http://exoplanet.eu/catalog/{0}/", fields[0].Replace(" ", "_")));
 				planet.AddNumberErrorMeasurement("mass", parseDouble(fields[1]), parseDouble(fields[2]), parseDouble(fields[3]));
 				planet.AddNumberErrorMeasurement("period", parseDouble(fields[10]), parseDouble(fields[11]), parseDouble(fields[12]));
 				planet.AddNumberErrorMeasurement("semimajoraxis", parseDouble(fields[13]), parseDouble(fields[14]), parseDouble(fields[15]));
