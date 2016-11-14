@@ -74,7 +74,7 @@ namespace UnitTests
         {
             Task<String> branch = rm.createBranch(getRandString(10));
             branch.Wait();
-            Assert.DoesNotThrowAsync(async () => await session.client.Repository.Branch.Get(rm.repo.Id, branch.Result));         
+            Assert.DoesNotThrowAsync(async () => await session.client.Repository.Branch.Get(rm.repo.Id, branch.Result));    
         }
 
         [Test]

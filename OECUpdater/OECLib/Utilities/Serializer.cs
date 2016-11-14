@@ -36,11 +36,12 @@ namespace OECLib.Utilities
                     {
                         try
                         {
-                            Type @interface = type.GetInterface("OECLib.Plugins.IPlugin");
+                            Type @interface = type.GetInterface("OECLib.Interface.IPlugin");
                             bool flag4 = @interface != null;
                             if (flag4)
                             {
                                 AttachPlugin(type);
+                               
                             }
                         }
                         catch (Exception ex)

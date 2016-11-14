@@ -24,7 +24,7 @@ namespace OECLib
 
         public bool On;
 
-        public static DateTime checkTime = DateTime.Today.AddHours(15);
+        public DateTime checkTime = DateTime.Today.AddHours(15);
 
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
@@ -38,7 +38,6 @@ namespace OECLib
         {
             this.On = true;
             this.cts = new CancellationTokenSource();
-            checkTime = checkTime.AddMinutes(33);
             if (checkTime < DateTime.Now)
             {
                 checkTime = checkTime.AddDays(1.0);
@@ -91,7 +90,7 @@ namespace OECLib
             XmlWriterSettings ws = new XmlWriterSettings();
             ws.Indent = true;
             ws.OmitXmlDeclaration = true;
-            foreach (Planet planet in newData)
+            foreach (StellarObject planet in newData)
             {
                 using (XmlWriter xw = XmlWriter.Create(output, ws))
                 {
