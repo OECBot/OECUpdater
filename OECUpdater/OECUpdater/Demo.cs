@@ -15,11 +15,11 @@ using OECLib;
 
 namespace OECUpdater
 {
-    public class DemoSprint2
+    public class Demo
     {
         public static string localHost = "127.0.0.1";
         public static int port = 4567;
-        public static string menu = "1)Run bot\n2)Check access\n3)Display all pull-requests for repository\n4)Set Current Repository\n5)Get file from repository\n6)Create branch\n7)Logout";
+        public static string menu = "1)Run bot\n2)Check access\n3)Display all pull-requests for repository\n4)Set Current Repository\n5)Get file from repository\n6)Create branch\n7)Change bot run schedule\n8)Logout";
         public static Dictionary<String, Func<Task>> commands = new Dictionary<string, Func<Task>>();
         public static Session s;
         public static OECBot bot;
@@ -32,7 +32,11 @@ namespace OECUpdater
             initalizeCommands();
             Serializer.InitPlugins();
             plugins = Serializer.plugins;
-
+            Console.WriteLine(plugins.Count + " plugins loaded:");
+            foreach (IPlugin plugin in getPlugins())
+            {
+                Console.WriteLine(plugin.GetName() + ": " + plugin.GetDescription());
+            }
             while (1 == 1)
             {
                 Console.WriteLine("Hello welcome to Spazio Demo!");
@@ -75,9 +79,39 @@ namespace OECUpdater
             commands.Add("5", getFile);
             commands.Add("6", createBranch);
             commands.Add("3", getAllPullRequest);
-            commands.Add("7", doNothing);
+            commands.Add("8", doNothing);
             commands.Add("4", setCurrentRepo);
-            commands.Add("8", getAllFiles);
+            commands.Add("7", setSchedule);
+        }
+
+        public async static Task setSchedule()
+        {
+            
+            double hour = 0;
+            string hs = "";
+            do
+            {
+                Console.WriteLine("Enter hour of check(int or double):");
+                hs = Console.ReadLine();
+            } while (!Double.TryParse(hs, out hour));
+            double min = 0;
+            string ms = "";
+
+            do
+            {
+                Console.WriteLine("Enter minute of check(int or double):");
+                ms = Console.ReadLine();
+            } while (!Double.TryParse(ms, out min));
+            try
+            {
+                bot.checkTime = DateTime.Today.AddHours(hour);
+                bot.checkTime = bot.checkTime.AddMinutes(min);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            Console.WriteLine("Bot set to run at: " + bot.checkTime.ToString());
         }
 
         public async static Task getAllFiles()
@@ -99,6 +133,7 @@ namespace OECUpdater
             try
             {
                 rm.repo = await s.client.Repository.Get(owner, name);
+                bot.rm.repo = rm.repo;
             }
             catch (Exception ex)
             {
@@ -143,8 +178,6 @@ namespace OECUpdater
         public async static Task runBot()
         {
             Console.WriteLine("Starting Bot");
-            var repo = await s.client.Repository.Get("Gazing", "OECTest");
-            bot = new OECBot(getPlugins(), repo);
             bot.Start();
         }
 
@@ -171,6 +204,7 @@ namespace OECUpdater
             {
                 s = await server.Start();
                 rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
+                bot = new OECBot(getPlugins(), rm.repo);
             }
             catch (Exception ex)
             {
@@ -192,7 +226,7 @@ namespace OECUpdater
                     Console.WriteLine("Command: ");
                     cmd = Console.ReadLine();
                 }
-                if (cmd == "7")
+                if (cmd == "8")
                 {
                     break;
                 }
@@ -222,31 +256,9 @@ namespace OECUpdater
             Console.WriteLine(hasAccess ? "You are a contributer of this repo!" : "You don't have access to this repo and cannot use this application!");
         }
 
-        public async static void PullRequest()
-        {
-            bool hasAccess = await CheckAccessByName("Gazing", "RedditPostsSaver");
-            Console.WriteLine(hasAccess ? "You are a contributer of this repo!" : "You don't have access to this repo and cannot use this application!");
-            if (!hasAccess)
-            {
-                return;
-            }
-            var repo = await s.client.Repository.Get("Gazing", "RedditPostsSaver");
-            try
-            {
-                NewPullRequest newPullRequest = new NewPullRequest("Test123", "test", "master");
-                PullRequest pr = await s.client.PullRequest.Create(repo.Id, newPullRequest);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-        }
-
         public async static void AllPullRequests()
         {
-            var repo = await s.client.Repository.Get("Gazing", "RedditPostsSaver");
-            var prs = await s.client.PullRequest.GetAllForRepository(repo.Id, new ApiOptions());
+            var prs = await rm.getAllPullRequests();
             foreach (PullRequest pr in prs)
             {
                 Console.WriteLine(pr.Title);
