@@ -29,3 +29,6 @@ Compile and Run:
 - The solution is built and moved to the 'Release' folder in the root directory.
 - 'dependencies.sh' works only on Debian (and derivatives), Fedora (and derivatives), and OSX (theoretically)
 - The OSX path hasn't been actually tested, however it should work. It uses the 'installer' command to install a pkg downloaded from the internet
+
+### UnitTests:
+- Can be found in OECUpdator/UnitTests
