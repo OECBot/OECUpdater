@@ -3,6 +3,9 @@
 The Deliverable 4 report contains an update of the progress of the project for the duration of three additional sprints. 
 
 
+To run the program please look at the README file in the root directory. 
+
+
 The report can be found in this current directory:
 
 ```
@@ -20,6 +23,7 @@ The code inspection reports can be found in the directory:
 ```
 /Inspection Reports
 ```
+
 
 The report structure is as follows:
 
