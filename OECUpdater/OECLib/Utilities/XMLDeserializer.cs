@@ -10,10 +10,17 @@ namespace OECLib.Utilities
 	{
 		XmlDocument doc;
 
-		public XMLDeserializer (string filename)
+		public XMLDeserializer (string filename, bool isFile)
 		{
 			doc = new XmlDocument ();
-			doc.LoadXml (File.ReadAllText (filename));
+            if (isFile)
+            {
+                doc.LoadXml(File.ReadAllText(filename));
+            }
+            else
+            {
+                doc.LoadXml(filename);
+            }
 		}
 
 		public StellarObject ParseXML(XmlNode node=null, StellarObject root=null) {

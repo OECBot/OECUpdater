@@ -46,7 +46,6 @@ namespace OECLib.GitHub
         {
             UpdateFileRequest ufr = new UpdateFileRequest("Update "+filePath, content, shaKeys[filePath], branch);
             var changeSet = await session.client.Repository.Content.UpdateFile(repo.Id, filePath, ufr);
-            Console.WriteLine(changeSet.Content);
             shaKeys.Remove(filePath);
         }
 
@@ -65,9 +64,9 @@ namespace OECLib.GitHub
             
         }
 
-        public async Task BeginCommitAndPull(String fileName, String content, String source, bool isNew)
+        public async Task BeginCommitAndPush(String fileName, String content, String source, bool isNew)
         {
-            String branch = await createBranch(fileName + getRandString(5));
+            String branch = await createBranch(fileName.Split('.')[0] + getRandString(5));
             if (isNew)
             {
                 await addFile(fileName, content, branch);

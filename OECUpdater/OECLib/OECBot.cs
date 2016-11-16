@@ -2,6 +2,7 @@
 using OECLib.Data;
 using OECLib.GitHub;
 using OECLib.Interface;
+using OECLib.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,16 @@ namespace OECLib
         public static String password = "UoJ84XJTXphgO4F";
         private CancellationTokenSource cts;
         public int Workers = 10;
+        public bool isFirstRun = true;
+        public Object queueLock = new Object();
+        public Queue<RepositoryContent> fileQueue;
 
         public List<IPlugin> plugins;
 
         public bool On;
 
         public DateTime checkTime = DateTime.Today.AddHours(15);
+        public DateTime lastCheckTime = DateTime.MinValue;
 
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
@@ -33,6 +38,7 @@ namespace OECLib
             this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
+            
         }
 
         public void Start()
@@ -43,21 +49,33 @@ namespace OECLib
             {
                 checkTime = checkTime.AddDays(1.0);
             }
-            scheduleCheck(runChecks);
+            if (isFirstRun)
+            {
+                scheduleCheck(firstRun);
+            }
+            else
+            {
+                scheduleCheck(runChecks);
+            }
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
-            
+
         }
 
         private async void scheduleCheck(Func<CancellationToken, Task> check)
         {
             await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
+
             try
             {
+                lastCheckTime = DateTime.Now;
+                checkTime = checkTime.AddDays(1.0);
+
+                scheduleCheck(runChecks);
                 await check(cts.Token);
             }
             catch (OperationCanceledException oce)
             {
-                Console.WriteLine("OECBot stopped..."+oce.Message);
+                Console.WriteLine("OECBot stopped..." + oce.Message);
             }
             catch (Exception ex)
             {
@@ -70,9 +88,6 @@ namespace OECLib
         {
 			List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
 			List<StellarObject> newData = new List<StellarObject>();
-
-            checkTime = checkTime.AddDays(1.0);
-            scheduleCheck(runChecks);
 
             foreach (IPlugin plugin in plugins)
             {
@@ -106,34 +121,66 @@ namespace OECLib
             
         }
 
-        public async Task firstRun()
+        public async Task firstRun(CancellationToken token)
         {
             var files = await rm.getAllFiles("systems/");
             Task[] tasks = new Task[10];
-            Queue<RepositoryContent> queue = new Queue<RepositoryContent>();
+            fileQueue =  new Queue<RepositoryContent>();
             foreach (RepositoryContent file in files)
             {
-                queue.Enqueue(file);
+                fileQueue.Enqueue(file);
             }
             for (int i = 0; i < tasks.Length; i++)
             {
-                tasks[i] = runWorker(queue);
+                tasks[i] = runWorker();
+            }
+            foreach (Task task in tasks)
+            {
+                await task;
             }
         }
 
-        public async Task runWorker(Queue<RepositoryContent> files)
+        private RepositoryContent dequeueFile()
         {
-            while (files.Count != 0)
+            lock (queueLock)
             {
-                var file = files.Dequeue();
-                String content = await rm.getFile("systems/"+file.Name);
-                String systemName = file.Name.Split('.')[0];
+                var file = this.fileQueue.Dequeue();
+                return file;
+            }
+            
+        }
 
+        public async Task runWorker()
+        {
+            while (fileQueue.Count != 0)
+            {
+                var file = this.dequeueFile();
+                try
+                {
+                    String content = await rm.getFile("systems/" + file.Name);
+                    String systemName = file.Name.Split('.')[0];
+                    XMLDeserializer xmld = new XMLDeserializer(content, false);
+                    StellarObject system = xmld.ParseXML();
+                    String lastUpdate = "";
+
+                    foreach (IPlugin plugin in plugins)
+                    {
+                        List<StellarObject> systems = plugin.Run(lastUpdate, systemName);
+
+                    }
+                    //Merge all of them!
+                    String newContent = "";
+                    await rm.BeginCommitAndPush("systems/" + file.Name, newContent, "", false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to update " + file.Name+": "+ex.Message);
+                }
             }
         }
 
         private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin) {
-            return plugin.Run();
+            return plugin.Run(lastCheckTime.ToString("yyyy-mm-dd"));
         }
 
         public void Stop()
