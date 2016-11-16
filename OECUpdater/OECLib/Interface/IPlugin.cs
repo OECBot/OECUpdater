@@ -15,7 +15,7 @@ namespace OECLib.Interface
 
 		void Initialize();
 
-		List<StellarObject> Run();
+		List<StellarObject> Run(String date, String name);
 	}
 }
 

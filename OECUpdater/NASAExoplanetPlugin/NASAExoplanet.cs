@@ -33,15 +33,20 @@ namespace NASAExoplanetPlugin
             return "Spazio";
         }
 
-		public List<StellarObject> Run()
+		public List<StellarObject> Run(String date, String sysName=null)
         {
             Dictionary<string, Star> stars = new Dictionary<string, Star>();
             HTTPRequest req = new HTTPRequest();
             string line;
 
-            string date = "2016-09-01";
+            //string date = "2016-09-01";
+            
             string columns = "pl_hostname,pl_name,pl_massj,pl_orbper,pl_orbsmax,pl_orbeccen,pl_orbeccenerr1,pl_orbeccenerr2,pl_orblper,pl_orblpererr1,pl_orblpererr2,pl_orbtper,pl_orbtpererr1,pl_orbtpererr2,pl_discmethod,rowupdate,pl_disc_refname";
             string filter = "rowupdate>to_date('" + date + "','yyyy-mm-dd')";
+            if (sysName != null)
+            {
+                filter += String.Format("where=pl_hostname like {0}", sysName);
+            }
             string newUrl = string.Format(baseURL, columns, filter);
             string httpResponse = req.RequestAsString(newUrl, null);
 
