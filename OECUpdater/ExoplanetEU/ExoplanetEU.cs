@@ -3,7 +3,6 @@ using System.Xml;
 
 using OECLib.Interface;
 using OECLib.Data;
-using OECLib.Data.Measurements;
 using System.Collections.Generic;
 using OECLib.Utilities;
 using System.IO;
@@ -52,36 +51,50 @@ namespace ExoplanetEU
 				Planet planet = new Planet ();
 
                 List<string> names = new List<String>();
-				planet.AddStringMeasurement("name", fields[0]);
+				planet.AddMeasurement("name", fields[0]);
                 string[] altNames = fields[63].Split(',');
 
                 foreach (string name in altNames)
 				{
-					planet.AddStringMeasurement("name", name);
+					planet.AddMeasurement("name", name);
                 }
 
-				planet.AddStringMeasurement("source", string.Format("http://exoplanet.eu/catalog/{0}/", fields[0].Replace(" ", "_")));
-				planet.AddNumberErrorMeasurement("mass", parseDouble(fields[1]), parseDouble(fields[2]), parseDouble(fields[3]));
-				planet.AddNumberErrorMeasurement("period", parseDouble(fields[10]), parseDouble(fields[11]), parseDouble(fields[12]));
-				planet.AddNumberErrorMeasurement("semimajoraxis", parseDouble(fields[13]), parseDouble(fields[14]), parseDouble(fields[15]));
-				planet.AddNumberErrorMeasurement("eccentricity", parseDouble(fields[16]), parseDouble(fields[17]), parseDouble(fields[18]));
-				planet.AddNumberErrorMeasurement("periastron", parseDouble(fields[25]), parseDouble(fields[26]), parseDouble(fields[27]));
-				planet.AddNumberErrorMeasurement("periastrontime", parseDouble(fields[28]), parseDouble(fields[29]), parseDouble(fields[29]));
-				planet.AddStringMeasurement("detectionMethod", fields[60] == "Radial Velocity" ? "RV" : "IDK");
-				string[] time = fields[24].Split('-');
-				planet.AddStringMeasurement("lastUpdate", (string.Format("{0}/{1}/{2}", time[0].Substring(2, 2), time[1], time[2])));
-				planet.AddStringMeasurement("discovery", fields[23]);
+				planet.AddMeasurement("source", string.Format("http://exoplanet.eu/catalog/{0}/", fields[0].Replace(" ", "_")));
 
-						planets.Add(planet);
+				planet.AddMeasurement("mass", fields[1], new Dictionary<string, string> {
+					{ "errorplus", fields[2]},
+					{ "errorminus", fields[3]},
+				});
+				planet.AddMeasurement("period", fields[10], new Dictionary<string, string> {
+					{ "errorplus", fields[11]},
+					{ "errorminus", fields[12]},
+				});
+				planet.AddMeasurement("semimajoraxis", fields[13], new Dictionary<string, string> {
+					{ "errorplus", fields[14]},
+					{ "errorminus", fields[15]},
+				});
+				planet.AddMeasurement("eccentricity", fields[16], new Dictionary<string, string> {
+					{ "errorplus", fields[17]},
+					{ "errorminus", fields[18]},
+				});
+				planet.AddMeasurement("periastron", fields[25], new Dictionary<string, string> {
+					{ "errorplus", fields[26]},
+					{ "errorminus", fields[27]},
+				});
+				planet.AddMeasurement("periastrontime", fields[28], new Dictionary<string, string> {
+					{ "errorplus", fields[29]},
+					{ "errorminus", fields[30]},
+				});
+
+				planet.AddMeasurement("detectionMethod", fields[60] == "Radial Velocity" ? "RV" : "IDK");
+				string[] time = fields[24].Split('-');
+				planet.AddMeasurement("lastUpdate", (string.Format("{0}/{1}/{2}", time[0].Substring(2, 2), time[1], time[2])));
+				planet.AddMeasurement("discovery", fields[23]);
+				planets.Add(planet);
 
             }
             return planets;
 		}
-
-        private Double parseDouble(String value)
-        {
-            return value == "" ? 0.0 : Double.Parse(value);
-        }
 	}
 }
 

@@ -60,27 +60,42 @@ namespace NASAExoplanetPlugin
                     star = stars[starName];
                 else
                 {
-                    star.AddStringMeasurement("name", starName);
+                    star.AddMeasurement("name", starName);
                     stars.Add(starName, star);
                 }
                 Planet planet = new Planet();
 
-                planet.AddStringMeasurement("name", fields[1]);
+                planet.AddMeasurement("name", fields[1]);
+
+
+				KeyValuePair<string, string> errMinus = new KeyValuePair<string, string> ("errorMinus", "");
+				KeyValuePair<string, string> errPlus = new KeyValuePair<string, string> ("errorPlus", "");
 
                 //string[] altNames = fields[63].Split(',');
 
                 String source = fields[1];
 
-                planet.AddNumberMeasurement("mass", parseDouble(fields[2]));
-                planet.AddNumberMeasurement("period", parseDouble(fields[3]));
-                planet.AddNumberMeasurement("semimajoraxis", parseDouble(fields[4]));
-                planet.AddNumberErrorMeasurement("eccentricity", parseDouble(fields[5]), parseDouble(fields[6]), parseDouble(fields[7]));
-                planet.AddNumberErrorMeasurement("periastron", parseDouble(fields[8]), parseDouble(fields[9]), parseDouble(fields[10]));
-                planet.AddNumberErrorMeasurement("periastrontime", parseDouble(fields[11]), parseDouble(fields[12]), parseDouble(fields[13]));
-                planet.AddStringMeasurement("discoverymethod", fields[14]);
-                planet.AddStringMeasurement("lastupdate", fields[15]);
+                planet.AddMeasurement("mass", fields[2]);
+                planet.AddMeasurement("period", fields[3]);
+                planet.AddMeasurement("semimajoraxis", fields[4]);
+
+				planet.AddMeasurement("eccentricity", fields[5], new Dictionary<string, string> {
+					{ "errorplus", fields[6]},
+					{ "errorminus", fields[7]},
+				});
+				planet.AddMeasurement("periastron", fields[8], new Dictionary<string, string> {
+					{ "errorplus", fields[9]},
+					{ "errorminus", fields[10]},
+				});
+				planet.AddMeasurement("periastrontime", fields[11],  new Dictionary<string, string> {
+					{ "errorplus", fields[12]},
+					{ "errorminus", fields[13]},
+				});
+
+                planet.AddMeasurement("discoverymethod", fields[14]);
+                planet.AddMeasurement("lastupdate", fields[15]);
                 string[] year = fields[16].Split(' ');
-                planet.AddStringMeasurement("discoveryyear", year[year.Length - 1]);
+                planet.AddMeasurement("discoveryyear", year[year.Length - 1]);
 
                 star.AddChild(planet);
 
@@ -89,11 +104,6 @@ namespace NASAExoplanetPlugin
 			List<StellarObject> sys = new List<StellarObject>();
             sys.AddRange(stars.Values);
             return sys;
-        }
-
-        private double parseDouble(string value)
-        {
-            return value == "" ? 0.0 : double.Parse(value);
         }
     }
 }

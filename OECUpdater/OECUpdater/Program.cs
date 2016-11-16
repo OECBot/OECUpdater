@@ -1,11 +1,9 @@
 ﻿using System;
 using IronPython.Hosting;
-using OECLib.Exoplanets.Units;
 using System.Diagnostics;
 using System.Xml;
 using System.Text;
 using System.Collections.Generic;
-using OECLib.Exoplanets;
 using OECLib.Utilities;
 using OECLib.Interface;
 using System.IO;
@@ -45,16 +43,16 @@ namespace OECUpdater
 			OECLib.Data.Planet testPlanet2 = new OECLib.Data.Planet ();
 			OECLib.Data.Planet testPlanet3 = new OECLib.Data.Planet ();
 
-			testStar1.AddStringMeasurement ("name", "star1");
-			testStar2.AddStringMeasurement ("name", "star1");
+			testStar1.AddMeasurement ("name", "star1");
+			testStar2.AddMeasurement ("name", "star1");
 
-			testPlanet1.AddStringMeasurement ("name", "planet1");
-			testPlanet2.AddStringMeasurement ("name", "planet2");
-			testPlanet3.AddStringMeasurement ("name", "planet3");
+			testPlanet1.AddMeasurement ("name", "planet1");
+			testPlanet2.AddMeasurement ("name", "planet2");
+			testPlanet3.AddMeasurement ("name", "planet3");
 
-			testPlanet1.AddNumberMeasurement ("mass", 3.22);
-			testPlanet2.AddNumberMeasurement ("mass", 5.4);
-			testPlanet3.AddNumberMeasurement ("mass", 4.22);
+			testPlanet1.AddMeasurement ("mass", "3.22");
+			testPlanet2.AddMeasurement ("mass", "5.4");
+			testPlanet3.AddMeasurement ("mass", "4.22");
 
 			testStar1.AddChild (testPlanet1);
 			testStar1.AddChild (testPlanet2);

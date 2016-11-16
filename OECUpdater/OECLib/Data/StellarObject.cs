@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using OECLib.Data.Measurements;
 
 namespace OECLib.Data
 {
+	public enum StellarType { System, Binary, Star, Planet }
+
     public abstract class StellarObject
     {
         public List<StellarObject> children;
-		public List<StringMeasurement> names;
-       	public Dictionary<string, Measurement> measurements;
+		public List<Measurement> names;
+       	public List<Measurement> measurements;
 
         public StellarObject()
         {
-            IsABinary = false;
-            IsAPlanet = false;
-            IsAStar = false;
-            IsASystem = false;
             children = new List<StellarObject>();
-			names = new List<StringMeasurement> ();
-			measurements = new Dictionary<string, Measurement>();
+			names = new List<Measurement> ();
+			measurements = new List<Measurement>();
         }
 
+		public abstract StellarType ObjectType {
+			get;
+		}
+
         public abstract bool AddChild(StellarObject child);
+
+		public abstract bool RemoveChild (StellarObject child);
 
         public abstract XmlElement XMLTag(XmlDocument root);
 
@@ -35,7 +38,7 @@ namespace OECLib.Data
                 node.AppendChild(element);
             }
 
-            foreach (Measurement measurement in measurements.Values)
+            foreach (Measurement measurement in measurements)
             {
                 XmlElement element = root.CreateElement(measurement.MeasurementName);
                 element = measurement.WriteXmlTag(element);
@@ -43,125 +46,82 @@ namespace OECLib.Data
             }
         }
         
-        public void AddStringMeasurement(string name, string measurement)
+		public override bool Equals(object other) {
+			if (other == null | GetType () != other.GetType ())
+				return false;
+
+			StellarObject obj = (StellarObject)other;
+
+			//if(names)
+
+			foreach (Measurement thisMeasure in names) {
+				foreach (Measurement otherMeasure in obj.names) {
+					if (thisMeasure == otherMeasure)
+						return true;
+				}
+			}
+			return false;
+		}
+
+		public void AddMeasurement(string name, string value, Dictionary<string, string> attributes=null)
 		{
-			StringMeasurement strmeasurement = new StringMeasurement (name, measurement);
+			Measurement measurement = new Measurement (name, value, attributes);
 				
 			if (name == "name") {
-				if (!names.Contains (strmeasurement))
-					names.Add(strmeasurement);
-			} else { 
-				if (!measurements.ContainsKey (name))
-					measurements.Add (name, strmeasurement);
+				if (!names.Contains (measurement))
+					names.Add(measurement);
+			} else {
+				int index;
+				if ((index = measurements.IndexOf(measurement)) == -1)
+					measurements.Add (measurement);
 				else
-					measurements [name] = strmeasurement;
+					measurements [index] = measurement;
 			}
-        }
-
-        public void AddNumberMeasurement(string name, double measurement)
-		{
-			NumberMeasurement numMeasure = new NumberMeasurement (name, measurement);
-				
-			if (!measurements.ContainsKey (name))
-				measurements.Add (name, numMeasure);
-			else
-				measurements [name] = numMeasure;
-        }
-
-        public void AddNumberErrorMeasurement(string name, double measurement, double errPlus, double errMinus)
-        {			
-			NumberErrorMeasurement numErrMeasure = new NumberErrorMeasurement(name, measurement, errPlus, errMinus);	
-
-			if (!measurements.ContainsKey (name))
-				measurements.Add (name, numErrMeasure);
-			else
-				measurements [name] = numErrMeasure;
         }
 
 		public void AddMeasurement(Measurement measurement)
 		{
 			if (measurement.MeasurementName == "name") {
-				if(measurement.GetMeasurementType == MeasurementType.StringMeasurement) {
-					StringMeasurement strmeasure = (StringMeasurement)measurement;
-					if (!names.Contains (strmeasure))
-						names.Add (strmeasure);
-				}
+				if (!names.Contains (measurement))
+					names.Add (measurement);
 			} else {
-				if (!measurements.ContainsKey (measurement.MeasurementName))
-					measurements.Add (measurement.MeasurementName, measurement);
+				int index;
+				if ((index = measurements.IndexOf(measurement)) == -1)
+					measurements.Add (measurement);
 				else
-					measurements [measurement.MeasurementName] = measurement;
+					measurements [index] = measurement;
 			}
 		}
 
-
-
-        public void ResetMeasurement()
-        {
-            this.measurements.Clear();
-        }
-
-
-        public bool IsABinary
-        {
-            get;
-            protected set;
-        }
-
-        public bool IsAPlanet
-        {
-            get;
-            protected set;
-        }
-
-        public bool IsAStar
-        {
-            get;
-            protected set;
-        }
-
-        public bool IsASystem
-        {
-            get;
-            protected set;
-        }
-
 		public void Write(XmlWriter w)
 		{
-			if (IsASystem) {
+			if (ObjectType == StellarType.System) {
 				w.WriteStartElement("system");
 			}
-			else if (IsAStar) {
+			else if (ObjectType == StellarType.Star) {
 				w.WriteStartElement("star");
 			}
-			else if (IsABinary) {
+			else if (ObjectType == StellarType.Binary) {
 				w.WriteStartElement("binary");
 			}
-			else if (IsAPlanet) {
+			else if (ObjectType == StellarType.Planet) {
 				w.WriteStartElement("planet");
 			}
 
 			foreach (Measurement entry in names) {
 				w.WriteStartElement("name");
-				w.WriteString((string) entry.getValue().value);
+				w.WriteString(entry.MeasurementValue);
 				w.WriteEndElement();
 			}
 
-			foreach (KeyValuePair<string, Measurement> entry in measurements) {
-				w.WriteStartElement(entry.Value.MeasurementName);
-				if(entry.Value.getValue().errorMinus != 0.0){
-					w.WriteAttributeString("errorminus", entry.Value.getValue().errorMinus.ToString());
-				}
-				if(entry.Value.getValue().errorPlus != 0.0){
-					w.WriteAttributeString("errorplus", entry.Value.getValue().errorPlus.ToString());
+			foreach (Measurement entry in measurements) {
+				w.WriteStartElement(entry.MeasurementName);
+
+				foreach (string key in entry.MeasurementAttributes.Keys) {
+					w.WriteAttributeString (key, entry.MeasurementAttributes [key]);
 				}
 
-				if (entry.Value.getValue ().value is double) {
-					w.WriteString (((double)entry.Value.getValue ().value).ToString());
-
-				} else {
-					w.WriteString ((string)entry.Value.getValue ().value);
-				}
+				w.WriteString (entry.MeasurementValue);
 
 				w.WriteEndElement();
 			}
