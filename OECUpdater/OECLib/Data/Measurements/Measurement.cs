@@ -16,6 +16,7 @@ namespace OECLib.Data.Measurements
         public string MeasurementName
         {
             get;
+            set;
         }
 
         public MeasurementType GetMeasurementType

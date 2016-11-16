@@ -36,12 +36,16 @@ namespace ExoplanetEU
 			return "Spazio";
 		}
 
-		public List<StellarObject> Run()
+		public List<StellarObject> Run(String date, String sysName=null)
 		{
 			List<StellarObject> planets = new List<StellarObject>();
             HTTPRequest req = new HTTPRequest();
-            string date = "2016-09-01";
+            //string date = "2016-09-01";
             string filter = "updated >= \""+date+"\"";
+            if (sysName != null)
+            {
+                filter += String.Format("and \"{0}\" in name", sysName);
+            }
             string data = req.RequestAsString(String.Format(baseURL, filter), null);
             StringReader sr = new StringReader(data);
             sr.ReadLine();
@@ -77,6 +81,22 @@ namespace ExoplanetEU
             }
             return planets;
 		}
+
+        public StellarObject GetSystem(String name)
+        {
+            String filter = String.Format("\"{0}\" in name", name);
+            HTTPRequest req = new HTTPRequest();
+            String data = req.RequestAsString(String.Format(baseURL, filter), null);
+            StringReader sr = new StringReader(data);
+            sr.ReadLine();
+            String line = null;
+            while ((line = sr.ReadLine()) != null)
+            {
+
+            }
+
+            return null;
+        }
 
         private Double parseDouble(String value)
         {

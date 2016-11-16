@@ -19,6 +19,7 @@ namespace OECLib
         public static String userName = "OECBot";
         public static String password = "UoJ84XJTXphgO4F";
         private CancellationTokenSource cts;
+        public int Workers = 10;
 
         public List<IPlugin> plugins;
 
@@ -103,6 +104,32 @@ namespace OECLib
             }
             newData.Clear();
             
+        }
+
+        public async Task firstRun()
+        {
+            var files = await rm.getAllFiles("systems/");
+            Task[] tasks = new Task[10];
+            Queue<RepositoryContent> queue = new Queue<RepositoryContent>();
+            foreach (RepositoryContent file in files)
+            {
+                queue.Enqueue(file);
+            }
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                tasks[i] = runWorker(queue);
+            }
+        }
+
+        public async Task runWorker(Queue<RepositoryContent> files)
+        {
+            while (files.Count != 0)
+            {
+                var file = files.Dequeue();
+                String content = await rm.getFile("systems/"+file.Name);
+                String systemName = file.Name.Split('.')[0];
+
+            }
         }
 
         private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin) {
