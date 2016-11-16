@@ -45,18 +45,28 @@ namespace OECLib.Data
                 node.AppendChild(element);
             }
         }
-        
+
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="OECLib.Data.StellarObject"/>.
+        /// </summary>
+        /// <param name="other">The <see cref="System.Object"/> to compare with the current <see cref="OECLib.Data.StellarObject"/>.</param>
+        /// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
+        /// <see cref="OECLib.Data.StellarObject"/>; otherwise, <c>false</c>.</returns>
 		public override bool Equals(object other) {
 			if (other == null | GetType () != other.GetType ())
 				return false;
 
 			StellarObject obj = (StellarObject)other;
 
-			//if(names)
+			//we have no better method of comparing, so just do the base version
+			if (names == null && obj.names == null)
+				return base.Equals (other);
 
+			//otherwise compare names
 			foreach (Measurement thisMeasure in names) {
 				foreach (Measurement otherMeasure in obj.names) {
-					if (thisMeasure == otherMeasure)
+					if (otherMeasure.MeasurementValue == thisMeasure.MeasurementValue)
 						return true;
 				}
 			}
@@ -82,13 +92,24 @@ namespace OECLib.Data
 		public void AddMeasurement(Measurement measurement)
 		{
 			if (measurement.MeasurementName == "name") {
-				if (!names.Contains (measurement))
+				bool exists = false;
+				foreach (Measurement name in names) {
+					if (measurement.MeasurementValue == name.MeasurementValue)
+						exists = true;
+				}
+				if (!exists)
 					names.Add (measurement);
 			} else {
 				int index;
-				if ((index = measurements.IndexOf(measurement)) == -1)
+				bool isInList = (index = measurements.IndexOf (measurement)) != -1;
+				bool attrAreSame = true;
+
+				if(isInList)
+					attrAreSame = measurements [index].AttributesAreEqual (measurement);
+
+				if (!isInList || !attrAreSame)
 					measurements.Add (measurement);
-				else
+				else 
 					measurements [index] = measurement;
 			}
 		}

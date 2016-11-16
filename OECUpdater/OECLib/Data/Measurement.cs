@@ -31,14 +31,37 @@ namespace OECLib.Data
 			private set;
 		}
 
-		public XmlElement WriteXmlTag(XmlElement element) 
+		public XmlElement WriteXmlTag(XmlElement element)
 		{
-			element.InnerText = MeasurementValue.ToString();
-			foreach (string key in MeasurementAttributes.Keys) {
-				element.SetAttribute (key, MeasurementAttributes [key]);
+			element.InnerText = MeasurementValue.ToString ();
+			if (MeasurementAttributes != null) {
+				foreach (string key in MeasurementAttributes.Keys) {
+					element.SetAttribute (key, MeasurementAttributes [key]);
+				}
 			}
 			return element;
 		}
+		public override bool Equals (object obj)
+		{
+			if (obj == null || GetType () != obj.GetType ())
+				return false;
 
+			Measurement objMeasure = (Measurement)obj;
+			if (objMeasure.MeasurementName == MeasurementName)
+				return true;
+			return false;
+		}
+
+		public bool AttributesAreEqual(Measurement measurement) {
+			Dictionary<string,string> otherAttr = measurement.MeasurementAttributes;
+
+			foreach (string key in MeasurementAttributes.Keys) {
+				if (otherAttr.ContainsKey(key)) {
+					if (otherAttr [key] != MeasurementAttributes [key])
+						return false;
+				}
+			}
+			return true;
+		}
     }
 }
