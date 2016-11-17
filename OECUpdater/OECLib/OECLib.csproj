@@ -39,18 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Binary.cs" />
-    <Compile Include="Data\Measurements\Measurement.cs" />
-    <Compile Include="Data\Measurements\NumberErrorMeasurement.cs" />
-    <Compile Include="Data\Measurements\NumberMeasurement.cs" />
-    <Compile Include="Data\Measurements\StringMeasurement.cs" />
     <Compile Include="Data\Planet.cs" />
     <Compile Include="Data\SolarSystem.cs" />
     <Compile Include="Data\Star.cs" />
     <Compile Include="Data\StellarObject.cs" />
-    <Compile Include="Data\Exoplanets\Planet.cs" />
-    <Compile Include="Data\Exoplanets\PlanetSystem.cs" />
-    <Compile Include="Data\Exoplanets\Star.cs" />
-    <Compile Include="Data\Exoplanets\Units\UnitError.cs" />
     <Compile Include="GitHub\RepositoryManager.cs" />
     <Compile Include="GitHub\Session.cs" />
     <Compile Include="Interface\XMLWritable.cs" />
@@ -59,10 +51,10 @@
     <Compile Include="Utilities\CallBackServer.cs" />
     <Compile Include="Utilities\Serializer.cs" />
     <Compile Include="Utilities\XMLDeserializer.cs" />
-    <Compile Include="Data\Measurements\MeasurementUnit.cs" />
     <Compile Include="Utilities\PlanetMerger.cs" />
     <Compile Include="Utilities\HTTPRequests.cs" />
     <Compile Include="Interface\IPlugin.cs" />
+    <Compile Include="Data\Measurement.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
