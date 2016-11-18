@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Collections.Concurrent;
 
 namespace OECLib
 {
@@ -23,8 +24,10 @@ namespace OECLib
         private CancellationTokenSource cts;
         public int Workers = 1;
         public bool isFirstRun = false;
-        public Object queueLock = new Object();
-        public Queue<RepositoryContent> fileQueue;
+        public Object updateLock = new Object();
+        public List<StellarObject> updateList;
+        public ConcurrentQueue<StellarObject> commitQueue;
+        private int finished;
 
         public List<IPlugin> plugins;
 
@@ -40,7 +43,7 @@ namespace OECLib
             this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
-            
+
         }
 
         public void Start()
@@ -53,13 +56,13 @@ namespace OECLib
             }
             if (isFirstRun)
             {
-                scheduleCheck(firstRun);
+                //scheduleCheck(firstRun);
             }
             else
             {
                 scheduleCheck(runChecks);
             }
-            
+
 
         }
 
@@ -86,7 +89,7 @@ namespace OECLib
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
-            
+
         }
 
         public bool needUpdate(List<String> original, List<StellarObject> newUpdates)
@@ -113,8 +116,8 @@ namespace OECLib
 
         public async Task runChecks(CancellationToken token)
         {
-			List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
-			List<StellarObject> newData = new List<StellarObject>();
+            List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
+            List<StellarObject> newData = new List<StellarObject>();
 
             foreach (IPlugin plugin in plugins)
             {
@@ -122,30 +125,90 @@ namespace OECLib
                 tasks.Add(runPluginAsync(plugin));
             }
 
-			foreach (Task<List<StellarObject>> task in tasks)
+            foreach (Task<List<StellarObject>> task in tasks)
             {
                 token.ThrowIfCancellationRequested();
-				List<StellarObject> planets = await task;
+                List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
-            
-            while (newData.Count != 0)
+
+            finished = 0;
+            commitQueue = new ConcurrentQueue<StellarObject>();
+            updateList = newData;
+            Task[] workers = new Task[Workers];
+            for (int i = 0; i < workers.Length; i++)
             {
-                StellarObject update = newData[0];
+                workers[i] = updateWorker();
+            }
+            int limit = 0;
+            while (finished != Workers)
+            {
+                while (!commitQueue.IsEmpty)
+                {
+                    StellarObject update;
+                    while (!commitQueue.TryDequeue(out update) && finished != Workers)
+                    {
+                        //block till items become available
+                    }
+                    try
+                    {
+                        StringBuilder output = new StringBuilder();
+                        XmlWriterSettings ws = new XmlWriterSettings();
+                        ws.Indent = true;
+                        ws.OmitXmlDeclaration = true;
+                        using (XmlWriter xw = XmlWriter.Create(output, ws))
+                        {
+                            update.Write(xw);
+                            xw.Flush();
+                        }
+                        String newContent = output.ToString();
+                        output.Clear();
+                        await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, "N/A", update.isNew);
+                        limit++;
+                        //60 pushes / min?
+                        if (limit >= 35)
+                        {
+                            await Task.Delay(60000);
+                            limit = 0;
+                        }
+                        
+                    }
+                    catch (ForbiddenException fex)
+                    {
+                        Console.WriteLine("Triggered abuse mechanism. Sleeping for 60s. " + fex.Message);
+                        commitQueue.Enqueue(update);
+                        Thread.Sleep(60000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
+                        Console.WriteLine(ex.StackTrace);
+                    }
+                    Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
+                }
+            }
+            foreach (Task worker in workers)
+            {
+                await worker;
+            }
+            Console.WriteLine("Finished running!");
+            lastCheckTime = tempTime;
+        }
+
+        public async Task updateWorker()
+        {
+            while (updateList.Count != 0)
+            {
                 try
                 {
-                    bool isNew = false;
-                    if (update.names[0].MeasurementValue == null)
-                    {
-                        throw new Exception("System name is empty. Skipping...");
-                    }
+                    List<StellarObject> system = dequeueUpdate();
+                    StellarObject update = system[0];
+
                     Task<String> xmlTask = rm.getFile("systems/" + update.names[0].MeasurementValue + ".xml");
-                    List<StellarObject> system = newData.FindAll(x => x.names[0].MeasurementValue == update.names[0].MeasurementValue);
-                    newData.RemoveAll(x => x.names[0].MeasurementValue == update.names[0].MeasurementValue);
+
                     List<String> lastUpdates = new List<string>();
 
                     String xml = await xmlTask;
-                    String updatedXml;
                     if (xml != null)
                     {
                         Console.WriteLine("Found existing system: {0} in OEC. Proceed with update.", update.names[0].MeasurementValue);
@@ -159,54 +222,33 @@ namespace OECLib
                         {
                             PlanetMerger.Merge(planet, original);
                         }
-                        StringBuilder output = new StringBuilder();
-                        XmlWriterSettings ws = new XmlWriterSettings();
-                        ws.Indent = true;
-                        ws.OmitXmlDeclaration = true;
-                        using (XmlWriter xw = XmlWriter.Create(output, ws))
-                        {
-                            original.Write(xw);
-                            xw.Flush();
-                        }
-                        updatedXml = output.ToString();
-                        output.Clear();
+                        original.isNew = false;
+                        commitQueue.Enqueue(original);
                     }
                     else
                     {
                         Console.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
-                        isNew = true;
                         StellarObject baseSys = system[0];
                         system.Remove(baseSys);
                         foreach (StellarObject otherPlanet in system)
                         {
                             PlanetMerger.Merge(otherPlanet, baseSys);
                         }
-                        StringBuilder output = new StringBuilder();
-                        XmlWriterSettings ws = new XmlWriterSettings();
-                        ws.Indent = true;
-                        ws.OmitXmlDeclaration = true;
-                        using (XmlWriter xw = XmlWriter.Create(output, ws))
-                        {
-                            baseSys.Write(xw);
-                            xw.Flush();
-                        }
-                        updatedXml = output.ToString();
-                        output.Clear();
+                        baseSys.isNew = true;
+                        commitQueue.Enqueue(baseSys);
+
                     }
-                    await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", updatedXml, "N/A", isNew);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Failed to update planet: " + update.names[0].MeasurementValue + "-" + ex.Message);
+                    Console.WriteLine("Failed to create update: " + ex.Message);
                     Console.WriteLine(ex.StackTrace);
                 }
-                Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
             }
-            
-            lastCheckTime = tempTime;
-            
+            Interlocked.Add(ref finished, 1);
         }
 
+        /*
         public async Task firstRun(CancellationToken token)
         {
             var files = await rm.getAllFiles("systems/");
@@ -225,18 +267,25 @@ namespace OECLib
                 await task;
             }
         }
+         */
 
-        private RepositoryContent dequeueFile()
+        private List<StellarObject> dequeueUpdate()
         {
-            lock (queueLock)
+            lock (updateLock)
             {
-                var file = this.fileQueue.Dequeue();
-                
-                return file;
+                var first = this.updateList[0];
+                if (first.names[0].MeasurementValue == null)
+                {
+                    throw new Exception("System name is empty. Skipping...");
+                }
+                List<StellarObject> system = updateList.FindAll(x => x.names[0].MeasurementValue == first.names[0].MeasurementValue);
+                updateList.RemoveAll(x => x.names[0].MeasurementValue == first.names[0].MeasurementValue);
+                return system;
             }
-            
+
         }
 
+        /*
         public async Task runWorker()
         {
             while (fileQueue.Count != 0)
@@ -303,8 +352,10 @@ namespace OECLib
                 Console.WriteLine("Updated " + file.Name + " successfully");
             }
         }
+         */
 
-        private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin) {
+        private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin)
+        {
             return plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"));
         }
 
