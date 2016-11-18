@@ -23,7 +23,7 @@ namespace OECLib
         public const String password = "UoJ84XJTXphgO4F";
         private CancellationTokenSource cts;
         public int Workers = 1;
-        public bool isFirstRun = false;
+        public bool isFirstRun = true;
         public Object updateLock = new Object();
         public List<StellarObject> updateList;
         public ConcurrentQueue<StellarObject> commitQueue;
@@ -34,7 +34,7 @@ namespace OECLib
         public bool On;
 
         public DateTime checkTime = DateTime.Today.AddHours(12);
-        public DateTime lastCheckTime = DateTime.ParseExact("2016-09-01", "yyyy-MM-dd", null);
+        public DateTime lastCheckTime = DateTime.MinValue;
         public DateTime tempTime;
 
         public OECBot(List<IPlugin> plugins, Repository repo)
@@ -56,7 +56,7 @@ namespace OECLib
             }
             if (isFirstRun)
             {
-                //scheduleCheck(firstRun);
+                lastCheckTime = DateTime.MinValue;
             }
             else
             {
@@ -69,15 +69,15 @@ namespace OECLib
         private async void scheduleCheck(Func<CancellationToken, Task> check)
         {
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
-            await Task.Delay(1);
-            //(int)checkTime.Subtract(DateTime.Now).TotalMilliseconds
+            await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
+            
 
             try
             {
                 tempTime = DateTime.Now;
                 checkTime = checkTime.AddDays(1.0);
 
-                //scheduleCheck(runChecks);
+                scheduleCheck(runChecks);
                 await check(cts.Token);
             }
             catch (OperationCanceledException oce)
@@ -192,6 +192,10 @@ namespace OECLib
                 await worker;
             }
             Console.WriteLine("Finished running!");
+            if (isFirstRun)
+            {
+                isFirstRun = false;
+            }
             lastCheckTime = tempTime;
         }
 
