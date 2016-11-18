@@ -21,3 +21,4 @@ GUI Creation:
 ### Asset Management
 - For testing purposes you can use absolute references but it would be nice if all assets(image,etc) are embedded
 - You can do so with the same procedure as adding the glade files.
+- Regarding the use of CSS beware that most references are basic CSS properties such as font, color, border, etc. However they may be unique ones so if you have any trouble as on Facebook or google it using GTK3 (No #).
