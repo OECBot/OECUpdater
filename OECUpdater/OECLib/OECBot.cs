@@ -133,7 +133,7 @@ namespace OECLib
         }
 
         private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin) {
-            return plugin.Run();
+            return plugin.Run("2016-09-01");
         }
 
         public void Stop()

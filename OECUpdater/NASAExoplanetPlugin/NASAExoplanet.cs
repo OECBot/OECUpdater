@@ -20,12 +20,12 @@ namespace NASAExoplanetPlugin
 
         public string GetName()
         {
-            return "Exoplanet.EU";
+            return "NASA";
         }
 
         public string GetDescription()
         {
-            return "This plugin allows the extraction of data from the exoplanet.eu database";
+            return "This plugin allows the extraction of data from the NASA database";
         }
 
         public string GetAuthor()
