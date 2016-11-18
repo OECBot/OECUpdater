@@ -1,0 +1,23 @@
+GUI Creation:
+------
+
+### Getting Started:
+- First you need to install the dependencies:
+  - GTK3 and GTK#3 (I suggest you use synaptic package manager to install these just incase)
+- Next you need to install Glade
+  - Set the Gtk version to 3.12 in preferences, this is the one we are going to use for the project.
+- Now you can start to design the GUI.
+- Please focus on functionality for now and worry about design/css later!
+
+### Create the window class
+- Next in the OECGUI project create your window class (preferably xxxWindow.cs, do not worry about the other windows)
+- Look at LoginWindow.cs follow the example exactly, if you have any questions ask on facebook
+  - There is little to no actual online reference or documentation on Gtk#3 if you are going to google it google with gtk#2, which is similar enough)
+- Adding the .glade file
+  - Import it directly into the project and set the properties to (Copy if new) and (Make Embedded Resource) Now you can reference it as OECGUI.xxx.glade
+- It is important that you do *NOT* use the built in GUI editor to do ANYTHING as GTK#3 is not supported and all design work should be done with Glade.
+- Now you can load the window and do whatever you want with it
+
+### Asset Management
+- For testing purposes you can use absolute references but it would be nice if all assets(image,etc) are embedded
+- You can do so with the same procedure as adding the glade files.
