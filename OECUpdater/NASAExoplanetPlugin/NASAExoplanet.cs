@@ -20,12 +20,12 @@ namespace NASAExoplanetPlugin
 
         public string GetName()
         {
-            return "Exoplanet.EU";
+            return "NASA Exoplanet Database";
         }
 
         public string GetDescription()
         {
-            return "This plugin allows the extraction of data from the exoplanet.eu database";
+            return "This plugin allows the extraction of data from the NASA Exoplanet Database";
         }
 
         public string GetAuthor()
@@ -45,7 +45,7 @@ namespace NASAExoplanetPlugin
             string filter = "rowupdate>to_date('" + date + "','yyyy-mm-dd')";
             if (sysName != null)
             {
-                filter += String.Format("where=pl_hostname like {0}", sysName);
+                filter += String.Format("and pl_hostname like \'{0}\'", sysName);
             }
             string newUrl = string.Format(baseURL, columns, filter);
             string httpResponse = req.RequestAsString(newUrl, null);

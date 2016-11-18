@@ -137,11 +137,14 @@ namespace OECLib.Data
 
 			foreach (Measurement entry in measurements) {
 				w.WriteStartElement(entry.MeasurementName);
+                if (entry.MeasurementAttributes != null)
+                {
 
-				foreach (string key in entry.MeasurementAttributes.Keys) {
-					w.WriteAttributeString (key, entry.MeasurementAttributes [key]);
-				}
+				    foreach (string key in entry.MeasurementAttributes.Keys) {
+					    w.WriteAttributeString (key, entry.MeasurementAttributes [key]);
+				    }
 
+                }
 				w.WriteString (entry.MeasurementValue);
 
 				w.WriteEndElement();
@@ -153,5 +156,38 @@ namespace OECLib.Data
 
 			w.WriteEndElement();
 		}
+
+        public String getMeasurementByName(String name)
+        {
+            foreach (Measurement m in measurements)
+            {
+                if (m.MeasurementName == name)
+                {
+                    
+                    return m.MeasurementValue;
+                }
+            }
+            return null;
+        }
+
+        public List<String> getLastUpdate()
+        {
+            List<String> lastUpdates = new List<string>();
+            String m = this.getMeasurementByName("lastupdate");
+            if (m != null)
+            {
+                lastUpdates.Add(m);
+            }
+            foreach (var child in children)
+            {
+                List<String> list = child.getLastUpdate();
+                if (list.Count != 0)
+                {
+                    lastUpdates.AddRange(list);
+                }
+                
+            }
+            return lastUpdates;
+        }
     }
 }

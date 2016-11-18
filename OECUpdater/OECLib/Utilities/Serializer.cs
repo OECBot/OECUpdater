@@ -44,7 +44,7 @@ namespace OECLib.Utilities
                         }
                         catch (Exception ex)
                         {
-                            
+                            Console.WriteLine("Failed to load plugin: " + ex.Message);
                         }
                     }
                 }

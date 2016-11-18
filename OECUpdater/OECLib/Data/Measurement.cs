@@ -41,6 +41,7 @@ namespace OECLib.Data
 			}
 			return element;
 		}
+
 		public override bool Equals (object obj)
 		{
 			if (obj == null || GetType () != obj.GetType ())
@@ -54,13 +55,18 @@ namespace OECLib.Data
 
 		public bool AttributesAreEqual(Measurement measurement) {
 			Dictionary<string,string> otherAttr = measurement.MeasurementAttributes;
-
-			foreach (string key in MeasurementAttributes.Keys) {
-				if (otherAttr.ContainsKey(key)) {
-					if (otherAttr [key] != MeasurementAttributes [key])
-						return false;
-				}
-			}
+            if (otherAttr != null)
+            {
+                foreach (string key in MeasurementAttributes.Keys)
+                {
+                    if (otherAttr.ContainsKey(key))
+                    {
+                        if (otherAttr[key] != MeasurementAttributes[key])
+                            return false;
+                    }
+                }
+            }
+			
 			return true;
 		}
     }

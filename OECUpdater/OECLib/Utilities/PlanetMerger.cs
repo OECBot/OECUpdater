@@ -8,12 +8,17 @@ namespace OECLib.Utilities
 
         public static StellarObject FindName(StellarObject mergeFrom, StellarObject mergeTo)
         {
-			foreach (var measure in mergeFrom.names) {
-				foreach (var toMeasure in mergeTo.names) {
-					if (measure.MeasurementValue == toMeasure.MeasurementValue)
-						return mergeTo;
-				}
-			}
+            if (mergeFrom.GetType() == mergeTo.GetType())
+            {
+                foreach (var measure in mergeFrom.names)
+                {
+                    foreach (var toMeasure in mergeTo.names)
+                    {
+                        if (measure.MeasurementValue == toMeasure.MeasurementValue)
+                            return mergeTo;
+                    }
+                }
+            }
 
             foreach(StellarObject m in mergeTo.children)
             {
@@ -51,7 +56,7 @@ namespace OECLib.Utilities
 
 		public static void TestMerge() {
 
-			XMLDeserializer sys1Desrializer = new XMLDeserializer ("16 Cygni.xml");
+			XMLDeserializer sys1Desrializer = new XMLDeserializer ("16 Cygni.xml", true);
 			StellarObject sys1 = sys1Desrializer.ParseXML ();
 
 			Star star1 = new Star ();

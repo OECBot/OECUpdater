@@ -24,10 +24,17 @@ namespace OECLib.GitHub
 
         public async Task<String> getFile(String filePath)
         {
-            var contentCollection = await session.client.Repository.Content.GetAllContents(repo.Id, filePath);
-            var content = contentCollection[0];
-            shaKeys[content.Name] = content.Sha;
-            return content.Content;
+            try
+            {
+                var contentCollection = await session.client.Repository.Content.GetAllContents(repo.Id, filePath);
+                var content = contentCollection[0];
+                shaKeys[filePath] = content.Sha;
+                return content.Content;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<IReadOnlyList<PullRequest>> getAllPullRequests()
@@ -44,7 +51,7 @@ namespace OECLib.GitHub
 
         public async Task updateFile(String filePath, String content, String branch)
         {
-            UpdateFileRequest ufr = new UpdateFileRequest("Update "+filePath, content, shaKeys[filePath], branch);
+            UpdateFileRequest ufr = new UpdateFileRequest("Updated "+filePath, content, shaKeys[filePath], branch);
             var changeSet = await session.client.Repository.Content.UpdateFile(repo.Id, filePath, ufr);
             shaKeys.Remove(filePath);
         }
@@ -66,7 +73,7 @@ namespace OECLib.GitHub
 
         public async Task BeginCommitAndPush(String fileName, String content, String source, bool isNew)
         {
-            String branch = await createBranch(fileName.Split('.')[0] + getRandString(5));
+            String branch = await createBranch(fileName.Split('.')[0].Split('/')[1].Replace(' ', '_') +"_"+ getRandString(5));
             if (isNew)
             {
                 await addFile(fileName, content, branch);
@@ -75,7 +82,8 @@ namespace OECLib.GitHub
             {
                 await updateFile(fileName, content, branch);
             }
-            await createPullRequest(branch, branch, source); 
+            String body = String.Format("Updated {0}. Time Stamp: {1}\nSource: {2}", fileName.Split('.')[0].Split('/')[1], DateTime.Now.ToString(), source);
+            await createPullRequest(branch, branch, body); 
         }
 
         public async Task<IReadOnlyList<RepositoryContent>> getAllFiles(String path)
@@ -100,7 +108,7 @@ namespace OECLib.GitHub
             String result = "";
             String a = "abcdefghijklmnopqrstuvwxyz1234567890";
             
-            for (int i = 0; i < r.Next(1, length); i++)
+            for (int i = 0; i < length; i++)
             {
                 int ran = r.Next(36);
 
