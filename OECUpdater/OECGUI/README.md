@@ -22,3 +22,9 @@ GUI Creation:
 - For testing purposes you can use absolute references but it would be nice if all assets(image,etc) are embedded
 - You can do so with the same procedure as adding the glade files.
 - Regarding the use of CSS beware that most references are basic CSS properties such as font, color, border, etc. However they may be unique ones so if you have any trouble as on Facebook or google it using GTK3 (No #).
+
+### References to help your progress
+[CSS Style Guide](https://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/)
+[GTK# Source Project](https://github.com/mono/gtk-sharp)
+[GTK#3 Template Project](http://addins.monodevelop.com/Project/Index/97) You will need a .NET disassembler to view the source code.
+[GTK#2 Guide](http://www.mono-project.com/docs/gui/gtksharp/beginners-guide/) THIS SHOULD BE USED AS RESEARCH ONLY
