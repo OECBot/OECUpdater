@@ -35,7 +35,7 @@ public partial class LoginWindow: Gtk.Window
 	public LoginWindow (Builder builder, IntPtr handle): base (handle)
 	{
 		CssProvider provider = new CssProvider();
-		provider.LoadFromPath ("/home/wannie/test.css");
+		provider.LoadFromPath ("../../test.css");
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		DeleteEvent += OnDeleteEvent;
