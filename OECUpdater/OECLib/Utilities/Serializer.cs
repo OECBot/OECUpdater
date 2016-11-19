@@ -8,9 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
-using OECLib.Exoplanets;
 using System.Xml;
-using OECLib.Exoplanets.Units;
 using OECLib.Data;
 
 namespace OECLib.Utilities
@@ -46,7 +44,7 @@ namespace OECLib.Utilities
                         }
                         catch (Exception ex)
                         {
-                            
+                            Console.WriteLine("Failed to load plugin: " + ex.Message);
                         }
                     }
                 }

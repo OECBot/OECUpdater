@@ -9,20 +9,25 @@ namespace OECLib.Data
 {
     public class Star : StellarObject
     {
-        public Star() : base()
-        {
-            IsAStar = true;
-        }
-
         public override bool AddChild(StellarObject child)
         {
-            if(child.IsAPlanet)
+			if(child.ObjectType == StellarType.Planet)
             {
                 children.Add(child);
                 return true;
             }
             return false;
         }
+
+		public override bool RemoveChild(StellarObject child) {
+			return children.Remove (child);
+		}
+
+		public override StellarType ObjectType {
+			get {
+				return StellarType.Star;
+			}
+		}
 
         public override XmlElement XMLTag(XmlDocument root)
         {

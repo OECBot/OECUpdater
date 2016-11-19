@@ -10,29 +10,35 @@ namespace OECLib.Data
         int numberOfBinaries = 0;
         int numberOfStars = 0;
 
-        public Binary() : base()
-        {
-            IsABinary = true;
-        }
-
         public override bool AddChild(StellarObject child)
         {
             bool canAdd = (numberOfBinaries == 1 && numberOfStars == 0) || (numberOfBinaries == 0 && numberOfStars == 1) || (numberOfStars == 0 && numberOfStars == 0) ;
             bool successfulAdd = false;
+			StellarType childType = child.ObjectType;
 
-            if(canAdd || child.IsAPlanet)
+			if(canAdd || childType == StellarType.Planet)
             {
                 children.Add(child);
 
-                if (child.IsABinary)
+				if (childType == StellarType.Binary)
                     numberOfBinaries++;
-                else if (child.IsAStar)
+				else if (childType == StellarType.Star)
                     numberOfStars++;
 
                 successfulAdd = true;
             }
             return successfulAdd;
         }
+
+		public override bool RemoveChild(StellarObject child) {
+			return false;
+		}
+
+		public override StellarType ObjectType {
+			get {
+				return StellarType.Binary;
+			}
+		}
 
         public override XmlElement XMLTag(XmlDocument root)
         {

@@ -9,14 +9,20 @@ namespace OECLib.Data
 {
     public class Planet : StellarObject
     {
-        public Planet() : base()
-        {
-            IsAPlanet = true;
-        }
         public override bool AddChild(StellarObject child)
         {
             return false;
         }
+
+		public override bool RemoveChild(StellarObject child) {
+			return false;
+		}
+
+		public override StellarType ObjectType {
+			get {
+				return StellarType.Planet;
+			}
+		}
 
         public override XmlElement XMLTag(XmlDocument root)
         {

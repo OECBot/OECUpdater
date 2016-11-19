@@ -1,6 +1,5 @@
 ﻿using System;
 using OECLib.Data;
-using OECLib.Data.Measurements;
 
 namespace OECLib.Utilities
 {
@@ -9,11 +8,18 @@ namespace OECLib.Utilities
 
         public static StellarObject FindName(StellarObject mergeFrom, StellarObject mergeTo)
         {
-			foreach (var measure in mergeFrom.names) {
-				string name = (string)measure.getValue ().value;
-				if (mergeTo.names.Contains (measure))
-					return mergeTo;
-			}
+            if (mergeFrom.GetType() == mergeTo.GetType())
+            {
+                foreach (var measure in mergeFrom.names)
+                {
+                    foreach (var toMeasure in mergeTo.names)
+                    {
+                        if (measure.MeasurementValue == toMeasure.MeasurementValue)
+                            return mergeTo;
+                    }
+                }
+            }
+
             foreach(StellarObject m in mergeTo.children)
             {
                 var result = FindName(mergeFrom, m);
@@ -21,50 +27,54 @@ namespace OECLib.Utilities
             }
             return null;
         }
-        public static StellarObject Merge(StellarObject mergeFrom, StellarObject mergeTo)
+
+        public static bool Merge(StellarObject mergeFrom, StellarObject mergeTo)
         {
 
             StellarObject stellar = FindName(mergeFrom, mergeTo);
 
-            if (stellar == null) return mergeFrom;
-            //mergeTo.ResetMeasurement();
+            if (stellar == null) return false;
 
-			foreach (var child in mergeFrom.children) {
-				stellar = Merge (child, stellar);
+			foreach(var m in mergeFrom.measurements)
+			{
+				mergeTo.AddMeasurement (m);
 			}
 
-            foreach(var m in mergeFrom.measurements)
-            {
-				mergeTo.AddMeasurement (m.Value);
-            }
-            return mergeTo;
+			foreach (var child in mergeFrom.children) {
+				int index;
+				if ((index=stellar.children.IndexOf (child)) != -1) {
+					foreach(var m in child.measurements)
+					{
+						stellar.children [index].AddMeasurement (m);
+					}
+				} else
+					stellar.AddChild (child);
+			}
+
+            return true;
         }
 
 		public static void TestMerge() {
-			SolarSystem mergeTo = new SolarSystem ();
-			Star testStar1 = new Star ();
 
-			Planet testPlanet1 = new Planet ();
-			Planet testPlanet2 = new Planet ();
-			Planet testPlanet3 = new Planet ();
+			XMLDeserializer sys1Desrializer = new XMLDeserializer ("16 Cygni.xml", true);
+			StellarObject sys1 = sys1Desrializer.ParseXML ();
 
-			testStar1.AddStringMeasurement ("name", "star1");
+			Star star1 = new Star ();
+			star1.AddMeasurement ("name", "Gliese 765.1 B");
 
-			testPlanet1.AddStringMeasurement ("name", "planet1");
-			testPlanet2.AddStringMeasurement ("name", "planet2");
-			testPlanet3.AddStringMeasurement ("name", "planet3");
+			Planet planet1 = new Planet ();
+			planet1.AddMeasurement ("name", "16 Cygni B b");
+			planet1.AddMeasurement ("list", "weird planets");
+			planet1.AddMeasurement ("description", "ayy lmao");
+			planet1.AddMeasurement ("discoverymethod", "IDK");
 
-			testPlanet1.AddNumberMeasurement ("mass", 3.22);
-			testPlanet2.AddNumberMeasurement ("mass", 5.4);
-			testPlanet3.AddNumberMeasurement ("mass", 4.22);
+			star1.AddChild (planet1);
 
-			testStar1.AddChild (testPlanet1);
-			testStar1.AddChild (testPlanet2);
-			mergeTo.AddChild (testStar1);
+			Console.WriteLine (sys1.XMLTag (new System.Xml.XmlDocument ()).OuterXml);
 
-			testStar1.AddChild (testPlanet3);
-			Console.WriteLine (mergeTo.XMLTag (new System.Xml.XmlDocument ()));
-			Console.WriteLine(Merge (testStar1, mergeTo).XMLTag(new System.Xml.XmlDocument()));
+			Merge (star1, sys1);
+			Console.Write ('\n');
+			Console.WriteLine(sys1.XMLTag(new System.Xml.XmlDocument()).OuterXml);
 		}
 	}
 }

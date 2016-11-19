@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using OECLib.Data;
-using OECLib.Data.Measurements;
 
 namespace OECLib.Utilities
 {
@@ -10,10 +10,17 @@ namespace OECLib.Utilities
 	{
 		XmlDocument doc;
 
-		public XMLDeserializer (string filename)
+		public XMLDeserializer (string filename, bool isFile)
 		{
 			doc = new XmlDocument ();
-			doc.LoadXml (File.ReadAllText (filename));
+            if (isFile)
+            {
+                doc.LoadXml(File.ReadAllText(filename));
+            }
+            else
+            {
+                doc.LoadXml(filename);
+            }
 		}
 
 		public StellarObject ParseXML(XmlNode node=null, StellarObject root=null) {
@@ -57,34 +64,13 @@ namespace OECLib.Utilities
 
 
 		Measurement CreateMeasurement(XmlNode node) {
-			Measurement measurement;
-			string name = node.Name;
+			Dictionary<string, string> attributes = new Dictionary<string, string> ();
 
-            if (node.Attributes != null && node.Attributes["errorminus"] != null) {
-				double errminus = parseDouble (node.Attributes.GetNamedItem ("errorminus").InnerText);
-				double errplus = parseDouble (node.Attributes.GetNamedItem ("errorplus").InnerText);
-				double nummeasurement = parseDouble (node.InnerText);
-
-				measurement = new NumberErrorMeasurement (name, nummeasurement, errplus, errminus);
-			} else {
-				double nummeasurement = parseDouble (node.InnerText);
-				if (double.IsNaN (nummeasurement)) {
-					string strmeasurement = node.InnerText;
-					measurement = new StringMeasurement (name, strmeasurement);
-				} else {
-					measurement = new NumberMeasurement (name, nummeasurement);
-				}
+			foreach (XmlAttribute xmlAttr in node.Attributes) {
+				attributes.Add (xmlAttr.Name, xmlAttr.InnerText);
 			}
-				
-			return measurement;
-		}
 
-		double parseDouble(string value) {
-			double result;
-			if (double.TryParse (value, out result)) {
-				return result;
-			}
-			return double.NaN;
+			return new Measurement (node.Name, node.InnerText, attributes);
 		}
 	}
 		

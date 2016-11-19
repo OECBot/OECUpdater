@@ -11,22 +11,29 @@ namespace OECLib.Data
     {
         int numOfChildren = 0;
 
-        public SolarSystem() : base()
-        {
-            IsASystem = true;
-        }
-
         public override bool AddChild(StellarObject child)
         {
-            if((numOfChildren == 0 || child.IsAPlanet) && !child.IsASystem)
+			StellarType childType = child.ObjectType;
+			if((numOfChildren == 0 || childType == StellarType.Planet) && childType != StellarType.System)
             {
                 children.Add(child);
-                if(!child.IsAPlanet)
+				if(childType != StellarType.Planet)
                     numOfChildren++;
                 return true;
             }
             return false;
         }
+
+		public override bool RemoveChild (StellarObject child)
+		{
+			return false;
+		}
+
+		public override StellarType ObjectType {
+			get {
+				return StellarType.System;
+			}
+		}
 
         public override XmlElement XMLTag(XmlDocument root)
         {
