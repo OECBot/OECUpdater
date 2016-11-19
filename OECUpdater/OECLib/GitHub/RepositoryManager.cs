@@ -82,7 +82,7 @@ namespace OECLib.GitHub
             {
                 await updateFile(fileName, content, branch);
             }
-            String body = String.Format("Updated {0}. Time Stamp: {1}\nSource: {2}", fileName.Split('.')[0].Split('/')[1], DateTime.Now.ToString(), source);
+            String body = String.Format("Updated {0}. Time Stamp: {1}\nSources:\n{2}", fileName.Split('.')[0].Split('/')[1], DateTime.Now.ToString(), source);
             await createPullRequest(branch, branch, body); 
         }
 

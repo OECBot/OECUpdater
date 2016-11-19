@@ -22,6 +22,8 @@ namespace OECLib
         public const String userName = "OECBot";
         public const String password = "UoJ84XJTXphgO4F";
         private CancellationTokenSource cts;
+        private CancellationToken token;
+
         public int Workers = 1;
         public bool isFirstRun = true;
         public Object updateLock = new Object();
@@ -58,15 +60,12 @@ namespace OECLib
             {
                 lastCheckTime = DateTime.MinValue;
             }
-            else
-            {
-                scheduleCheck(runChecks);
-            }
+            scheduleCheck(runChecks);
 
 
         }
 
-        private async void scheduleCheck(Func<CancellationToken, Task> check)
+        private async void scheduleCheck(Func<Task> check)
         {
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
             await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
@@ -78,7 +77,8 @@ namespace OECLib
                 checkTime = checkTime.AddDays(1.0);
 
                 scheduleCheck(runChecks);
-                await check(cts.Token);
+                token = cts.Token;
+                await check();
             }
             catch (OperationCanceledException oce)
             {
@@ -114,7 +114,7 @@ namespace OECLib
             return false;
         }
 
-        public async Task runChecks(CancellationToken token)
+        public async Task runChecks()
         {
             List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
             List<StellarObject> newData = new List<StellarObject>();
@@ -122,7 +122,7 @@ namespace OECLib
             foreach (IPlugin plugin in plugins)
             {
                 Console.WriteLine("Running plugin: {0}", plugin.GetName());
-                tasks.Add(runPluginAsync(plugin));
+                tasks.Add(Task<List<StellarObject>>.Run(()=> plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
             }
 
             foreach (Task<List<StellarObject>> task in tasks)
@@ -163,7 +163,7 @@ namespace OECLib
                         }
                         String newContent = output.ToString();
                         output.Clear();
-                        await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, "N/A", update.isNew);
+                        await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, update.Source, update.isNew);
                         limit++;
                         //60 pushes / min?
                         if (limit >= 35)
@@ -186,10 +186,6 @@ namespace OECLib
                     }
                     Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
                 }
-            }
-            foreach (Task worker in workers)
-            {
-                await worker;
             }
             Console.WriteLine("Finished running!");
             if (isFirstRun)
@@ -220,13 +216,17 @@ namespace OECLib
                         StellarObject original = xmld.ParseXML();
                         if (!needUpdate(original.getLastUpdate(), system))
                         {
+                            Console.WriteLine("Appears that system: {0} does not to be updated continuing.", update.names[0].MeasurementValue);
                             continue;
                         }
+                        String sources = "";
                         foreach (StellarObject planet in system)
                         {
                             PlanetMerger.Merge(planet, original);
+                            sources += String.Format("[{0}]({1})\n", planet.children[0].names[0].MeasurementValue, planet.Source);
                         }
                         original.isNew = false;
+                        original.Source = sources;
                         commitQueue.Enqueue(original);
                     }
                     else
@@ -234,11 +234,14 @@ namespace OECLib
                         Console.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
                         StellarObject baseSys = system[0];
                         system.Remove(baseSys);
+                        String sources = "";
                         foreach (StellarObject otherPlanet in system)
                         {
                             PlanetMerger.Merge(otherPlanet, baseSys);
+                            sources += String.Format("[{0}]({1})\n", otherPlanet.children[0].names[0].MeasurementValue, otherPlanet.Source);
                         }
                         baseSys.isNew = true;
+                        baseSys.Source = sources;
                         commitQueue.Enqueue(baseSys);
 
                     }

@@ -100,7 +100,7 @@ namespace ExoplanetEU
                     { "errorminus", fields[87]},
                 });
 
-				planet.AddMeasurement("source", string.Format("http://exoplanet.eu/catalog/{0}/", fields[0].Replace(" ", "_")));
+				star.Source = string.Format("http://exoplanet.eu/catalog/{0}/", fields[0].Replace(" ", "_"));
 
 				planet.AddMeasurement("mass", fields[1], new Dictionary<string, string> {
 					{ "errorplus", fields[3]},

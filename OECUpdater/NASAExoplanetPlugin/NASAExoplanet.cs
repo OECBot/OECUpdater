@@ -71,7 +71,7 @@ namespace NASAExoplanetPlugin
                 Planet planet = new Planet();
 
                 planet.AddMeasurement("name", fields[1]);
-
+                star.Source = String.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
 				KeyValuePair<string, string> errMinus = new KeyValuePair<string, string> ("errorMinus", "");
 				KeyValuePair<string, string> errPlus = new KeyValuePair<string, string> ("errorPlus", "");

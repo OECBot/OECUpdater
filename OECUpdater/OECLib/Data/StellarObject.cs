@@ -12,6 +12,7 @@ namespace OECLib.Data
 		public List<Measurement> names;
        	public List<Measurement> measurements;
         public bool isNew { get; set; }
+        public String Source { get; set; }
 
         public StellarObject()
         {

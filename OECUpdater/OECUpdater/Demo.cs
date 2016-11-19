@@ -82,6 +82,18 @@ namespace OECUpdater
             commands.Add("8", doNothing);
             commands.Add("4", setCurrentRepo);
             commands.Add("7", setSchedule);
+            commands.Add("9", forceRun);
+        }
+
+        public async static Task forceRun()
+        {
+            Console.WriteLine("Forcing bot to run now.");
+            if (bot.On)
+            {
+                bot.Stop();
+            }
+            
+            bot.runChecks();
         }
 
         public async static Task setSchedule()
