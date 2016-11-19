@@ -1,0 +1,306 @@
+[16-11-19 05:29:14] Begin running plugins.
+[16-11-19 05:29:14] Running plugin: Exoplanet.EU
+[16-11-19 05:29:14] Running plugin: NASA Exoplanet Database
+[16-11-19 05:29:15] Finished running plugins in: 0.7440426 seconds
+[16-11-19 05:29:15] Starting workers
+[16-11-19 05:29:17] Successfully commited data for: 2M 2236+4751 
+[16-11-19 05:29:18] Successfully commited data for: 38 Vir 
+[16-11-19 05:29:20] Successfully commited data for: EPIC 211822797 
+[16-11-19 05:29:21] Successfully commited data for: EPIC 211913977 
+[16-11-19 05:29:22] Successfully commited data for: EPIC 211916756 
+[16-11-19 05:29:23] Successfully commited data for: EPIC 211969807 
+[16-11-19 05:29:25] Successfully commited data for: EPIC 211970147 
+[16-11-19 05:29:26] Successfully commited data for: EPIC 211990866 
+[16-11-19 05:29:27] Successfully commited data for: EPIC 219388192 
+[16-11-19 05:29:28] Successfully commited data for: EPIC 220674823 
+[16-11-19 05:29:29] Successfully commited data for: GJ 163 
+[16-11-19 05:29:30] Successfully commited data for: GJ 536 
+[16-11-19 05:29:31] Successfully commited data for: GJ 667 C 
+[16-11-19 05:29:32] Successfully commited data for: HAT-P-11 
+[16-11-19 05:29:34] Successfully commited data for: HAT-P-65 
+[16-11-19 05:29:35] Successfully commited data for: HAT-P-66 
+[16-11-19 05:29:36] Successfully commited data for: HD 110014 
+[16-11-19 05:29:37] Successfully commited data for: HD 164509 
+[16-11-19 05:29:38] Successfully commited data for: HD 175370 
+[16-11-19 05:29:39] Successfully commited data for: HD 189733 
+[16-11-19 05:29:40] Successfully commited data for: HD 2638 
+[16-11-19 05:29:41] Successfully commited data for: HIP 68468 
+[16-11-19 05:29:42] Successfully commited data for: HR 2562 
+[16-11-19 05:29:43] Successfully commited data for: K2-39 
+[16-11-19 05:29:44] Successfully commited data for: EPIC 212803289 
+[16-11-19 05:29:45] Successfully commited data for: KELT-8 
+[16-11-19 05:29:46] Successfully commited data for: Kepler-1647 (AB) 
+[16-11-19 05:29:47] Successfully commited data for: Kepler-21 
+[16-11-19 05:29:48] Successfully commited data for: Kepler-80 
+[16-11-19 05:29:50] Successfully commited data for: OGLE-2007-BLG-349(AB) 
+OECUpdater.vshost.exe Error: 0 : [16-11-19 05:29:50] Failed to update planet: PSR J0636. Validation FailedOctokit.ApiValidationException
+OECUpdater.vshost.exe Error: 0 : [16-11-19 05:29:50]    at Octokit.Connection.HandleErrors(IResponse response)
+   at Octokit.Connection.<RunRequest>d__54.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.ConfiguredTaskAwaitable`1.ConfiguredTaskAwaiter.GetResult()
+   at Octokit.Connection.<Run>d__53`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.ConfiguredTaskAwaitable`1.ConfiguredTaskAwaiter.GetResult()
+   at Octokit.ApiConnection.<Post>d__22`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at OECLib.GitHub.RepositoryManager.<createPullRequest>d__16.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\GitHub\RepositoryManager.cs:line 70
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at OECLib.GitHub.RepositoryManager.<BeginCommitAndPush>d__1b.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\GitHub\RepositoryManager.cs:line 86
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at OECLib.OECBot.<runChecks>d__7.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\OECBot.cs:line 178
+[16-11-19 05:29:51] Successfully commited data for: Qatar-3 
+[16-11-19 05:29:53] Successfully commited data for: Qatar-4 
+[16-11-19 05:29:54] Successfully commited data for: Qatar-5 
+[16-11-19 05:29:54] Successfully commited data for: V2051 Oph 
+[16-11-19 05:29:56] Successfully commited data for: WASP-17 
+[16-11-19 05:29:56] GitHub push limit reached awaiting 60s.
+[16-11-19 05:30:57] Successfully commited data for: WASP-47 
+[16-11-19 05:30:58] Successfully commited data for: Kepler-25 
+[16-11-19 05:30:59] Successfully commited data for: Kepler-37 
+[16-11-19 05:31:00] Successfully commited data for: Kepler-48 
+[16-11-19 05:31:01] Successfully commited data for: Kepler-68 
+[16-11-19 05:31:02] Successfully commited data for: Kepler-100 
+[16-11-19 05:31:04] Successfully commited data for: Kepler-102 
+[16-11-19 05:31:05] Successfully commited data for: Kepler-106 
+[16-11-19 05:31:08] Successfully commited data for: Kepler-109 
+[16-11-19 05:31:09] Successfully commited data for: Kepler-113 
+[16-11-19 05:31:10] Successfully commited data for: HATS-17 
+[16-11-19 05:31:11] Successfully commited data for: GJ 676 A 
+[16-11-19 05:31:12] Successfully commited data for: HD 154672 
+[16-11-19 05:31:13] Successfully commited data for: HD 164922 
+[16-11-19 05:31:14] Successfully commited data for: HD 48265 
+[16-11-19 05:31:15] Successfully commited data for: HD 60532 
+[16-11-19 05:31:16] Successfully commited data for: HD 88133 
+[16-11-19 05:31:17] Successfully commited data for: HD 97658 
+[16-11-19 05:31:18] Successfully commited data for: WASP-12 
+[16-11-19 05:31:19] Successfully commited data for: OGLE 2007-BLG-349L A 
+[16-11-19 05:31:20] Successfully commited data for: HATS-11 
+[16-11-19 05:31:21] Successfully commited data for: HATS-12 
+[16-11-19 05:31:22] Successfully commited data for: HD 152079 
+[16-11-19 05:31:23] Successfully commited data for: EPIC 211351816 
+[16-11-19 05:31:24] Successfully commited data for: EPIC 211391664 
+[16-11-19 05:31:26] Successfully commited data for: Kepler-407 
+[16-11-19 05:31:27] Successfully commited data for: Kepler-408 
+[16-11-19 05:31:28] Successfully commited data for: Kepler-409 
+[16-11-19 05:31:29] Successfully commited data for: K2-77 
+[16-11-19 05:31:30] Successfully commited data for: K2-95 
+OECUpdater.vshost.exe Error: 0 : [16-11-19 05:31:31] Failed to update planet: HD 3167. Branch HD_3167_yb787 not foundOctokit.NotFoundException
+OECUpdater.vshost.exe Error: 0 : [16-11-19 05:31:31]    at Octokit.Connection.HandleErrors(IResponse response)
+   at Octokit.Connection.<RunRequest>d__54.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.ConfiguredTaskAwaitable`1.ConfiguredTaskAwaiter.GetResult()
+   at Octokit.Connection.<Run>d__53`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.ConfiguredTaskAwaitable`1.ConfiguredTaskAwaiter.GetResult()
+   at Octokit.ApiConnection.<Put>d__26`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at OECLib.GitHub.RepositoryManager.<addFile>d__25.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\GitHub\RepositoryManager.cs:line 98
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at OECLib.GitHub.RepositoryManager.<BeginCommitAndPush>d__1b.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\GitHub\RepositoryManager.cs:line 79
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at OECLib.OECBot.<runChecks>d__7.MoveNext() in c:\Users\Fen\Documents\GitHub\team06-Project\OECUpdater\OECLib\OECBot.cs:line 178
+[16-11-19 05:31:32] Successfully commited data for: HD 133131 A 
+[16-11-19 05:31:33] Successfully commited data for: HD 133131 B 
+[16-11-19 05:31:34] Successfully commited data for: KELT-17 
+[16-11-19 05:31:35] Successfully commited data for: WASP-92 
+[16-11-19 05:31:36] Successfully commited data for: WASP-93 
+[16-11-19 05:31:36] GitHub push limit reached awaiting 60s.
+[16-11-19 05:33:52] Begin running plugins.
+[16-11-19 05:33:52] Running plugin: Exoplanet.EU
+[16-11-19 05:33:52] Running plugin: NASA Exoplanet Database
+[16-11-19 05:33:53] Finished running plugins in: 0.7620011 seconds
+[16-11-19 05:33:53] Starting workers
+[16-11-19 05:33:55] Successfully commited data for: 2M 2236+4751 
+[16-11-19 05:33:56] Successfully commited data for: 38 Vir 
+[16-11-19 05:33:57] Successfully commited data for: EPIC 211822797 
+[16-11-19 05:33:59] Successfully commited data for: EPIC 211913977 
+[16-11-19 05:34:00] Successfully commited data for: EPIC 211916756 
+[16-11-19 05:34:01] Successfully commited data for: EPIC 211969807 
+[16-11-19 05:34:02] Successfully commited data for: EPIC 211970147 
+[16-11-19 05:34:03] Successfully commited data for: EPIC 211990866 
+[16-11-19 05:34:04] Successfully commited data for: EPIC 219388192 
+[16-11-19 05:34:05] Successfully commited data for: EPIC 220674823 
+[16-11-19 05:34:06] Successfully commited data for: GJ 163 
+[16-11-19 05:34:08] Successfully commited data for: GJ 536 
+[16-11-19 05:34:09] Successfully commited data for: GJ 667 C 
+[16-11-19 05:34:10] Successfully commited data for: HAT-P-11 
+[16-11-19 05:34:11] Successfully commited data for: HAT-P-65 
+[16-11-19 05:34:12] Successfully commited data for: HAT-P-66 
+[16-11-19 05:34:14] Successfully commited data for: HD 110014 
+[16-11-19 05:34:15] Successfully commited data for: HD 164509 
+[16-11-19 05:34:16] Successfully commited data for: HD 175370 
+[16-11-19 05:34:17] Successfully commited data for: HD 189733 
+[16-11-19 05:34:18] Successfully commited data for: HD 2638 
+[16-11-19 05:34:19] Successfully commited data for: HIP 68468 
+[16-11-19 05:34:21] Successfully commited data for: HR 2562 
+[16-11-19 05:34:22] Successfully commited data for: K2-39 
+[16-11-19 05:34:23] Successfully commited data for: EPIC 212803289 
+[16-11-19 05:34:25] Successfully commited data for: KELT-8 
+[16-11-19 05:34:26] Successfully commited data for: Kepler-1647 (AB) 
+[16-11-19 05:34:27] Successfully commited data for: Kepler-21 
+[16-11-19 05:34:29] Successfully commited data for: Kepler-80 
+[16-11-19 05:34:29] Successfully commited data for: OGLE-2007-BLG-349(AB) 
+[16-11-19 05:34:31] Successfully commited data for: PSR J0636 
+[16-11-19 05:34:32] Successfully commited data for: Qatar-3 
+[16-11-19 05:34:33] Successfully commited data for: Qatar-4 
+[16-11-19 05:34:34] Successfully commited data for: Qatar-5 
+[16-11-19 05:34:35] Successfully commited data for: V2051 Oph 
+[16-11-19 05:34:35] GitHub push limit reached awaiting 60s.
+[16-11-19 05:35:36] Successfully commited data for: WASP-17 
+[16-11-19 05:35:37] Successfully commited data for: WASP-47 
+[16-11-19 05:35:38] Successfully commited data for: Kepler-25 
+[16-11-19 05:35:39] Successfully commited data for: Kepler-37 
+[16-11-19 05:35:40] Successfully commited data for: Kepler-48 
+[16-11-19 05:35:41] Successfully commited data for: Kepler-68 
+[16-11-19 05:35:42] Successfully commited data for: Kepler-100 
+[16-11-19 05:35:43] Successfully commited data for: Kepler-102 
+[16-11-19 05:35:44] Successfully commited data for: Kepler-106 
+[16-11-19 05:35:45] Successfully commited data for: Kepler-109 
+[16-11-19 05:35:46] Successfully commited data for: Kepler-113 
+[16-11-19 05:35:47] Successfully commited data for: HATS-17 
+[16-11-19 05:35:48] Successfully commited data for: GJ 676 A 
+[16-11-19 05:35:50] Successfully commited data for: HD 154672 
+[16-11-19 05:35:52] Successfully commited data for: HD 164922 
+[16-11-19 05:35:53] Successfully commited data for: HD 48265 
+OECUpdater.vshost.exe Warning: 0 : [16-11-19 05:35:54] Triggered abuse mechanism? Sleeping for 60s. You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.
+OECUpdater.vshost.exe Warning: 0 : [16-11-19 05:36:55] Triggered abuse mechanism? Sleeping for 60s. You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.
+OECUpdater.vshost.exe Warning: 0 : [16-11-19 05:37:56] Triggered abuse mechanism? Sleeping for 60s. You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.
+[16-11-19 05:40:27] Begin running plugins.
+[16-11-19 05:40:27] Running plugin: Exoplanet.EU
+[16-11-19 05:40:27] Running plugin: NASA Exoplanet Database
+[16-11-19 05:40:29] Finished running plugins in: 1.0360017 seconds
+[16-11-19 05:40:29] Starting workers
+OECUpdater.vshost.exe Warning: 0 : [16-11-19 05:40:31] Triggered abuse mechanism? Sleeping for 60s. You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.
+[16-11-19 05:57:43] Begin running plugins.
+[16-11-19 05:57:43] Running plugin: Exoplanet.EU
+[16-11-19 05:57:43] Running plugin: NASA Exoplanet Database
+[16-11-19 05:57:44] Finished running plugins in: 1.0210032 seconds
+[16-11-19 05:57:44] Starting workers
+OECUpdater.vshost.exe Warning: 0 : [16-11-19 05:57:46] Triggered abuse mechanism? Sleeping for 60s. You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.
+[16-11-19 06:00:54] Begin running plugins.
+[16-11-19 06:00:54] Running plugin: Exoplanet.EU
+[16-11-19 06:00:54] Running plugin: NASA Exoplanet Database
+[16-11-19 06:00:54] Finished running plugins in: 0.7160097 seconds
+[16-11-19 06:00:54] Starting workers
+[16-11-19 06:00:56] Successfully commited data for: 2M 2236+4751 
+[16-11-19 06:00:57] Successfully commited data for: 38 Vir 
+[16-11-19 06:00:58] Successfully commited data for: EPIC 211822797 
+[16-11-19 06:00:59] Successfully commited data for: EPIC 211913977 
+[16-11-19 06:01:00] Successfully commited data for: EPIC 211916756 
+[16-11-19 06:01:01] Successfully commited data for: EPIC 211969807 
+[16-11-19 06:01:02] Successfully commited data for: EPIC 211970147 
+[16-11-19 06:01:03] Successfully commited data for: EPIC 211990866 
+[16-11-19 06:01:04] Successfully commited data for: EPIC 219388192 
+[16-11-19 06:01:05] Successfully commited data for: EPIC 220674823 
+[16-11-19 06:01:06] Successfully commited data for: GJ 163 
+[16-11-19 06:01:07] Successfully commited data for: GJ 536 
+[16-11-19 06:01:08] Successfully commited data for: GJ 667 C 
+[16-11-19 06:01:09] Successfully commited data for: HAT-P-11 
+[16-11-19 06:01:10] Successfully commited data for: HAT-P-65 
+[16-11-19 06:01:11] Successfully commited data for: HAT-P-66 
+[16-11-19 06:01:12] Successfully commited data for: HD 110014 
+[16-11-19 06:01:13] Successfully commited data for: HD 164509 
+[16-11-19 06:01:14] Successfully commited data for: HD 175370 
+[16-11-19 06:01:15] Successfully commited data for: HD 189733 
+[16-11-19 06:01:16] Successfully commited data for: HD 2638 
+[16-11-19 06:01:17] Successfully commited data for: HIP 68468 
+[16-11-19 06:01:18] Successfully commited data for: HR 2562 
+[16-11-19 06:01:19] Successfully commited data for: K2-39 
+[16-11-19 06:01:20] Successfully commited data for: EPIC 212803289 
+[16-11-19 06:01:21] Successfully commited data for: KELT-8 
+[16-11-19 06:01:22] Successfully commited data for: Kepler-1647 (AB) 
+[16-11-19 06:01:22] Successfully commited data for: Kepler-21 
+[16-11-19 06:01:23] Successfully commited data for: Kepler-80 
+[16-11-19 06:01:24] Successfully commited data for: OGLE-2007-BLG-349(AB) 
+[16-11-19 06:01:25] Successfully commited data for: PSR J0636 
+[16-11-19 06:01:26] Successfully commited data for: Qatar-3 
+[16-11-19 06:01:27] Successfully commited data for: Qatar-4 
+[16-11-19 06:01:28] Successfully commited data for: Qatar-5 
+[16-11-19 06:01:28] Successfully commited data for: V2051 Oph 
+[16-11-19 06:01:28] GitHub push limit reached awaiting 60s.
+[16-11-19 06:02:29] Successfully commited data for: WASP-17 
+[16-11-19 06:02:30] Successfully commited data for: WASP-47 
+[16-11-19 06:02:31] Successfully commited data for: Kepler-25 
+[16-11-19 06:02:32] Successfully commited data for: Kepler-37 
+[16-11-19 06:02:33] Successfully commited data for: Kepler-48 
+[16-11-19 06:02:34] Successfully commited data for: Kepler-68 
+[16-11-19 06:02:35] Successfully commited data for: Kepler-100 
+[16-11-19 06:02:35] Successfully commited data for: Kepler-102 
+[16-11-19 06:02:36] Successfully commited data for: Kepler-106 
+[16-11-19 06:02:37] Successfully commited data for: Kepler-109 
+[16-11-19 06:02:38] Successfully commited data for: Kepler-113 
+[16-11-19 06:02:39] Successfully commited data for: HATS-17 
+[16-11-19 06:02:40] Successfully commited data for: GJ 676 A 
+[16-11-19 06:02:41] Successfully commited data for: HD 154672 
+[16-11-19 06:02:42] Successfully commited data for: HD 164922 
+[16-11-19 06:02:42] Successfully commited data for: HD 48265 
+[16-11-19 06:02:43] Successfully commited data for: HD 60532 
+[16-11-19 06:02:44] Successfully commited data for: HD 88133 
+[16-11-19 06:02:45] Successfully commited data for: HD 97658 
+[16-11-19 06:02:46] Successfully commited data for: WASP-12 
+[16-11-19 06:02:47] Successfully commited data for: OGLE 2007-BLG-349L A 
+[16-11-19 06:02:48] Successfully commited data for: HATS-11 
+[16-11-19 06:02:49] Successfully commited data for: HATS-12 
+[16-11-19 06:02:50] Successfully commited data for: HD 152079 
+[16-11-19 06:02:51] Successfully commited data for: EPIC 211351816 
+[16-11-19 06:02:52] Successfully commited data for: EPIC 211391664 
+[16-11-19 06:02:52] Successfully commited data for: Kepler-407 
+[16-11-19 06:02:53] Successfully commited data for: Kepler-408 
+[16-11-19 06:02:54] Successfully commited data for: Kepler-409 
+[16-11-19 06:02:55] Successfully commited data for: K2-77 
+[16-11-19 06:02:56] Successfully commited data for: K2-95 
+[16-11-19 06:02:57] Successfully commited data for: HD 3167 
+[16-11-19 06:02:58] Successfully commited data for: HD 133131 A 
+[16-11-19 06:02:59] Successfully commited data for: HD 133131 B 
+[16-11-19 06:03:00] Successfully commited data for: KELT-17 
+[16-11-19 06:03:00] GitHub push limit reached awaiting 60s.
+[16-11-19 06:04:01] Successfully commited data for: WASP-92 
+[16-11-19 06:04:02] Successfully commited data for: WASP-93 
+[16-11-19 06:04:03] Successfully commited data for: WASP-118 
+[16-11-19 06:04:03] Successfully commited data for: HD 111998 
+[16-11-19 06:04:04] Successfully commited data for: K2-99 
+[16-11-19 06:04:05] Successfully commited data for: OGLE 2015-BLG-0051L 
+[16-11-19 06:04:06] Successfully commited data for: OGLE-2012-BLG-0950L 
+[16-11-19 06:04:07] Successfully commited data for: OGLE-2014-BLG-1760 
+[16-11-19 06:04:08] Successfully commited data for: HD 9174 
+[16-11-19 06:04:09] Successfully commited data for: Qatar-1 
+[16-11-19 06:04:10] Successfully commited data for: HD 68402 
+[16-11-19 06:04:10] Successfully commited data for: HD 72892 
+[16-11-19 06:04:11] Successfully commited data for: HD 128356 
+[16-11-19 06:04:12] Successfully commited data for: HD 147873 
+[16-11-19 06:04:13] Successfully commited data for: HD 165155 
+[16-11-19 06:04:14] Successfully commited data for: HD 224538 
+[16-11-19 06:04:15] Successfully commited data for: 2MASS J22362452+4751425 
+[16-11-19 06:04:16] Successfully commited data for: Kepler-56 
+[16-11-19 06:04:17] Successfully commited data for: rho CrB 
+[16-11-19 06:04:18] Successfully commited data for: HD 42618 
+[16-11-19 06:04:18] Successfully commited data for: HATS-18 
+[16-11-19 06:04:19] Successfully commited data for: HD 143361 
+[16-11-19 06:04:19] Finished running OECBot in 205.8124312 seconds was not first run.
+[16-11-19 06:04:19] Successfully updated 92 systems out of 92 system updates found.

@@ -43,12 +43,6 @@ namespace OECLib.GitHub
             return prs;
         }
 
-        public async Task<IReadOnlyList<Branch>> getAllBranches()
-        {
-            var branches = await session.client.Repository.Branch.GetAll(repo.Id);
-            return branches;
-        }
-
         public async Task updateFile(String filePath, String content, String branch)
         {
             UpdateFileRequest ufr = new UpdateFileRequest("Updated "+filePath, content, shaKeys[filePath], branch);
@@ -100,7 +94,18 @@ namespace OECLib.GitHub
 
         public async Task deleteBranch(String branch)
         {
-            await session.client.Git.Reference.Delete(repo.Id, branch);
+            await session.client.Git.Reference.Delete(repo.Id, "heads/"+branch);
+        }
+
+        public async Task<List<String>> getAllBranches()
+        {
+            IReadOnlyList<Branch> branches = await session.client.Repository.Branch.GetAll(repo.Id);
+            List<String> branchNames = new List<String>();
+            foreach (Branch branch in branches)
+            {
+                branchNames.Add(branch.Name);
+            }
+            return branchNames;
         }
 
         private String getRandString(int length)

@@ -12,6 +12,7 @@ using OECLib.Utilities;
 using OECLib.GitHub;
 using OECLib.Interface;
 using OECLib;
+using System.Diagnostics;
 
 namespace OECUpdater
 {
@@ -29,6 +30,7 @@ namespace OECUpdater
 
         public static void Main(string[] args)
         {
+            
             initalizeCommands();
             Serializer.InitPlugins();
             plugins = Serializer.plugins;
@@ -83,6 +85,27 @@ namespace OECUpdater
             commands.Add("4", setCurrentRepo);
             commands.Add("7", setSchedule);
             commands.Add("9", forceRun);
+            commands.Add("10", deleteAllBranches);
+        }
+
+        public static async Task deleteAllBranches()
+        {
+            try
+            {
+                List<String> branches = await rm.getAllBranches();
+                foreach (String name in branches)
+                {
+                    if (name != "master")
+                    {
+                        Console.WriteLine("Deleting branch {0}", name);
+                        await rm.deleteBranch(name);
+                    }       
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async static Task forceRun()
