@@ -108,6 +108,21 @@ namespace OECLib.GitHub
             return branchNames;
         }
 
+        public async Task MergePullRequest(String branch, int prNum)
+        {
+            MergePullRequest mpr = new MergePullRequest();
+            mpr.CommitMessage = String.Format("Merging branch {0} Timestamp: {1}", branch, DateTime.Now);
+            mpr.CommitTitle = String.Format("Merge pullrequest for {0}", branch);
+            await session.client.Repository.PullRequest.Merge(repo.Id, prNum, mpr);
+        }
+
+        public async Task closePullRequest(int prNum)
+        {
+            PullRequestUpdate pru = new PullRequestUpdate();
+            pru.State = ItemState.Closed;
+            await session.client.Repository.PullRequest.Update(repo.Id, prNum, pru);
+        }
+
         private String getRandString(int length)
         {
             String result = "";
