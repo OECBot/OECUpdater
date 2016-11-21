@@ -9,6 +9,7 @@ namespace OECGUI
 		{
 			Application.Init ();
 			RequestWindow main = RequestWindow.Create ();
+
 			main.Show ();
 			Application.Run ();
 		}
