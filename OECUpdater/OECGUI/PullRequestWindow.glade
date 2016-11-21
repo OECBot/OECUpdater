@@ -3,106 +3,100 @@
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="RequestWindow">
+    <property name="width_request">650</property>
+    <property name="height_request">550</property>
     <property name="can_focus">False</property>
+    <property name="border_width">0</property>
     <child>
       <object class="GtkFixed" id="fixed1">
+        <property name="width_request">650</property>
+        <property name="height_request">550</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkFixed" id="fixed2">
-            <property name="width_request">650</property>
-            <property name="height_request">550</property>
+          <object class="GtkLabel" id="listPullRequestsLabel">
+            <property name="name">listPullRequestLabel</property>
+            <property name="width_request">100</property>
+            <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">baseline</property>
             <property name="valign">baseline</property>
-            <property name="border_width">0</property>
-            <property name="resize_mode">immediate</property>
+            <property name="margin_bottom">3</property>
+            <property name="label" translatable="yes">Pull Requests</property>
+          </object>
+          <packing>
+            <property name="x">250</property>
+            <property name="y">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="AcceptButton">
+            <property name="label" translatable="yes">Accept</property>
+            <property name="width_request">125</property>
+            <property name="height_request">50</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">475</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="RejectButton">
+            <property name="label" translatable="yes">Reject</property>
+            <property name="width_request">125</property>
+            <property name="height_request">50</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">500</property>
+            <property name="y">475</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="textview1">
+            <property name="width_request">275</property>
+            <property name="height_request">375</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">75</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
+            <property name="width_request">300</property>
+            <property name="height_request">450</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">in</property>
             <child>
-              <object class="GtkLabel" id="listPullRequestsLabel">
-                <property name="name">listPullRequestLabel</property>
-                <property name="width_request">100</property>
-                <property name="height_request">40</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">baseline</property>
-                <property name="margin_bottom">3</property>
-                <property name="label" translatable="yes">Pull Requests</property>
-              </object>
-              <packing>
-                <property name="x">250</property>
-                <property name="y">10</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="AcceptButton">
-                <property name="label" translatable="yes">Accept</property>
-                <property name="width_request">125</property>
-                <property name="height_request">50</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <style>
-                  <class name="button"/>
-                </style>
-              </object>
-              <packing>
-                <property name="x">350</property>
-                <property name="y">475</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="RejectButton">
-                <property name="label" translatable="yes">Reject</property>
-                <property name="width_request">125</property>
-                <property name="height_request">50</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="x">500</property>
-                <property name="y">475</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkTextView" id="textview1">
-                <property name="width_request">275</property>
-                <property name="height_request">375</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="x">350</property>
-                <property name="y">75</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
+              <object class="GtkTreeView" id="RequestTreeView">
                 <property name="width_request">300</property>
-                <property name="height_request">448</property>
+                <property name="height_request">450</property>
                 <property name="visible">True</property>
+                <property name="app_paintable">True</property>
                 <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="RequestTreeView">
-                    <property name="width_request">300</property>
-                    <property name="height_request">448</property>
-                    <property name="visible">True</property>
-                    <property name="app_paintable">True</property>
-                    <property name="can_focus">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
-                  </object>
+                <property name="activate_on_single_click">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection1"/>
                 </child>
               </object>
-              <packing>
-                <property name="x">25</property>
-                <property name="y">75</property>
-              </packing>
             </child>
           </object>
+          <packing>
+            <property name="x">25</property>
+            <property name="y">75</property>
+          </packing>
         </child>
       </object>
     </child>
