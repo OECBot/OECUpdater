@@ -1,37 +1,92 @@
-.button {
-	background-color: #9ECE08;
+.buttonLogin {
+	background-color: #4CBB17;
 	color: #FFFFFF;
 	background-image: none;
 	border-image: none;
 	border-radius: 0;
+	font: Laksaman;
+	font-size: 12;
 }
 
-.button:hover {
-	background-color: #4A9586;
+.buttonSettings {
+	background-color: #8C92AC;
+	color: #FFFFFF;
+	background-image: url("Assets/082__setting_cog.png");
+	border-image: none;
+	border-radius: 0;
+	font-size: 1;
+}
+
+.buttonSettings:hover {
+	background-color: #A3AAC7;
 	color: #FFFFFF;
 }
 
-.button:active {
-	background-color: #5EAE9E;
+.buttonSettings:active {
+	background-color: #8C92AC;
 	color: #FFFFFF;
 }
 
-.transparent {
-	background-color: #FFFFFF;
+.iconBox {
+	background-color: #8C92AC;
 }
-
-.font {
-	color: #FFFFFF;
-}
-
-.bg {
-	background-image: url("/home/wannie/Downloads/PxtaE4S.png");
-}
-
 
 .loginBox {
 	border-image: none;
 	border-radius: 0;
 	background-color: #FFFFFF;
 	background-image: none;
+	color: #000000;
+	font: Laksaman;
+	font-size: 10;
+	
+}
+
+.loginBox:selected {
+	color: #CB6D51;
+}
+
+.repoBox {
+	border-image: none;
+	border-radius: 0;
+	background-color: #FFFFFF;
+	background-image: none;
+	color: #000000;
+	font: Laksaman;
+	font-size: 8;
+}
+
+.repoBox:selected {
+	color: #CB6D51;
+}
+
+.buttonLogin:hover {
+	background-color: #4A9586;
+	color: #FFFFFF;
+}
+
+.buttonLogin:active {
+	background-color: #5EAE9E;
+	color: #FFFFFF;
+}
+
+.transparent {
+	background-color: #EFEFEF;
+	text-shadow: black;
+}
+
+.font {
+	color: #000000;
+	font: Laksaman;
+	font-size: 10;
+}
+
+.titleFont {
+	color: #000000;
+	font: Laksaman;
+	font-size: 40;
+}
+
+.bg {
+	background-image: url("Assets/PxtaE4S.png");
 }
