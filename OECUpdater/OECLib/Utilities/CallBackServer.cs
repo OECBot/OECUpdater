@@ -19,6 +19,8 @@ namespace OECLib.Utilities
         public Session session;
         private GitHubClient GHClient;
 		private CancellationTokenSource cts;
+		public bool isRunning { get; set; }
+		public bool isCancelled { get; set; }
 
         public CallBackServer(String ip, int port, GitHubClient client)
         {
@@ -26,17 +28,29 @@ namespace OECLib.Utilities
             Console.WriteLine("Server listening at {0}:{1}", ip, port);
             this.GHClient = client;
 			cts = new CancellationTokenSource();
+			isRunning = false;
+			this.isCancelled = false;
         }
 
         public async Task<Session> Start()
         {
             listener.Start();
-
+			isRunning = true;
             bool gotCode = false;
             do
             {
 				var token = cts.Token;
-				TcpClient client = await Task.Run(() => listener.AcceptTcpClientAsync(), token);
+				TcpClient client = null;
+
+				try {
+					client = await Task.Run(() => listener.AcceptTcpClientAsync(), token);
+				}
+				catch (OperationCanceledException ex) {
+					Console.WriteLine("First callback exception caught and dealt with");
+					isRunning = false;
+					listener.Stop ();
+					return null;
+				}
                 Console.WriteLine("Client connected.");
 
                 byte[] rq = new byte[8192];
@@ -70,12 +84,14 @@ namespace OECLib.Utilities
                 await session.ObtainNewToken();
                 gotCode = true;
             } while (!gotCode);
-
+			isRunning = false;
+			listener.Stop ();
             return session;
         }
 
 		public void Stop() {
 			cts.Cancel ();
+			isCancelled = true;
 		}
     }
 }
