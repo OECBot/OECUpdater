@@ -2,8 +2,10 @@
 using Gtk;
 using OECLib.GitHub;
 using OECLib.Utilities;
+using System.Threading.Tasks;
 using UI = Gtk.Builder.ObjectAttribute;
 using Octokit;
+using System.Collections.Generic;
 
 namespace OECGUI
 {
@@ -15,7 +17,16 @@ namespace OECGUI
 		[UI] Gtk.TextView textview1;
 		//	CallBackServer callback;
 
-		public static RequestWindow Create () {
+		static Session session;
+		static RepositoryManager rm;
+		private static IReadOnlyList<PullRequest> pullRequestList;
+
+		public static RequestWindow Create (Session currSession) {
+			session = new Session("OECBot", "UoJ84XJTXphgO4F");
+			Task<Repository> repo = session.client.Repository.Get("Gazing", "OECTest");
+			repo.Wait();
+			rm = new RepositoryManager(session, repo.Result);
+
 			Gtk.Builder builder = new Gtk.Builder(null, "OECGUI.PullRequestWindow.glade", null);
 			RequestWindow m = new RequestWindow (builder, builder.GetObject ("RequestWindow").Handle);
 			return m;
@@ -33,44 +44,53 @@ namespace OECGUI
 			RejectButton.Clicked += RejectButtonClicked;
 			RequestTreeView.RowActivated += RowClicked;
 
-			Gtk.ListStore requestListStore = new Gtk.ListStore (typeof(string), typeof(string), typeof(string));
+			createStores ();
+			renderColumns ();
+
+
+
+			//ShowAll ();
+		}
+
+		private async void createStores(){
+			Gtk.ListStore requestListStore = new Gtk.ListStore (typeof(string), typeof(string), 
+				typeof(string), typeof(string), typeof(string));
 			RequestTreeView.Model = requestListStore;
 
-			requestListStore.AppendValues ("123", "First", "Comment1");
-			requestListStore.AppendValues ("456", "Second", "Comment2");
-			requestListStore.AppendValues ("789", "Third", "Comment3");
-			requestListStore.AppendValues ("1231", "1First", "Comment4");
-			requestListStore.AppendValues ("4561", "1Second", "Comment5");
-			requestListStore.AppendValues ("7891", "1Third", "Comment6");
-			requestListStore.AppendValues ("1232", "2First", "Comment7");
-			requestListStore.AppendValues ("4562", "2Second", "Comment8");
-			requestListStore.AppendValues ("7892", "2Third", "Comment9");
-			requestListStore.AppendValues ("123", "First", "Comment10");
-			requestListStore.AppendValues ("456", "Second", "Comment11");
-			requestListStore.AppendValues ("789", "Third", "Comment12");
-			requestListStore.AppendValues ("1231", "1First", "Comment13");
-			requestListStore.AppendValues ("4561", "1Second", "Comment14");
-			requestListStore.AppendValues ("7891", "1Third", "Comment15");
-			requestListStore.AppendValues ("1232", "2First", "Comment16");
-			requestListStore.AppendValues ("4562", "2Second", "Comment17");
-			requestListStore.AppendValues ("7892", "2Third", "Comment18");
-			requestListStore.AppendValues ("123", "First", "Comment19");
-//			requestListStore.AppendValues ("456", "Second");
-//			requestListStore.AppendValues ("789", "Third");
-//			requestListStore.AppendValues ("1231", "1First");
-//			requestListStore.AppendValues ("4561", "1Second");
-//			requestListStore.AppendValues ("7891", "1Third");
-//			requestListStore.AppendValues ("1232", "2First");
-//			requestListStore.AppendValues ("4562", "2Second");
-//			requestListStore.AppendValues ("7892", "2Third");
+			await getAllPullRequest();
 
+			foreach (PullRequest pr in pullRequestList)
+			{
+				requestListStore.AppendValues (pr.Title.ToString(), pr.Body, pr.User.Login.ToString(), 
+					pr.CreatedAt.ToString(), pr.State.ToString());
+			}
+		}
 
+		public async static Task getAllPullRequest()
+		{
+			try
+			{
+				pullRequestList = await rm.getAllPullRequests();
+//				Console.WriteLine(pullRequestList[0].Title);
+//				foreach (PullRequest pr in pullRequestList)
+//				{
+//					Console.WriteLine("Pull-Request: {0} - {1}Created by: {2} on {3}, Status: {4}", pr.Title, pr.Body, pr.User.Login, pr.CreatedAt, pr.State);
+//				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+
+		}
+
+		private void renderColumns(){
 			Gtk.TreeViewColumn requestIDCol = new Gtk.TreeViewColumn ();
-			requestIDCol.Title = "Request ID";
+			requestIDCol.Title = "Title";
 			RequestTreeView.AppendColumn (requestIDCol);
 
 			Gtk.TreeViewColumn titleCol = new Gtk.TreeViewColumn ();
-			titleCol.Title = "Title";
+			titleCol.Title = "User";
 			RequestTreeView.AppendColumn (titleCol);
 
 
@@ -80,10 +100,7 @@ namespace OECGUI
 
 			Gtk.CellRendererText titleCell = new Gtk.CellRendererText ();
 			titleCol.PackStart (titleCell, true);
-			titleCol.AddAttribute (titleCell, "text", 1);
-
-
-			//ShowAll ();
+			titleCol.AddAttribute (titleCell, "text", 2);
 		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -106,12 +123,15 @@ namespace OECGUI
 			var model = RequestTreeView.Model;
 			TreeIter iter;
 			model.GetIter (out iter, args.Path);
-			var requestID = model.GetValue (iter, 0);
-			var title = model.GetValue (iter, 1);
-			var comment = model.GetValue (iter, 2);
-			Console.WriteLine ("requestID: " + requestID + "\ttitle: " + title);
+			var title = model.GetValue (iter, 0);
+			var body = model.GetValue (iter, 1);
+			var user = model.GetValue (iter, 2);
+			var createdAt = model.GetValue (iter, 3);
+			var status = model.GetValue (iter, 4);
+			//Console.WriteLine ("requestID: " + requestID + "\ttitle: " + title);
 
-			textview1.Buffer.Text = "System: " + title + "\nRequest ID: " + requestID + "\n\nComments:\n\n" + comment;
+			textview1.Buffer.Text = "Title: " + title + "\nUser: " + user + 
+				"\nCreated: " + createdAt + "\n\nComments:\n\n" + body;
 		}
 
 	}
