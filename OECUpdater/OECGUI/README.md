@@ -2,6 +2,7 @@ GUI Creation:
 ------
 
 ### Getting Started:
+- Everything GUI is to be done through Linux.
 - First you need to install the dependencies:
   - GTK3 and GTK#3 (I suggest you use synaptic package manager to install these just incase)
 - Next you need to install Glade
