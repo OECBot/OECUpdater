@@ -25,7 +25,7 @@ namespace OECLib
         private CancellationToken token;
 
         public int Workers = 1;
-        public bool isFirstRun = true;
+        public bool isFirstRun = false;
         public Object updateLock = new Object();
         public List<StellarObject> updateList;
         public ConcurrentQueue<StellarObject> commitQueue;
@@ -45,7 +45,7 @@ namespace OECLib
             this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
-
+            DateTime.TryParse("2016-09-01", out lastCheckTime);
         }
 
         public void Start()
@@ -67,9 +67,10 @@ namespace OECLib
 
         private async void scheduleCheck(Func<Task> check)
         {
+            Logger.WriteLine("Bot scheduled to run in {0}", checkTime - DateTime.Now);
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
             await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
-            
+
 
             try
             {
@@ -83,6 +84,7 @@ namespace OECLib
             catch (OperationCanceledException oce)
             {
                 Console.WriteLine("OECBot stopped..." + oce.Message);
+                Logger.WriteWarning("OECBot stopped..." + oce.Message);
             }
             catch (Exception ex)
             {
@@ -119,11 +121,18 @@ namespace OECLib
             List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
             List<StellarObject> newData = new List<StellarObject>();
 
+            DateTime oecStart = DateTime.Now;
+            Logger.WriteLine("Begin running plugins.");
+            DateTime start = DateTime.Now;
+            int updateCount = 0;
+            int total = 0;
             foreach (IPlugin plugin in plugins)
             {
                 Console.WriteLine("Running plugin: {0}", plugin.GetName());
-                tasks.Add(Task<List<StellarObject>>.Run(()=> plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
+                Logger.WriteLine("Running plugin: {0}", plugin.GetName());
+                tasks.Add(Task<List<StellarObject>>.Run(() => plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
             }
+
 
             foreach (Task<List<StellarObject>> task in tasks)
             {
@@ -131,11 +140,13 @@ namespace OECLib
                 List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
-
+            Logger.WriteLine("Finished running plugins in: {0} seconds", (DateTime.Now - start).TotalSeconds);
             finished = 0;
+
             commitQueue = new ConcurrentQueue<StellarObject>();
             updateList = newData;
             Task[] workers = new Task[Workers];
+            Logger.WriteLine("Starting workers");
             for (int i = 0; i < workers.Length; i++)
             {
                 workers[i] = updateWorker();
@@ -148,10 +159,11 @@ namespace OECLib
                     StellarObject update;
                     while (!commitQueue.TryDequeue(out update) && finished != Workers)
                     {
-                        //block till items become available
+
                     }
                     try
                     {
+                        total++;
                         StringBuilder output = new StringBuilder();
                         XmlWriterSettings ws = new XmlWriterSettings();
                         ws.Indent = true;
@@ -164,18 +176,23 @@ namespace OECLib
                         String newContent = output.ToString();
                         output.Clear();
                         await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, update.Source, update.isNew);
+                        updateCount++;
                         limit++;
+                        Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
+                        Logger.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
                         //60 pushes / min?
                         if (limit >= 35)
                         {
+                            Logger.WriteLine("GitHub push limit reached awaiting 60s.");
                             await Task.Delay(60000);
                             limit = 0;
                         }
-                        
+
                     }
                     catch (ForbiddenException fex)
                     {
-                        Console.WriteLine("Triggered abuse mechanism. Sleeping for 60s. " + fex.Message);
+                        Console.WriteLine("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
+                        Logger.WriteWarning("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
                         commitQueue.Enqueue(update);
                         Thread.Sleep(60000);
                     }
@@ -183,11 +200,15 @@ namespace OECLib
                     {
                         Console.WriteLine("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
                         Console.WriteLine(ex.StackTrace);
+                        Logger.WriteError("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
+                        Logger.WriteError(ex.StackTrace);
                     }
-                    Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
+
                 }
             }
             Console.WriteLine("Finished running!");
+            Logger.WriteLine("Finished running OECBot in {0} seconds was {1}first run.", (DateTime.Now - oecStart).TotalSeconds, isFirstRun ? "" : "not ");
+            Logger.WriteLine("Successfully updated {0} systems out of {1} system updates found.", updateCount, total);
             if (isFirstRun)
             {
                 isFirstRun = false;
@@ -199,13 +220,13 @@ namespace OECLib
         {
             while (updateList.Count != 0)
             {
+
+                List<StellarObject> system = dequeueUpdate();
+                StellarObject update = system[0];
+
+                Task<String> xmlTask = rm.getFile("systems/" + update.names[0].MeasurementValue + ".xml");
                 try
                 {
-                    List<StellarObject> system = dequeueUpdate();
-                    StellarObject update = system[0];
-
-                    Task<String> xmlTask = rm.getFile("systems/" + update.names[0].MeasurementValue + ".xml");
-
                     List<String> lastUpdates = new List<string>();
 
                     String xml = await xmlTask;
