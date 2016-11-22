@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using OECLib.HTTPRequests;
+using OECLib.Utilities;
+using NUnit.Framework;
 
 namespace UnitTests
 {
