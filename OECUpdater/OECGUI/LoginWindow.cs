@@ -4,6 +4,7 @@ using OECLib.GitHub;
 using OECLib.Utilities;
 using UI = Gtk.Builder.ObjectAttribute;
 using Octokit;
+using OECGUI;
 
 public partial class LoginWindow: Gtk.Window
 {
@@ -14,13 +15,12 @@ public partial class LoginWindow: Gtk.Window
 	[UI] Gtk.Entry entry2;
 	[UI] Gtk.Revealer revealer1;
 	[UI] Gtk.Entry entry3;
-	private CallBackServer callback;
 
 	public static LoginWindow Create ()
 	{
 		Gtk.Builder builder = new Gtk.Builder (null, "OECGUI.Test.glade", null);
 
-		LoginWindow m = new LoginWindow (builder, builder.GetObject ("MainWindow").Handle);
+		LoginWindow m = new LoginWindow (builder, builder.GetObject ("LoginWindow").Handle);
 		return m;
 
 	}
@@ -97,6 +97,12 @@ public partial class LoginWindow: Gtk.Window
 				                  ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
 			md.Run ();
 			md.Destroy ();
+
+			String[] repoInfo = entry3.Text.Split ('/');
+
+			MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+			main.Show();
+			this.Hide();
 		} catch (Exception ex) {
 			MessageDialog md = new MessageDialog (this, 
 				                   DialogFlags.DestroyWithParent, MessageType.Info, 
@@ -104,5 +110,6 @@ public partial class LoginWindow: Gtk.Window
 			md.Run ();
 			md.Destroy ();
 		}
+
 	}
 }

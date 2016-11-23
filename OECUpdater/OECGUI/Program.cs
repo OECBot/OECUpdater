@@ -8,7 +8,7 @@ namespace OECGUI
 		public static void Main (string[] args)
 		{
 			Application.Init ();
-			LoginWindow main = LoginWindow.Create ();
+			LoginWindow main = LoginWindow.Create();
 			main.Show ();
 			Application.Run ();
 		}
