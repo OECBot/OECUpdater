@@ -70,9 +70,9 @@ namespace NASAExoplanetPlugin
 			"st_mass,st_masserr1,st_masserr2," + //mass (jupiter masses)
 			"st_rad,st_raderr1,st_raderr2," + //radius (juptier radii)
 			"st_teff,st_tefferr1,st_tefferr2," + //temperature
-			"st_age,st_ageerr1" +
-			",st_ageerr2," +
-			"st_metfe,st_spstr," +
+			"st_age,st_ageerr1,st_ageerr2," +
+			"st_metfe,st_metfeerr1,st_metfeerr2," +
+			"st_spstr," +
 			"st_bj,st_vj,st_rc,st_ic,st_j,st_h,st_k";
 
         public void Initialize()
@@ -126,7 +126,7 @@ namespace NASAExoplanetPlugin
                 Planet planet = new Planet();
 
                 planet.AddMeasurement("name", fields[1]);
-                star.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
+				planet.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
 				string detectionMethod = fields [38];
 				bool transit = false;
@@ -234,16 +234,19 @@ namespace NASAExoplanetPlugin
 					{ "errorplus", fields[11]},
 					{ "errorminus", fields[12]},
 				});
-				star.AddMeasurement ("metallicity", fields[13]);
-				star.AddMeasurement ("spectraltype", fields[14]);
+				star.AddMeasurement ("metallicity", fields[13], new Dictionary<string, string> {
+					{ "errorplus", fields[14]},
+					{ "errorminus", fields[15]},
+				});
+				star.AddMeasurement ("spectraltype", fields[16]);
 
-				star.AddMeasurement ("magB", fields[15]);
-				star.AddMeasurement ("magV", fields[16]);
-				star.AddMeasurement ("magR", fields[17]);
-				star.AddMeasurement ("magI", fields[18]);
-				star.AddMeasurement ("magJ", fields[19]);
-				star.AddMeasurement ("magH", fields[20]);
-				star.AddMeasurement ("magK", fields[21]);
+				star.AddMeasurement ("magB", fields[17]);
+				star.AddMeasurement ("magV", fields[18]);
+				star.AddMeasurement ("magR", fields[19]);
+				star.AddMeasurement ("magI", fields[20]);
+				star.AddMeasurement ("magJ", fields[21]);
+				star.AddMeasurement ("magH", fields[22]);
+				star.AddMeasurement ("magK", fields[23]);
 				
 				starList.Add (name, star);
 			}
