@@ -20,8 +20,11 @@ namespace OECGUI
 		static Session session;
 		static RepositoryManager rm;
 		private string currentRow = null;
+		//private Gtk.RowActivatedArgs arg = null;
+		private TreeIter currIter;
 		private static IReadOnlyList<PullRequest> pullRequestList;
 		private static Task<Repository> repo;
+		private Gtk.ListStore requestListStore;
 
 		public static RequestWindow Create (Session currSession) {
 			session = new Session("OECBot", "UoJ84XJTXphgO4F");
@@ -36,9 +39,6 @@ namespace OECGUI
 
 		public RequestWindow (Builder builder, IntPtr handle): base (handle)
 		{
-//			CssProvider provider = new CssProvider();
-//			provider.LoadFromPath ("../../test.css");
-//			ApplyCss (this, provider, uint.MaxValue);
 
 			builder.Autoconnect (this);
 			DeleteEvent += OnDeleteEvent;
@@ -49,13 +49,11 @@ namespace OECGUI
 			createStores ();
 			renderColumns ();
 
-
-
 			//ShowAll ();
 		}
 
 		private async void createStores(){
-			Gtk.ListStore requestListStore = new Gtk.ListStore (typeof(string), typeof(string), 
+			requestListStore = new Gtk.ListStore (typeof(string), typeof(string), 
 				typeof(string), typeof(string), typeof(string), typeof(string));
 			RequestTreeView.Model = requestListStore;
 
@@ -74,11 +72,6 @@ namespace OECGUI
 			try
 			{
 				pullRequestList = await rm.getAllPullRequests();
-//				Console.WriteLine(pullRequestList[0].Title);
-//				foreach (PullRequest pr in pullRequestList)
-//				{
-//					Console.WriteLine("Pull-Request: {0} - {1}Created by: {2} on {3}, Status: {4}", pr.Title, pr.Body, pr.User.Login, pr.CreatedAt, pr.State);
-//				}
 			}
 			catch (Exception ex)
 			{
@@ -128,7 +121,7 @@ namespace OECGUI
 		async void mergePullRequest(int prNum){
 			try{
 				await rm.MergePullRequest("master", prNum);
-
+				removeRow();
 			}catch (Exception e){
 				Console.WriteLine (e);
 			}
@@ -149,16 +142,18 @@ namespace OECGUI
 		async void closePullRequest(int prNum){
 			try{
 				await rm.closePullRequest(prNum);
-
+				removeRow();
 			}catch (Exception e){
 				Console.WriteLine (e);
 			}
 		}
 
 		void RowClicked(object sender, Gtk.RowActivatedArgs args){
+			//arg = args;
 			var model = RequestTreeView.Model;
 			TreeIter iter;
 			model.GetIter (out iter, args.Path);
+			currIter = iter;
 
 			var title = model.GetValue (iter, 0);
 			var body = model.GetValue (iter, 1);
@@ -172,6 +167,35 @@ namespace OECGUI
 
 			textview1.Buffer.Text = "Title: " + title + "\nNumber: " + number + "\nUser: " + user + 
 				"\nCreated: " + createdAt + "\n\nComments:\n\n" + body;
+		}
+
+
+		void removeRow(){
+			Console.WriteLine ("in removeRow");
+			try {
+//				if(arg != null){
+				var model = RequestTreeView.Model;
+//					Console.WriteLine ("in removeRow 2");
+//					TreeIter iter;
+//					Console.WriteLine ("in removeRow 3");
+//					model.GetIter (out iter, arg.Path);
+				var title = model.GetValue (currIter, 0);
+				var body = model.GetValue (currIter, 1);
+				var user = model.GetValue (currIter, 2);
+				var createdAt = model.GetValue (currIter, 3);
+				var status = model.GetValue (currIter, 4);
+				var number = model.GetValue (currIter, 5);
+				Console.WriteLine ("Title: " + title + "\nNumber: " + number + "\nUser: " + user + 
+					"\nCreated: " + createdAt + "\n\nComments:\n\n" + body);
+				requestListStore.Remove(ref currIter);
+				Console.WriteLine ("in removeRow 5");
+				textview1.Buffer.Text = "";
+//				}
+
+
+			} catch(Exception ex){
+				Console.WriteLine (ex);
+			}
 		}
 
 	}
