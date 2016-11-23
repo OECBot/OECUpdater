@@ -52,7 +52,8 @@ namespace NASAExoplanetPlugin
 			"pl_massj,pl_massjerr1,pl_massjerr2," + //mass (jupiter masses)
 			"pl_radj,pl_radjerr1,pl_radjerr2," + //radius (juptier radii)
 			"pl_eqt,pl_eqterr1,pl_eqterr2," + //temperature
-			"pl_disc,pl_discmethod,rowupdate,pl_disc_refname";
+			"pl_disc,pl_discmethod,rowupdate,pl_disc_refname," +
+			"pl_msinij,pl_msinijerr1,pl_msinijerr2";
 
 		//system info
 		string sysColumns;
@@ -128,61 +129,75 @@ namespace NASAExoplanetPlugin
                 planet.AddMeasurement("name", fields[1]);
 				planet.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
-				string detectionMethod = fields [38];
+				string detectionMethod = fields [38].ToLower();
 				bool transit = false;
+				bool rv = false;
 
-				if (detectionMethod.ToLower () == "transit")
+				if (detectionMethod == "transit") {
 					transit = true;
-				else if (detectionMethod.ToLower () == "radial velocity")
+				} else if (detectionMethod == "radial velocity") {
 					detectionMethod = "RV";
+					rv = true;
+				}
 
 				planet.AddMeasurement("semimajoraxis", fields[2], new Dictionary<string, string> {
 					{ "errorplus", fields[3]},
-					{ "errorminus", fields[4]},
+					{ "errorminus", fields[4]}
 				});
 				planet.AddMeasurement("eccentricity", fields[5], new Dictionary<string, string> {
 					{ "errorplus", fields[6]},
-					{ "errorminus", fields[7]},
+					{ "errorminus", fields[7]}
 				});
 				planet.AddMeasurement("periastron", fields[8], new Dictionary<string, string> {
 					{ "errorplus", fields[9]},
-					{ "errorminus", fields[10]},
+					{ "errorminus", fields[10]}
 				});
 				planet.AddMeasurement("longitiude", fields[11]);
 				planet.AddMeasurement("inclination", fields[12], new Dictionary<string, string> {
 					{ "errorplus", fields[13]},
-					{ "errorminus", fields[14]},
+					{ "errorminus", fields[14]}
 				});
 				planet.AddMeasurement("impactparamater", fields[15], new Dictionary<string, string> {
 					{ "errorplus", fields[16]},
-					{ "errorminus", fields[17]},
+					{ "errorminus", fields[17]}
 				});
 				planet.AddMeasurement("period", fields[18], new Dictionary<string, string> {
 					{ "errorplus", fields[19]},
-					{ "errorminus", fields[20]},
+					{ "errorminus", fields[20]}
 				});
 				planet.AddMeasurement("periastrontime", fields[25], new Dictionary<string, string> {
 					{ "errorplus", fields[26]},
-					{ "errorminus", fields[27]},
+					{ "errorminus", fields[27]}
 				});
-				planet.AddMeasurement("mass", fields[28], new Dictionary<string, string> {
-					{ "errorplus", fields[29]},
-					{ "errorminus", fields[30]},
-				});
+
+				if (rv) {
+					planet.AddMeasurement ("mass", fields [41], new Dictionary<string, string> {
+						{ "errorplus", fields [42] },
+						{ "errorminus", fields [43] },
+						{ "type", "msini" }
+					});
+				} else {
+					planet.AddMeasurement ("mass", fields [28], new Dictionary<string, string> {
+						{ "errorplus", fields [29] },
+						{ "errorminus", fields [30] }
+					});
+				}
+
+
 				planet.AddMeasurement("radius", fields[31], new Dictionary<string, string> {
 					{ "errorplus", fields[32]},
 					{ "errorminus", fields[33]},
 				});
 				planet.AddMeasurement("temperature", fields[34], new Dictionary<string, string> {
 					{ "errorplus", fields[35]},
-					{ "errorminus", fields[36]},
+					{ "errorminus", fields[36]}
 				});
 
 				if (transit) {
 					planet.AddMeasurement ("istransitting", fields [21]);
 					planet.AddMeasurement ("transittime", fields [22], new Dictionary<string, string> {
 						{ "errorplus", fields [23] },
-						{ "errorminus", fields [24] },
+						{ "errorminus", fields [24] }
 					});
 				}
 

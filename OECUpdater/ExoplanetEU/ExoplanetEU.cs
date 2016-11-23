@@ -74,13 +74,16 @@ namespace ExoplanetEU
 
 				planet.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
-				string detectionMethod = fields [60];
+				string detectionMethod = fields [60].ToLower();
 				bool transit = false;
+				bool rv = false;
 
-				if (detectionMethod.ToLower () == "transit")
+				if (detectionMethod == "transit") {
 					transit = true;
-				else if (detectionMethod.ToLower () == "radial velocity")
+				} else if (detectionMethod == "radial velocity") {
 					detectionMethod = "RV";
+					rv = true;
+				}
 
 				//there might be more, but i'm not sure if they are the same
 
@@ -122,10 +125,19 @@ namespace ExoplanetEU
 					{ "errorminus", fields[30]},
 				});
 
-				planet.AddMeasurement("mass", fields[1], new Dictionary<string, string> {
-					{ "errorplus", fields[2]},
-					{ "errorminus", fields[3]},
-				});
+				if (rv) {
+					planet.AddMeasurement ("mass", fields [4], new Dictionary<string, string> {
+						{ "errorplus", fields [5] },
+						{ "errorminus", fields [6] },
+						{ "type", "msini" }
+					});
+				} else {
+					planet.AddMeasurement ("mass", fields [1], new Dictionary<string, string> {
+						{ "errorplus", fields [2] },
+						{ "errorminus", fields [3] },
+					});
+				}
+
 				planet.AddMeasurement("radius", fields[7], new Dictionary<string, string> {
 					{ "errorplus", fields[8]},
 					{ "errorminus", fields[9]},
