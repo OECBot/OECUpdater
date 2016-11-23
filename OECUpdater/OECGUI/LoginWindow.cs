@@ -10,14 +10,17 @@ public partial class LoginWindow: Gtk.Window
 {
 	[UI] Gtk.Button loginButton;
 	[UI] Gtk.Button OauthButton;
+	[UI] Gtk.Button settingsButton;
 	[UI] Gtk.Entry entry1;
 	[UI] Gtk.Entry entry2;
-	CallBackServer callback;
+	[UI] Gtk.Revealer revealer1;
+	[UI] Gtk.Entry entry3;
 
-	public static LoginWindow Create () {
-		Gtk.Builder builder = new Gtk.Builder(null, "OECGUI.Test.glade", null);
+	public static LoginWindow Create ()
+	{
+		Gtk.Builder builder = new Gtk.Builder (null, "OECGUI.Test.glade", null);
 
-		LoginWindow m = new LoginWindow (builder, builder.GetObject ("MainWindow").Handle);
+		LoginWindow m = new LoginWindow (builder, builder.GetObject ("LoginWindow").Handle);
 		return m;
 
 	}
@@ -33,16 +36,29 @@ public partial class LoginWindow: Gtk.Window
 		}
 	}
 
-	public LoginWindow (Builder builder, IntPtr handle): base (handle)
+	public LoginWindow (Builder builder, IntPtr handle) : base (handle)
 	{
+<<<<<<< HEAD
 		CssProvider provider = new CssProvider();
 		provider.LoadFromPath ("../../test.css");
+=======
+		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
+
+		CssProvider provider = new CssProvider ();
+		provider.LoadFromPath ("test.css");
+>>>>>>> master
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		DeleteEvent += OnDeleteEvent;
 		loginButton.Clicked += LoginButton_Clicked;
 		OauthButton.Clicked += OauthLogin;
+		settingsButton.Clicked += Settings_Clicked;
 		//ShowAll ();
+	}
+
+	protected void Settings_Clicked (object sender, EventArgs e)
+	{
+		revealer1.RevealChild = !revealer1.RevealChild;
 	}
 
 	void LoginButton_Clicked (object sender, EventArgs e)
@@ -56,7 +72,8 @@ public partial class LoginWindow: Gtk.Window
 		a.RetVal = true;
 	}
 
-	protected void Login() {
+	protected void Login ()
+	{
 		String uname = entry1.Text;
 		String password = entry2.Text;
 		Session session = new Session (uname, password);
@@ -66,41 +83,41 @@ public partial class LoginWindow: Gtk.Window
 		this.Hide ();
 	}
 
-	protected void OauthLogin(object sender, EventArgs e) {
+	protected void OauthLogin (object sender, EventArgs e)
+	{
 		RegisterCallBack ();
 	}
 
-	protected async void RegisterCallBack() {
-		try {
-				
-			if (callback != null) {
-				callback.Stop();
-				callback = null;
-			}
-			GitHubClient g = new GitHubClient(new ProductHeaderValue("SpazioApp"));
-
-			var request = new OauthLoginRequest(Session.clientId)
-			{
-				Scopes = { "user", "notifications", "repo" }
-			};
-
-			String oauthLoginUrl = g.Oauth.GetGitHubLoginUrl(request).ToString();
-			System.Diagnostics.Process.Start(oauthLoginUrl);
-			callback = new CallBackServer ("127.0.0.1", 4567, g);
-			Session session = await callback.Start ();
-			User cur = await session.client.User.Current ();
-			MessageDialog md = new MessageDialog(this, 
-				DialogFlags.DestroyWithParent, MessageType.Info, 
-				ButtonsType.Close, "Succesfully authenticated as: "+cur.Login);
-			md.Run();
-			md.Destroy();
+	protected async void RegisterCallBack ()
+	{
+		
+		Session session = await Session.CreateOauthSession ();
+		if (session == null) {
+			return;
 		}
-		catch (Exception ex) {
-			MessageDialog me = new MessageDialog (this, 
+		try {
+			await session.SetCurrentUser ();
+			if (Session.server.isCancelled) {
+				return;
+			}
+			MessageDialog md = new MessageDialog (this, 
+				                  DialogFlags.DestroyWithParent, MessageType.Info, 
+				                  ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
+			md.Run ();
+			md.Destroy ();
+
+			String[] repoInfo = entry3.Text.Split ('/');
+
+			MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+			main.Show();
+			this.Hide();
+		} catch (Exception ex) {
+			MessageDialog md = new MessageDialog (this, 
 				                   DialogFlags.DestroyWithParent, MessageType.Info, 
 				                   ButtonsType.Close, ex.Message);
-			me.Run ();
-			me.Destroy ();
+			md.Run ();
+			md.Destroy ();
 		}
+
 	}
 }
