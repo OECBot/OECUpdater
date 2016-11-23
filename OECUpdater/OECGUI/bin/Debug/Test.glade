@@ -4,11 +4,11 @@
   <requires lib="gtk+" version="3.12"/>
   <!-- interface-local-resource-path /home/wannie/Downloads -->
   <!-- interface-css-provider-path test.css -->
-  <object class="GtkWindow" id="MainWindow">
+  <object class="GtkWindow" id="LoginWindow">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Login</property>
-    <property name="window_position">center</property>
+    <property name="title" translatable="yes">Test</property>
     <property name="resizable">False</property>
+    <property name="window_position">center</property>
     <child>
       <object class="GtkFixed" id="fixed1">
         <property name="visible">True</property>
@@ -28,34 +28,37 @@
                 <child>
                   <placeholder/>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <style>
                   <class name="transparent"/>
                 </style>
               </object>
               <packing>
                 <property name="x">117</property>
-                <property name="y">55</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="loginButton">
-                <property name="label" translatable="yes">Login</property>
-                <property name="width_request">188</property>
-                <property name="height_request">43</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">wtf</property>
-                <property name="opacity">0.90000000000000002</property>
-                <property name="halign">center</property>
-
-                <style>
-                  <class name="button"/>
-                </style>
-              </object>
-              <packing>
-                <property name="x">179</property>
-                <property name="y">258</property>
+                <property name="y">57</property>
               </packing>
             </child>
             <child>
@@ -70,12 +73,12 @@
                 <property name="opacity">0.90000000000000002</property>
                 <property name="halign">center</property>
                 <style>
-                  <class name="button"/>
+                  <class name="buttonLogin"/>
                 </style>
               </object>
               <packing>
                 <property name="x">179</property>
-                <property name="y">323</property>
+                <property name="y">308</property>
               </packing>
             </child>
             <child>
@@ -94,7 +97,7 @@
               </object>
               <packing>
                 <property name="x">216</property>
-                <property name="y">168</property>
+                <property name="y">155</property>
               </packing>
             </child>
             <child>
@@ -110,7 +113,7 @@
               </object>
               <packing>
                 <property name="x">256</property>
-                <property name="y">300</property>
+                <property name="y">285</property>
               </packing>
             </child>
             <child>
@@ -120,10 +123,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="max_length">28</property>
-                <property name="width_chars">5</property>
-                <property name="max_width_chars">30</property>
                 <property name="visibility">False</property>
                 <property name="invisible_char">*</property>
+                <property name="width_chars">5</property>
+                <property name="max_width_chars">30</property>
                 <property name="placeholder_text" translatable="yes">Password</property>
                 <property name="input_purpose">password</property>
                 <style>
@@ -132,7 +135,7 @@
               </object>
               <packing>
                 <property name="x">216</property>
-                <property name="y">212</property>
+                <property name="y">199</property>
               </packing>
             </child>
             <child>
@@ -142,14 +145,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="opacity">0.84999999999999998</property>
-                <property name="pixbuf">/home/wannie/Downloads/103__user.png</property>
+                <property name="pixbuf">Assets/103__user.png</property>
                 <style>
                   <class name="iconBox"/>
                 </style>
               </object>
               <packing>
                 <property name="x">180</property>
-                <property name="y">169</property>
+                <property name="y">156</property>
               </packing>
             </child>
             <child>
@@ -159,14 +162,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="opacity">0.84999999999999998</property>
-                <property name="pixbuf">/home/wannie/Downloads/098__locked.png</property>
+                <property name="pixbuf">Assets/098__locked.png</property>
                 <style>
                   <class name="iconBox"/>
                 </style>
               </object>
               <packing>
                 <property name="x">180</property>
-                <property name="y">213</property>
+                <property name="y">200</property>
               </packing>
             </child>
             <child>
@@ -182,7 +185,74 @@
               </object>
               <packing>
                 <property name="x">188</property>
-                <property name="y">72</property>
+                <property name="y">59</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="loginButton">
+                <property name="label" translatable="yes">Login</property>
+                <property name="width_request">188</property>
+                <property name="height_request">43</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">wtf</property>
+                <property name="opacity">0.90000000000000002</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="buttonLogin"/>
+                </style>
+              </object>
+              <packing>
+                <property name="x">179</property>
+                <property name="y">245</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRevealer" id="revealer1">
+                <property name="width_request">71</property>
+                <property name="height_request">32</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="transition_type">slide-right</property>
+                <property name="transition_duration">250</property>
+                <property name="reveal_child">False</property>
+                <child>
+                  <object class="GtkEntry" id="entry3">
+                    <property name="width_request">151</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="width_chars">22</property>
+                    <property name="max_width_chars">15</property>
+                    <property name="placeholder_text" translatable="yes">RepoOwner/RepoName</property>
+                    <style>
+                      <class name="repoBox"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="x">215</property>
+                <property name="y">357</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="settingsButton">
+                <property name="label" translatable="yes">
+</property>
+                <property name="width_request">36</property>
+                <property name="height_request">36</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="opacity">0.84999999999999998</property>
+                <style>
+                  <class name="buttonSettings"/>
+                </style>
+              </object>
+              <packing>
+                <property name="x">179</property>
+                <property name="y">356</property>
               </packing>
             </child>
           </object>

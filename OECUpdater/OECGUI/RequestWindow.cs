@@ -19,6 +19,7 @@ namespace OECGUI
 
 		static Session session;
 		static RepositoryManager rm;
+		private string currentRow = null;
 		private static IReadOnlyList<PullRequest> pullRequestList;
 		private static Task<Repository> repo;
 
@@ -114,19 +115,19 @@ namespace OECGUI
 		void AcceptButtonClicked (object sender, EventArgs e)
 		{
 			Console.WriteLine ("Accept button clicked");
-			PullRequest pr = pullRequestList [0];
-			mergePullRequest (pr);
+
+			try{
+				if(currentRow != null){
+					mergePullRequest (Int32.Parse(currentRow));
+				}
+			} catch (Exception ex){
+				Console.WriteLine(ex);
+			}
 		}
 
-		async void mergePullRequest(PullRequest pr){
+		async void mergePullRequest(int prNum){
 			try{
-				Console.WriteLine (pr.Title+ "\t" + pr.Number);
-				MergePullRequest mpr = new MergePullRequest ();
-				Console.WriteLine (pr.Title+ "\t" + pr.Number+"\t2");
-				//mpr.CommitMessage = "Some commit msg.";
-				//mpr.Sha = pr.Head;
-				await session.client.PullRequest.Merge (repo.Id, pr.Number, mpr);
-				Console.WriteLine (pr.Title+ "\t" + pr.Number+"\t3");
+				await rm.MergePullRequest("master", prNum);
 
 			}catch (Exception e){
 				Console.WriteLine (e);
@@ -136,6 +137,22 @@ namespace OECGUI
 		void RejectButtonClicked (object sender, EventArgs e)
 		{
 			Console.WriteLine ("Reject button clicked");
+			try{
+				if(currentRow != null){
+					closePullRequest(Int32.Parse(currentRow));
+				}
+			} catch (Exception ex){
+				Console.WriteLine(ex);
+			}
+		}
+
+		async void closePullRequest(int prNum){
+			try{
+				await rm.closePullRequest(prNum);
+
+			}catch (Exception e){
+				Console.WriteLine (e);
+			}
 		}
 
 		void RowClicked(object sender, Gtk.RowActivatedArgs args){
@@ -149,6 +166,8 @@ namespace OECGUI
 			var createdAt = model.GetValue (iter, 3);
 			var status = model.GetValue (iter, 4);
 			var number = model.GetValue (iter, 5);
+
+			currentRow = number.ToString();
 			//Console.WriteLine ("requestID: " + requestID + "\ttitle: " + title);
 
 			textview1.Buffer.Text = "Title: " + title + "\nNumber: " + number + "\nUser: " + user + 

@@ -38,12 +38,10 @@ public partial class LoginWindow: Gtk.Window
 
 	public LoginWindow (Builder builder, IntPtr handle) : base (handle)
 	{
-
-// 		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
+		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
 
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
-
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		DeleteEvent += OnDeleteEvent;
@@ -78,6 +76,7 @@ public partial class LoginWindow: Gtk.Window
 		RequestWindow main = RequestWindow.Create (session);
 		main.Show ();
 		this.Hide ();
+
 	}
 
 	protected void OauthLogin (object sender, EventArgs e)
