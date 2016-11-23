@@ -20,10 +20,11 @@ namespace OECGUI
 		static Session session;
 		static RepositoryManager rm;
 		private static IReadOnlyList<PullRequest> pullRequestList;
+		private static Task<Repository> repo;
 
 		public static RequestWindow Create (Session currSession) {
 			session = new Session("OECBot", "UoJ84XJTXphgO4F");
-			Task<Repository> repo = session.client.Repository.Get("Gazing", "OECTest");
+			repo = session.client.Repository.Get("Gazing", "OECTest");
 			repo.Wait();
 			rm = new RepositoryManager(session, repo.Result);
 
@@ -54,7 +55,7 @@ namespace OECGUI
 
 		private async void createStores(){
 			Gtk.ListStore requestListStore = new Gtk.ListStore (typeof(string), typeof(string), 
-				typeof(string), typeof(string), typeof(string));
+				typeof(string), typeof(string), typeof(string), typeof(string));
 			RequestTreeView.Model = requestListStore;
 
 			await getAllPullRequest();
@@ -62,7 +63,8 @@ namespace OECGUI
 			foreach (PullRequest pr in pullRequestList)
 			{
 				requestListStore.AppendValues (pr.Title.ToString(), pr.Body, pr.User.Login.ToString(), 
-					pr.CreatedAt.ToString(), pr.State.ToString());
+						pr.CreatedAt.ToString(), pr.State.ToString(), pr.Number.ToString());
+				
 			}
 		}
 
@@ -112,6 +114,23 @@ namespace OECGUI
 		void AcceptButtonClicked (object sender, EventArgs e)
 		{
 			Console.WriteLine ("Accept button clicked");
+			PullRequest pr = pullRequestList [0];
+			mergePullRequest (pr);
+		}
+
+		async void mergePullRequest(PullRequest pr){
+			try{
+				Console.WriteLine (pr.Title+ "\t" + pr.Number);
+				MergePullRequest mpr = new MergePullRequest ();
+				Console.WriteLine (pr.Title+ "\t" + pr.Number+"\t2");
+				//mpr.CommitMessage = "Some commit msg.";
+				//mpr.Sha = pr.Head;
+				await session.client.PullRequest.Merge (repo.Id, pr.Number, mpr);
+				Console.WriteLine (pr.Title+ "\t" + pr.Number+"\t3");
+
+			}catch (Exception e){
+				Console.WriteLine (e);
+			}
 		}
 
 		void RejectButtonClicked (object sender, EventArgs e)
@@ -123,14 +142,16 @@ namespace OECGUI
 			var model = RequestTreeView.Model;
 			TreeIter iter;
 			model.GetIter (out iter, args.Path);
+
 			var title = model.GetValue (iter, 0);
 			var body = model.GetValue (iter, 1);
 			var user = model.GetValue (iter, 2);
 			var createdAt = model.GetValue (iter, 3);
 			var status = model.GetValue (iter, 4);
+			var number = model.GetValue (iter, 5);
 			//Console.WriteLine ("requestID: " + requestID + "\ttitle: " + title);
 
-			textview1.Buffer.Text = "Title: " + title + "\nUser: " + user + 
+			textview1.Buffer.Text = "Title: " + title + "\nNumber: " + number + "\nUser: " + user + 
 				"\nCreated: " + createdAt + "\n\nComments:\n\n" + body;
 		}
 
