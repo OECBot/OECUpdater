@@ -36,7 +36,9 @@ namespace OECLib.Data
 			element.InnerText = MeasurementValue.ToString ();
 			if (MeasurementAttributes != null) {
 				foreach (string key in MeasurementAttributes.Keys) {
-					element.SetAttribute (key, MeasurementAttributes [key]);
+					if (MeasurementAttributes [key] != "") {
+						element.SetAttribute (key, MeasurementAttributes [key]);
+					}
 				}
 			}
 			return element;
