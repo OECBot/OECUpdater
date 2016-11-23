@@ -82,6 +82,8 @@ namespace ExoplanetEU
 				else if (detectionMethod.ToLower () == "radial velocity")
 					detectionMethod = "RV";
 
+				//there might be more, but i'm not sure if they are the same
+
 				planet.AddMeasurement("semimajoraxis", fields[13], new Dictionary<string, string> {
 					{ "errorplus", fields[14]},
 					{ "errorminus", fields[15]},
@@ -91,11 +93,15 @@ namespace ExoplanetEU
 					{ "errorminus", fields[18]},
 				});
 
-				//TODO: figure out which column refers to this
-				/*planet.AddMeasurement("periastron", fields[28], new Dictionary<string, string> {
-					{ "errorplus", fields[29]},
-					{ "errorminus", fields[30]},
-				});*/
+				planet.AddMeasurement("separation", fields[22], new Dictionary<string, string> {
+					{ "errorplus", fields[23]},
+					{ "errorminus", fields[24]},
+				});
+
+				planet.AddMeasurement("periastron", fields[25], new Dictionary<string, string> {
+					{ "errorplus", fields[26]},
+					{ "errorminus", fields[27]},
+				});
 
 				planet.AddMeasurement("longitiude", fields[11]);
 				planet.AddMeasurement("inclination", fields[19], new Dictionary<string, string> {
@@ -110,12 +116,11 @@ namespace ExoplanetEU
 					{ "errorplus", fields[11]},
 					{ "errorminus", fields[12]},
 				});
-
-				//TODO: figure out which column refers to this
-				/*planet.AddMeasurement("periastrontime", fields[25], new Dictionary<string, string> {
-					{ "errorplus", fields[26]},
-					{ "errorminus", fields[27]},
-				});*/
+					
+				planet.AddMeasurement("periastrontime", fields[28], new Dictionary<string, string> {
+					{ "errorplus", fields[29]},
+					{ "errorminus", fields[30]},
+				});
 
 				planet.AddMeasurement("mass", fields[1], new Dictionary<string, string> {
 					{ "errorplus", fields[2]},
@@ -134,6 +139,12 @@ namespace ExoplanetEU
 						{ "errorminus", fields [24] },
 					});
 				}*/
+
+
+				planet.AddMeasurement("spinorbitalalignment", fields[40], new Dictionary<string, string> {
+					{ "errorplus", fields[41]},
+					{ "errorminus", fields[42]},
+				});
 
 				planet.AddMeasurement("detectionMethod", detectionMethod);
 				string[] time = fields[24].Split('-');
