@@ -38,15 +38,12 @@ public partial class LoginWindow: Gtk.Window
 
 	public LoginWindow (Builder builder, IntPtr handle) : base (handle)
 	{
-<<<<<<< HEAD
-		CssProvider provider = new CssProvider();
-		provider.LoadFromPath ("../../test.css");
-=======
-		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
+
+// 		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
 
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
->>>>>>> master
+
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		DeleteEvent += OnDeleteEvent;
