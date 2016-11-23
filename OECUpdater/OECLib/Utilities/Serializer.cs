@@ -49,6 +49,11 @@ namespace OECLib.Utilities
                     }
                 }
             }
+			Console.WriteLine(plugins.Count + " plugins loaded:");
+			foreach (IPlugin plugin in plugins.Values)
+			{
+				Console.WriteLine(plugin.GetName() + ": " + plugin.GetDescription());
+			}
         }
 
         private static void AttachPlugin(Type type)

@@ -81,6 +81,12 @@
 	font-size: 10;
 }
 
+.fontWhite {
+	color: #FFFFFF;
+	
+	font-size: 12;
+}
+
 .titleFont {
 	color: #000000;
 	font: Laksaman;
@@ -89,4 +95,53 @@
 
 .bg {
 	background-image: url("Assets/PxtaE4S.png");
+}
+
+.notebook {
+	border-width: 0;
+	background-color: @base;
+    	box-shadow:0 0 0 1px gray;
+    	background-clip: border-box;
+	-tab-fill: true;
+	
+}
+
+.notebook tab {
+	background-color: #434c5b;
+	border-image: none;
+	background-image: none;
+	border-style: solid;
+	box-shadow: none;
+	padding-bottom: 10;
+	padding-top: 10;
+	padding-left: 15;
+	padding-right: 15;
+	
+}
+
+.notebook frame {
+    	border: none;
+	background-color: #7d60ff;
+}
+
+.notebook header {
+	background-color: #434c5b;
+	border-image: none;
+	background-image: none;
+}
+
+.notebook tab:hover {
+	background-color: #947ef7;
+	transition: 100ms linear;
+}
+
+.notebook tab:active {
+	background-color: #434c5b;
+	background-image: none;
+	border-image: -gtk-gradient (linear, center center, center center,
+                                 from (alpha (shade (#8b60f7, 1), 1)),
+                                 to (shade (#8b60f7, 1))) 1;
+    	border-image-width: 0 0 5px 0;
+	transition: 250ms ease-in-out;
+	
 }
