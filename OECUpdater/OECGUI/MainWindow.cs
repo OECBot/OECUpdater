@@ -11,6 +11,7 @@ namespace OECGUI
 	public class MainWindow: Gtk.Window
 	{
 		[UI] Notebook notebook1;
+		BotForm bf;
 
 		public static MainWindow Create (RepositoryManager manager)
 		{
@@ -43,28 +44,34 @@ namespace OECGUI
 			builder.Autoconnect (this);
 			DeleteEvent += OnDeleteEvent;
 
-			BotForm bf = BotForm.Create (manager);
+
+
+			bf = BotForm.Create (manager);
+			//var box = new HBox ();
+			//var icon = new Image ("Assets/home.png");
 			Label l1 = new Label ("OECBot");
 			l1.StyleContext.AddClass ("fontWhite");
 
-			//Label l2 = new Label ("   ");
-			//l2.StyleContext.AddClass ("fontWhite");
+			Label l2 = new Label ("Dashboard");
+
+			l2.StyleContext.AddClass ("fontWhite");
+			notebook1.AppendPage (DashboardForm.Create(), l2);
 			notebook1.AppendPage (bf, l1);
 
-			//notebook1.AppendPage (BotForm.Create(manager), l2);
+
 
 
 			provider.LoadFromPath ("test.css");
 			l1.StyleContext.AddProvider (provider, uint.MaxValue);
-			//l2.StyleContext.AddProvider (provider, uint.MaxValue);
+			l2.StyleContext.AddProvider (provider, uint.MaxValue);
 			ApplyCss (this, provider, uint.MaxValue);
 			//ShowAll ();
 		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
-			Application.Quit ();
-			a.RetVal = true;
+			Console.WriteLine ("ON DELETE MAIN");
+			bf.OnDeleteEvent (sender, a);
 		}
 	}
 

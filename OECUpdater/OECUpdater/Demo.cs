@@ -57,16 +57,7 @@ namespace OECUpdater
                 }
 
                 GitHubClient g = new GitHubClient(new ProductHeaderValue("SpazioApp"));
-                string csrf = Membership.GeneratePassword(24, 1);
 
-                var request = new OauthLoginRequest(Session.clientId)
-                {
-                    Scopes = { "user", "notifications", "repo" },
-                    State = csrf,
-                };
-
-                String oauthLoginUrl = g.Oauth.GetGitHubLoginUrl(request).ToString();
-                System.Diagnostics.Process.Start(oauthLoginUrl);
 
                 Task console = BeginGitHubSession(g);
                 console.Wait();
@@ -234,10 +225,10 @@ namespace OECUpdater
 
         public async static Task BeginGitHubSession(GitHubClient client)
         {
-            CallBackServer server = new CallBackServer(localHost, port, client);
+            
             try
             {
-                s = await server.Start();
+				s = await Session.CreateOauthSession();
                 rm = new RepositoryManager(s, await s.client.Repository.Get("Gazing", "OECTest"));
                 bot = new OECBot(getPlugins(), rm.repo);
             }

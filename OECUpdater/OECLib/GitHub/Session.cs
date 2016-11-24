@@ -75,8 +75,11 @@ namespace OECLib.GitHub
 		}
 
 		public async Task SetCurrentUser() {
-			if (server.isCancelled) {
-				return;
+			if (client.Credentials.AuthenticationType == AuthenticationType.Oauth)
+			{
+				if (server.isCancelled) {
+					return;
+				}
 			}
 			current = await client.User.Current ();
 		}
