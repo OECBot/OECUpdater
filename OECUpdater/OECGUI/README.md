@@ -13,7 +13,7 @@ GUI Creation:
 ### Create the window class
 - Next in the OECGUI project create your window class (preferably xxxWindow.cs, do not worry about the other windows)
 - Look at LoginWindow.cs follow the example exactly, if you have any questions ask on facebook
-  - There is little to no actual online reference or documentation on Gtk#3 if you are going to google it google with gtk#2, which is similar enough) (Actually gtk#3 and gtk#2 uses the exact same API expect for a few small things)
+  - There is little to no actual online reference or documentation on Gtk#3 if you are going to google it google with gtk#2, which is similar enough) (Actually gtk#3 and gtk#2 uses the exact same API except for a few small things)
 - Adding the .glade file
   - Import it directly into the project and set the properties to (Copy if new) and (Make Embedded Resource) Now you can reference it as OECGUI.xxx.glade
 - It is important that you do *NOT* use the built in GUI editor to do ANYTHING as GTK#3 is not supported and all design work should be done with Glade.
