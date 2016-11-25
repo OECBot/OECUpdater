@@ -8,6 +8,8 @@ using OECLib;
 using UI = Gtk.Builder.ObjectAttribute;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace OECGUI
 {
@@ -18,8 +20,12 @@ namespace OECGUI
 		[UI] Button clearButton;
 		[UI] Button forceButton;
 		[UI] TextView textview1;
+		[UI] ScrolledWindow scrolledwindow1;
 
 		public OECBot bot;
+		private Thread botThread;
+
+
 
 		public static BotForm Create (RepositoryManager manager)
 		{
@@ -50,9 +56,11 @@ namespace OECGUI
 			provider.LoadFromPath ("test.css");
 			ApplyCss (this, provider, uint.MaxValue);
 			builder.Autoconnect (this);
-			DeleteEvent += OnDeleteEvent;
+			//DeleteEvent += OnDeleteEvent;
+			//Destroyed += new EventHandler (OnDestroy);
 
-			Console.SetOut (new ControlWriter (textview1));
+
+			Console.SetOut (new ControlWriter (textview1, scrolledwindow1));
 
 			Serializer.InitPlugins ();
 			List<IPlugin> plugins = new List<IPlugin> ();
@@ -60,6 +68,7 @@ namespace OECGUI
 			foreach (IPlugin plugin in ps) {
 				plugins.Add (plugin);
 			}
+			Console.WriteLine ("Connected to repository: {0}/{1}", manager.repo.Owner.Login, manager.repo.Name);
 			bot = new OECBot (plugins, manager.repo);
 
 			startButton.Clicked += Start_Clicked;
@@ -86,32 +95,67 @@ namespace OECGUI
 
 		protected void Force_Clicked(object sender, EventArgs args)
 		{
-			bot.runChecks ();
+			botThread = new Thread(new ThreadStart(bot.forceRun));
+			botThread.Start ();
+
 		}
 
-		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+		protected void OnDestroy (object sender, EventArgs args)
 		{
+			Console.WriteLine ("Closed");
 			Application.Quit ();
-			a.RetVal = true;
 		}
+			
+		public void OnDeleteEvent (object sender, DeleteEventArgs a)
+		{
+			Console.WriteLine ("ON DELETE: STOP BOT THREAD");
+
+			if (botThread != null) {
+				bot.Stop ();
+				botThread.Join ();
+			}
+
+			Application.Quit ();
+			a.RetVal = false;
+		}
+
+
+	
 	}
 
 	public class ControlWriter : TextWriter
 	{
 		private TextView textbox;
-		public ControlWriter(TextView textbox)
+		private ScrolledWindow scroll;
+
+		public ControlWriter(TextView textbox, ScrolledWindow scroll)
 		{
 			this.textbox = textbox;
+			this.scroll = scroll;
 		}
 
 		public override void Write(char value)
 		{
+			Gtk.Application.Invoke (delegate{mWrite (value);});
+		}
+
+		public void mWrite(char value)
+		{
 			textbox.Buffer.Text += value;
+			var adj = scroll.Vadjustment;
+			adj.Value = adj.Upper - adj.PageSize;
 		}
 
 		public override void Write(string value)
 		{
+			Gtk.Application.Invoke (delegate{mWrite (value);});
+		}
+
+		public void mWrite(string value)
+		{
 			textbox.Buffer.Text += value;
+			var adj = scroll.Vadjustment;
+			adj.Value = adj.Upper - adj.PageSize;
 		}
 
 		public override Encoding Encoding

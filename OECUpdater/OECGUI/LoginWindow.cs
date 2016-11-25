@@ -56,23 +56,38 @@ public partial class LoginWindow: Gtk.Window
 		revealer1.RevealChild = !revealer1.RevealChild;
 	}
 
-	void LoginButton_Clicked (object sender, EventArgs e)
+	public void LoginButton_Clicked (object sender, EventArgs e)
 	{
 		Login ();
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
+		Console.WriteLine ("ON DELETE LOGIN");
 		Application.Quit ();
 		a.RetVal = true;
 	}
 
-	protected void Login ()
+	protected async void Login ()
 	{
 		String uname = entry1.Text;
 		String password = entry2.Text;
 		Session session = new Session (uname, password);
+		await session.SetCurrentUser ();
 
+		MessageDialog md = new MessageDialog (this, 
+			DialogFlags.DestroyWithParent, MessageType.Info, 
+			ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
+		md.Run ();
+		md.Destroy ();
+
+		String[] repoInfo = entry3.Text.Split ('/');
+
+		MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+
+		main.Show();
+
+		this.Destroy();
 	}
 
 	protected void OauthLogin (object sender, EventArgs e)
@@ -101,12 +116,14 @@ public partial class LoginWindow: Gtk.Window
 			String[] repoInfo = entry3.Text.Split ('/');
 
 			MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+
 			main.Show();
-			this.Hide();
+
+			this.Destroy();
 		} catch (Exception ex) {
 			MessageDialog md = new MessageDialog (this, 
 				                   DialogFlags.DestroyWithParent, MessageType.Info, 
-				                   ButtonsType.Close, ex.Message);
+				ButtonsType.Close, ex.StackTrace);
 			md.Run ();
 			md.Destroy ();
 		}

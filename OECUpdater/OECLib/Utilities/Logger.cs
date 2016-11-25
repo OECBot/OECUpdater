@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define TRACE
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace OECLib.Utilities
 {
     public class Logger
     {
+		public static void Initialize() {
+			Trace.Listeners.Add (new TextWriterTraceListener ("test.log"));
+			Trace.AutoFlush = true;
+		}
+
         public static void WriteLine(string format, params object[] args) 
         {
             Trace.WriteLine(String.Format("["+DateTime.Now.ToString("yy-MM-dd hh:mm:ss")+"] "+format, args));

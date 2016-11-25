@@ -45,13 +45,15 @@ namespace OECLib
             this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
+			this.cts = new CancellationTokenSource();
+			this.token = cts.Token;
             DateTime.TryParse("2016-09-01", out lastCheckTime);
         }
 
         public void Start()
         {
             this.On = true;
-            this.cts = new CancellationTokenSource();
+            
             if (checkTime < DateTime.Now)
             {
                 checkTime = checkTime.AddDays(1.0);
@@ -116,9 +118,19 @@ namespace OECLib
             return false;
         }
 
+		public void forceRun()
+		{
+			Task run = runChecks ();
+			run.Wait ();
+			Console.WriteLine ("Thread done");
+		}
+
         public async Task runChecks()
         {
+			token.ThrowIfCancellationRequested();
+			Logger.Initialize ();
             List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
+
             List<StellarObject> newData = new List<StellarObject>();
 
             DateTime oecStart = DateTime.Now;
@@ -130,7 +142,8 @@ namespace OECLib
             {
                 Console.WriteLine("Running plugin: {0}", plugin.GetName());
                 Logger.WriteLine("Running plugin: {0}", plugin.GetName());
-                tasks.Add(Task<List<StellarObject>>.Run(() => plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
+				tasks.Add(Task<List<StellarObject>>.Run(() => plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
+
             }
 
 
@@ -140,13 +153,14 @@ namespace OECLib
                 List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
-            Logger.WriteLine("Finished running plugins in: {0} seconds", (DateTime.Now - start).TotalSeconds);
+
+            Console.WriteLine("Finished running plugins in: {0} seconds", (DateTime.Now - start).TotalSeconds);
             finished = 0;
 
             commitQueue = new ConcurrentQueue<StellarObject>();
             updateList = newData;
             Task[] workers = new Task[Workers];
-            Logger.WriteLine("Starting workers");
+            Console.WriteLine("Starting workers");
             for (int i = 0; i < workers.Length; i++)
             {
                 workers[i] = updateWorker();
@@ -159,7 +173,7 @@ namespace OECLib
                     StellarObject update;
                     while (!commitQueue.TryDequeue(out update) && finished != Workers)
                     {
-
+						token.ThrowIfCancellationRequested();
                     }
                     try
                     {
@@ -175,6 +189,7 @@ namespace OECLib
                         }
                         String newContent = output.ToString();
                         output.Clear();
+						token.ThrowIfCancellationRequested();
                         await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, update.Source, update.isNew);
                         updateCount++;
                         limit++;
@@ -184,18 +199,29 @@ namespace OECLib
                         if (limit >= 35)
                         {
                             Logger.WriteLine("GitHub push limit reached awaiting 60s.");
-                            await Task.Delay(60000);
+                            await Task.Delay(60000, token);
                             limit = 0;
                         }
 
                     }
                     catch (ForbiddenException fex)
                     {
-                        Console.WriteLine("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
+                        Console.WriteLine("Triggered abuse mechanism? Killing bot. " + fex.Message);
                         Logger.WriteWarning("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
-                        commitQueue.Enqueue(update);
-                        Thread.Sleep(60000);
+						return;
                     }
+					catch (OperationCanceledException ex)
+					{
+						Console.WriteLine ("Bot cancelled");
+						return;
+					}
+					catch (ApiValidationException ex)
+					{
+						Console.WriteLine("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
+						Console.WriteLine(ex.HttpResponse.Body);
+						Logger.WriteError("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
+						Logger.WriteError(ex.HttpResponse.Body.ToString());
+					}
                     catch (Exception ex)
                     {
                         Console.WriteLine("Failed to update planet: " + update.names[0].MeasurementValue + ". " + ex.Message + ex.GetType());
@@ -220,24 +246,27 @@ namespace OECLib
         {
             while (updateList.Count != 0)
             {
-
+				token.ThrowIfCancellationRequested ();
                 List<StellarObject> system = dequeueUpdate();
                 StellarObject update = system[0];
 
                 Task<String> xmlTask = rm.getFile("systems/" + update.names[0].MeasurementValue + ".xml");
-                try
-                {
+                
                     List<String> lastUpdates = new List<string>();
-
+					token.ThrowIfCancellationRequested();
+				try
+				{
                     String xml = await xmlTask;
                     if (xml != null)
                     {
                         Console.WriteLine("Found existing system: {0} in OEC. Proceed with update.", update.names[0].MeasurementValue);
+						Logger.WriteLine("Found existing system: {0} in OEC. Proceed with update.", update.names[0].MeasurementValue);
                         XMLDeserializer xmld = new XMLDeserializer(xml, false);
                         StellarObject original = xmld.ParseXML();
                         if (!needUpdate(original.getLastUpdate(), system))
                         {
                             Console.WriteLine("Appears that system: {0} does not to be updated continuing.", update.names[0].MeasurementValue);
+							Logger.WriteLine("Appears that system: {0} does not to be updated continuing.", update.names[0].MeasurementValue);
                             continue;
                         }
                         String sources = "";
@@ -253,6 +282,7 @@ namespace OECLib
                     else
                     {
                         Console.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
+						Logger.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
                         StellarObject baseSys = system[0];
                         system.Remove(baseSys);
                         String sources = "";
@@ -271,6 +301,8 @@ namespace OECLib
                 {
                     Console.WriteLine("Failed to create update: " + ex.Message);
                     Console.WriteLine(ex.StackTrace);
+					Logger.WriteLine("Failed to create update: " + ex.Message);
+					Logger.WriteLine(ex.StackTrace);
                 }
             }
             Interlocked.Add(ref finished, 1);
@@ -391,7 +423,7 @@ namespace OECLib
         {
             this.On = false;
             cts.Cancel();
-            cts.Dispose();
+            //cts.Dispose();
         }
     }
 }
