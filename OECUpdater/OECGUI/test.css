@@ -1,5 +1,5 @@
 .buttonLogin {
-	background-color: #4CBB17;
+	background-color: #1fad72;
 	color: #FFFFFF;
 	background-image: none;
 	border-image: none;
@@ -134,7 +134,7 @@
 
 .backgroundDark {
 	background-color: #1c2c3d;
-	box-shadow: inset 3px 3px 3px -5px #000000;
+	box-shadow: inset 0px -1px 3px -2px #000000;
 }
 
 .notebook tab:hover {
