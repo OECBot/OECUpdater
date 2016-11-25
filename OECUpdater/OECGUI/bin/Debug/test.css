@@ -1,0 +1,147 @@
+.buttonLogin {
+	background-color: #4CBB17;
+	color: #FFFFFF;
+	background-image: none;
+	border-image: none;
+	border-radius: 0;
+	font: Laksaman;
+	font-size: 12;
+}
+
+.buttonSettings {
+	background-color: #8C92AC;
+	color: #FFFFFF;
+	background-image: url("Assets/082__setting_cog.png");
+	border-image: none;
+	border-radius: 0;
+	font-size: 1;
+}
+
+.buttonSettings:hover {
+	background-color: #A3AAC7;
+	color: #FFFFFF;
+}
+
+.buttonSettings:active {
+	background-color: #8C92AC;
+	color: #FFFFFF;
+}
+
+.iconBox {
+	background-color: #8C92AC;
+}
+
+.loginBox {
+	border-image: none;
+	border-radius: 0;
+	background-color: #FFFFFF;
+	background-image: none;
+	color: #000000;
+	font: Laksaman;
+	font-size: 10;
+	
+}
+
+.loginBox:selected {
+	color: #CB6D51;
+}
+
+.repoBox {
+	border-image: none;
+	border-radius: 0;
+	background-color: #FFFFFF;
+	background-image: none;
+	color: #000000;
+	font: Laksaman;
+	font-size: 8;
+}
+
+.repoBox:selected {
+	color: #CB6D51;
+}
+
+.buttonLogin:hover {
+	background-color: #4A9586;
+	color: #FFFFFF;
+}
+
+.buttonLogin:active {
+	background-color: #5EAE9E;
+	color: #FFFFFF;
+}
+
+.transparent {
+	background-color: #EFEFEF;
+	text-shadow: black;
+}
+
+.font {
+	color: #000000;
+	font: Laksaman;
+	font-size: 10;
+}
+
+.fontWhite {
+	color: #FFFFFF;
+	
+	font-size: 12;
+}
+
+.titleFont {
+	color: #000000;
+	font: Laksaman;
+	font-size: 40;
+}
+
+.bg {
+	background-image: url("Assets/PxtaE4S.png");
+}
+
+.notebook {
+	border-width: 0;
+	background-color: @base;
+    	box-shadow:0 0 0 1px gray;
+    	background-clip: border-box;
+	-tab-fill: true;
+	
+}
+
+.notebook tab {
+	background-color: #434c5b;
+	border-image: none;
+	background-image: none;
+	border-style: solid;
+	box-shadow: none;
+	padding-bottom: 10;
+	padding-top: 10;
+	padding-left: 15;
+	padding-right: 15;
+	
+}
+
+.notebook frame {
+    	border: none;
+	background-color: #7d60ff;
+}
+
+.notebook header {
+	background-color: #434c5b;
+	border-image: none;
+	background-image: none;
+}
+
+.notebook tab:hover {
+	background-color: #947ef7;
+	transition: 100ms linear;
+}
+
+.notebook tab:active {
+	background-color: #434c5b;
+	background-image: none;
+	border-image: -gtk-gradient (linear, center center, center center,
+                                 from (alpha (shade (#8b60f7, 1), 1)),
+                                 to (shade (#8b60f7, 1))) 1;
+    	border-image-width: 0 0 5px 0;
+	transition: 250ms ease-in-out;
+	
+}
