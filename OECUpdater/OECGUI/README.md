@@ -16,7 +16,7 @@ GUI Creation:
   - There is little to no actual online reference or documentation on Gtk#3 if you are going to google it google with gtk#2, which is similar enough) (Actually gtk#3 and gtk#2 uses the exact same API except for a few small things)
 - Adding the .glade file
   - Import it directly into the project and set the properties to (Copy if new) and (Make Embedded Resource) Now you can reference it as OECGUI.xxx.glade
-- It is important that you do *NOT* use the built in GUI editor to do *ANYTHING* as GTK#3 is not supported and all design work should be done with Glade.
+- It is important that you do **NOT** use the built in GUI editor to do **ANYTHING** as GTK#3 is not supported and all design work should be done with Glade.
 - Now you can load the window and do whatever you want with it
 
 ### Asset Management
