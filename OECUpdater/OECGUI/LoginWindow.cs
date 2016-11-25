@@ -73,10 +73,6 @@ public partial class LoginWindow: Gtk.Window
 		String password = entry2.Text;
 		Session session = new Session (uname, password);
 
-		RequestWindow main = RequestWindow.Create (session);
-		main.Show ();
-		this.Hide ();
-
 	}
 
 	protected void OauthLogin (object sender, EventArgs e)
