@@ -31,5 +31,5 @@ GUI Creation:
 
 *[GTK#3 Template Project](http://addins.monodevelop.com/Project/Index/97) You will need a .NET disassembler to view the source code.*
 
-*[GTK#2 Guide](http://www.mono-project.com/docs/gui/gtksharp/beginners-guide/) I think this guide is kinda of outdated.*
+*[GTK#2 Guide](http://www.mono-project.com/docs/gui/gtksharp/beginners-guide/)*
 
