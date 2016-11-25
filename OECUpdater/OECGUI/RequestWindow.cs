@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace OECGUI
 {
-	public partial class RequestWindow : Gtk.Window
+	public partial class RequestWindow : Gtk.Widget
 	{
 		[UI] Gtk.Button AcceptButton;
 		[UI] Gtk.Button RejectButton;
@@ -17,8 +17,7 @@ namespace OECGUI
 		[UI] Gtk.TextView textview1;
 		//	CallBackServer callback;
 
-		static Session session;
-		static RepositoryManager rm;
+		private RepositoryManager rm;
 		private string currentRow = null;
 		//private Gtk.RowActivatedArgs arg = null;
 		private TreeIter currIter;
@@ -26,18 +25,15 @@ namespace OECGUI
 		private static Task<Repository> repo;
 		private Gtk.ListStore requestListStore;
 
-		public static RequestWindow Create (Session currSession) {
-			session = new Session("OECBot", "UoJ84XJTXphgO4F");
-			repo = session.client.Repository.Get("Gazing", "OECTest");
-			repo.Wait();
-			rm = new RepositoryManager(session, repo.Result);
+		public static RequestWindow Create (RepositoryManager manager) {
+			
 
 			Gtk.Builder builder = new Gtk.Builder(null, "OECGUI.PullRequestWindow.glade", null);
-			RequestWindow m = new RequestWindow (builder, builder.GetObject ("RequestWindow").Handle);
+			RequestWindow m = new RequestWindow (builder, builder.GetObject ("RequestWindow").Handle, manager);
 			return m;
 		}
 
-		public RequestWindow (Builder builder, IntPtr handle): base (handle)
+		public RequestWindow (Builder builder, IntPtr handle, RepositoryManager manager): base (handle)
 		{
 
 			builder.Autoconnect (this);
@@ -45,6 +41,7 @@ namespace OECGUI
 			AcceptButton.Clicked += AcceptButtonClicked;
 			RejectButton.Clicked += RejectButtonClicked;
 			RequestTreeView.RowActivated += RowClicked;
+			this.rm = manager;
 
 			createStores ();
 			renderColumns ();
@@ -67,7 +64,7 @@ namespace OECGUI
 			}
 		}
 
-		public async static Task getAllPullRequest()
+		public async Task getAllPullRequest()
 		{
 			try
 			{
@@ -101,7 +98,7 @@ namespace OECGUI
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
-			Application.Quit ();
+			Gtk.Application.Quit ();
 			a.RetVal = true;
 		}
 

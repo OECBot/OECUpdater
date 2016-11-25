@@ -101,7 +101,7 @@ namespace OECGUI
 			notebook1.AppendPage (DashboardForm.Create(), box);
 			notebook1.AppendPage (bf, box2);
 			notebook1.AppendPage (DashboardForm.Create (), box4);
-			notebook1.AppendPage (DashboardForm.Create (), box3);
+			notebook1.AppendPage (RequestWindow.Create(manager), box3);
 
 
 
