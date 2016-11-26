@@ -13,12 +13,16 @@ namespace OECGUI
 	{
 		[UI] Notebook notebook1;
 		[UI] Image image1;
-		BotForm bf;
+		private BotForm bf;
+		public static RepositoryManager manager;
+		public static Session session;
 
 		public static MainWindow Create (RepositoryManager manager)
 		{
 			Gtk.Builder builder = new Gtk.Builder (null, "OECGUI.MainWindow.glade", null);
 
+			MainWindow.manager = manager;
+			MainWindow.session = manager.session;
 			MainWindow m = new MainWindow (builder, builder.GetObject ("MainWindow").Handle, manager);
 
 
@@ -48,7 +52,7 @@ namespace OECGUI
 
 
 
-			bf = BotForm.Create (manager);
+			bf = BotForm.Create ();
 
 			var box3 = new HBox ();
 
@@ -98,10 +102,12 @@ namespace OECGUI
 			box2.ShowAll ();
 			box3.ShowAll ();
 
-			notebook1.AppendPage (DashboardForm.Create(), box);
+			DashboardForm df = DashboardForm.Create ();
+			notebook1.AppendPage (df, box);
+			bf.dashboard = df;
 			notebook1.AppendPage (bf, box2);
 			notebook1.AppendPage (DashboardForm.Create (), box4);
-			notebook1.AppendPage (RequestWindow.Create(manager), box3);
+			notebook1.AppendPage (RequestWindow.Create(), box3);
 
 
 

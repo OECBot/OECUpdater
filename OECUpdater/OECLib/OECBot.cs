@@ -30,6 +30,8 @@ namespace OECLib
         public List<StellarObject> updateList;
         public ConcurrentQueue<StellarObject> commitQueue;
         private int finished;
+		public int updateCount { get; private set; }
+		public int total { get; private set; }
 
         public List<IPlugin> plugins;
 
@@ -136,8 +138,8 @@ namespace OECLib
             DateTime oecStart = DateTime.Now;
             Logger.WriteLine("Begin running plugins.");
             DateTime start = DateTime.Now;
-            int updateCount = 0;
-            int total = 0;
+            updateCount = 0;
+            total = 0;
             foreach (IPlugin plugin in plugins)
             {
                 Console.WriteLine("Running plugin: {0}", plugin.GetName());
@@ -235,13 +237,14 @@ namespace OECLib
             Console.WriteLine("Finished running!");
             Logger.WriteLine("Finished running OECBot in {0} seconds was {1}first run.", (DateTime.Now - oecStart).TotalSeconds, isFirstRun ? "" : "not ");
             Logger.WriteLine("Successfully updated {0} systems out of {1} system updates found.", updateCount, total);
+
             if (isFirstRun)
             {
                 isFirstRun = false;
             }
             lastCheckTime = tempTime;
         }
-
+			
         public async Task updateWorker()
         {
             while (updateList.Count != 0)

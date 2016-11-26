@@ -142,7 +142,7 @@ namespace OECUpdater
 
         public async static Task getAllFiles()
         {
-            await rm.getAllFiles("systems/");
+            //await rm.getAllFiles("systems/");
         }
 
         public async static Task doNothing()

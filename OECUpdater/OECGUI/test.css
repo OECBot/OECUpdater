@@ -3,9 +3,9 @@
 	color: #FFFFFF;
 	background-image: none;
 	border-image: none;
-	border-radius: 0;
+	border-radius: 0px;
 	font: Laksaman;
-	font-size: 12;
+	font-size: 12px;
 }
 
 .buttonSettings {
@@ -13,8 +13,8 @@
 	color: #FFFFFF;
 	background-image: url("Assets/082__setting_cog.png");
 	border-image: none;
-	border-radius: 0;
-	font-size: 1;
+	border-radius: 0px;
+	font-size: 1px;
 }
 
 .buttonSettings:hover {
@@ -33,12 +33,12 @@
 
 .loginBox {
 	border-image: none;
-	border-radius: 0;
+	border-radius: 0px;
 	background-color: #FFFFFF;
 	background-image: none;
 	color: #000000;
 	font: Laksaman;
-	font-size: 10;
+	font-size: 10px;
 	
 }
 
@@ -52,12 +52,12 @@
 
 .repoBox {
 	border-image: none;
-	border-radius: 0;
+	border-radius: 0px;
 	background-color: #FFFFFF;
 	background-image: none;
 	color: #000000;
 	font: Laksaman;
-	font-size: 8;
+	font-size: 8px;
 }
 
 .repoBox:selected {
@@ -88,13 +88,13 @@
 .fontWhite {
 	color: #FFFFFF;
 	font: DejaVu Sans;
-	font-size: 10;
+	font-size: 10px;
 }
 
 .titleFont {
 	color: #000000;
 	font: Laksaman;
-	font-size: 40;
+	font-size: 40px;
 }
 
 .bg {
@@ -102,7 +102,7 @@
 }
 
 .notebook {
-	border-width: 0;
+	border-width: 0px;
 	background-color: @base;
 	box-shadow: inset 4px 3px 3px -5px #000000;
 	
@@ -114,10 +114,10 @@
 	background-image: none;
 	border-style: solid;
 	box-shadow: none;
-	padding-bottom: 5;
-	padding-top: 5;
-	padding-left: 15;
-	padding-right: 18;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 15px;
+	padding-right: 18px;
 }
 
 .notebook frame {
@@ -146,7 +146,7 @@
 	background-color: #101c26;
 	background-image: none;
 	transition: 250ms ease-in-out;
-	box-shadow: inset 3px 0 0 #6c4fff;
+	box-shadow: inset 3px 0px 0px #6c4fff;
 	
 }
 
@@ -154,4 +154,10 @@
 	background-color: #FFFFFF;
 	/*box-shadow: inset 0 -1px 1px -3px #000000;*/
 	color: #000;
+}
+
+.introText {
+	color: #000;
+	font: DejaVu Sans;
+	font-size: 18;
 }

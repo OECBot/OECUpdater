@@ -22,16 +22,16 @@ namespace OECGUI
 		[UI] TextView textview1;
 		[UI] ScrolledWindow scrolledwindow1;
 
-		public OECBot bot;
+		public static OECBot bot;
 		private Thread botThread;
+		public DashboardForm dashboard;
 
-
-
-		public static BotForm Create (RepositoryManager manager)
+		public static BotForm Create ()
 		{
 			Gtk.Builder builder = new Gtk.Builder (null, "OECGUI.BotForm.glade", null);
 
-			BotForm m = new BotForm (builder, builder.GetObject ("BotForm").Handle, manager);
+
+			BotForm m = new BotForm (builder, builder.GetObject ("BotForm").Handle);
 
 			return m;
 
@@ -48,7 +48,7 @@ namespace OECGUI
 			}
 		}
 
-		public BotForm (Builder builder, IntPtr handle, RepositoryManager manager) : base (handle)
+		public BotForm (Builder builder, IntPtr handle) : base (handle)
 		{
 			//revealer = new Widget (builder.GetObject ("revealer1").Handle);
 
@@ -68,8 +68,8 @@ namespace OECGUI
 			foreach (IPlugin plugin in ps) {
 				plugins.Add (plugin);
 			}
-			Console.WriteLine ("Connected to repository: {0}/{1}", manager.repo.Owner.Login, manager.repo.Name);
-			bot = new OECBot (plugins, manager.repo);
+			Console.WriteLine ("Connected to repository: {0}/{1}", MainWindow.manager.repo.Owner.Login, MainWindow.manager.repo.Name);
+			bot = new OECBot (plugins, MainWindow.manager.repo);
 
 			startButton.Clicked += Start_Clicked;
 			stopButton.Clicked += Stop_Clicked;
@@ -95,7 +95,7 @@ namespace OECGUI
 
 		protected void Force_Clicked(object sender, EventArgs args)
 		{
-			botThread = new Thread(new ThreadStart(bot.forceRun));
+			botThread = new Thread(new ThreadStart(forceRun));
 			botThread.Start ();
 
 		}
@@ -117,6 +117,11 @@ namespace OECGUI
 
 			Application.Quit ();
 			a.RetVal = false;
+		}
+
+		private void forceRun() {
+			bot.forceRun ();
+			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yy-MM-dd hh:mm"), bot.updateCount, bot.total);});
 		}
 
 

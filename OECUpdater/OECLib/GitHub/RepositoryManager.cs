@@ -9,7 +9,7 @@ namespace OECLib.GitHub
 {
     public class RepositoryManager
     {
-        private Session session;
+		public Session session { get; set; }
         public Repository repo { get; set; }
         private Dictionary<String, String> shaKeys;
         private Random r;
@@ -81,11 +81,23 @@ namespace OECLib.GitHub
             await createPullRequest(branch, branch, body); 
         }
 
-        public async Task<IReadOnlyList<RepositoryContent>> getAllFiles(String path)
+		public async Task<TreeResponse> getAllFiles()
         {
-            IReadOnlyList<RepositoryContent> files = await session.client.Repository.Content.GetAllContents(repo.Id, path);
+            //IReadOnlyList<RepositoryContent> files = await session.client.Repository.Content.GetAllContents(repo.Id, path);
+			TreeResponse files = await session.client.Git.Tree.GetRecursive (repo.Id, "master");
+
             return files;
         }
+
+		public async Task<int> getFileCount(String path) {
+			var tree = await getAllFiles ();
+			var iterator = tree.Tree.Where (x => x.Path.Contains ("systems/") == true);
+			int count = 0;
+			foreach (TreeItem item in iterator) {
+				count++;
+			}
+			return count;
+		}
 
         public async Task addFile(String filePath, String content, String branch)
         {

@@ -17,7 +17,6 @@ namespace OECGUI
 		[UI] Gtk.TextView textview1;
 		//	CallBackServer callback;
 
-		private RepositoryManager rm;
 		private string currentRow = null;
 		//private Gtk.RowActivatedArgs arg = null;
 		private TreeIter currIter;
@@ -25,15 +24,15 @@ namespace OECGUI
 		private static Task<Repository> repo;
 		private Gtk.ListStore requestListStore;
 
-		public static RequestWindow Create (RepositoryManager manager) {
+		public static RequestWindow Create () {
 			
 
 			Gtk.Builder builder = new Gtk.Builder(null, "OECGUI.PullRequestWindow.glade", null);
-			RequestWindow m = new RequestWindow (builder, builder.GetObject ("RequestWindow").Handle, manager);
+			RequestWindow m = new RequestWindow (builder, builder.GetObject ("RequestWindow").Handle);
 			return m;
 		}
 
-		public RequestWindow (Builder builder, IntPtr handle, RepositoryManager manager): base (handle)
+		public RequestWindow (Builder builder, IntPtr handle): base (handle)
 		{
 
 			builder.Autoconnect (this);
@@ -41,7 +40,6 @@ namespace OECGUI
 			AcceptButton.Clicked += AcceptButtonClicked;
 			RejectButton.Clicked += RejectButtonClicked;
 			RequestTreeView.RowActivated += RowClicked;
-			this.rm = manager;
 
 			createStores ();
 			renderColumns ();
@@ -68,7 +66,7 @@ namespace OECGUI
 		{
 			try
 			{
-				pullRequestList = await rm.getAllPullRequests();
+				pullRequestList = await MainWindow.manager.getAllPullRequests();
 			}
 			catch (Exception ex)
 			{
@@ -117,7 +115,7 @@ namespace OECGUI
 
 		async void mergePullRequest(int prNum){
 			try{
-				await rm.MergePullRequest("master", prNum);
+				await MainWindow.manager.MergePullRequest("master", prNum);
 				removeRow();
 			}catch (Exception e){
 				Console.WriteLine (e);
@@ -138,7 +136,7 @@ namespace OECGUI
 
 		async void closePullRequest(int prNum){
 			try{
-				await rm.closePullRequest(prNum);
+				await MainWindow.manager.closePullRequest(prNum);
 				removeRow();
 			}catch (Exception e){
 				Console.WriteLine (e);
