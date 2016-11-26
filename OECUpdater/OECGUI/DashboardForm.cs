@@ -74,7 +74,7 @@ namespace OECGUI
 
 
 			Gtk.TreeViewColumn uCountCol = new Gtk.TreeViewColumn ();
-			uCountCol.Title = "Systems updated";
+			uCountCol.Title = "Total systems updated";
 			historyTree.AppendColumn (uCountCol);
 
 			Gtk.CellRendererText uCountCell = new Gtk.CellRendererText ();
@@ -88,7 +88,7 @@ namespace OECGUI
 		private async void setManagedSystems() {
 			int count = await MainWindow.manager.getFileCount ("systems/");
 
-			button2.Label = String.Format ("Managing {0}\nsystems in {1}", count, MainWindow.manager.repo.Name);
+			button2.Label = String.Format ("{0}\nsystems\nmanaged", count);
 		}
 	}
 }
