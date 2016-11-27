@@ -72,22 +72,44 @@ public partial class LoginWindow: Gtk.Window
 	{
 		String uname = entry1.Text;
 		String password = entry2.Text;
+		if (!entry3.Text.Contains ("/")) {
+			MessageDialog mw = new MessageDialog (this, 
+				                   DialogFlags.DestroyWithParent, MessageType.Warning, 
+				                   ButtonsType.Close, "Invalid repository target." + entry3.Text);
+			mw.Run ();
+			mw.Destroy ();
+			return;
+		}
 		Session session = new Session (uname, password);
-		await session.SetCurrentUser ();
+		try {
+			await session.SetCurrentUser ();
 
-		MessageDialog md = new MessageDialog (this, 
-			DialogFlags.DestroyWithParent, MessageType.Info, 
-			ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
-		md.Run ();
-		md.Destroy ();
+			MessageDialog md = new MessageDialog (this, 
+				                   DialogFlags.DestroyWithParent, MessageType.Info, 
+				                   ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
+			md.Run ();
+			md.Destroy ();
 
-		String[] repoInfo = entry3.Text.Split ('/');
 
-		MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+			String[] repoInfo = entry3.Text.Split ('/');
+			
 
-		main.Show();
+			MainWindow main = MainWindow.Create (new RepositoryManager (session, await session.client.Repository.Get (repoInfo [0], repoInfo [1])));
 
-		this.Destroy();
+			main.Show ();
+
+			this.Destroy ();
+		} catch (AuthorizationException ex) {
+			MessageDialog md = new MessageDialog (this, 
+				                   DialogFlags.DestroyWithParent, MessageType.Warning, 
+				                   ButtonsType.Close, "Login Failed: " + ex.Message);
+			md.Run ();
+			md.Destroy ();
+		} catch (Exception ex) {
+			ExceptionDialog md = ExceptionDialog.Create (ex.Message, ex.StackTrace);
+			md.Run ();
+			md.Destroy ();
+		}
 	}
 
 	protected void OauthLogin (object sender, EventArgs e)
@@ -108,22 +130,26 @@ public partial class LoginWindow: Gtk.Window
 				return;
 			}
 			MessageDialog md = new MessageDialog (this, 
-				                  DialogFlags.DestroyWithParent, MessageType.Info, 
-				                  ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
+				                   DialogFlags.DestroyWithParent, MessageType.Info, 
+				                   ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
 			md.Run ();
 			md.Destroy ();
 
 			String[] repoInfo = entry3.Text.Split ('/');
 
-			MainWindow main = MainWindow.Create(new RepositoryManager(session, await session.client.Repository.Get(repoInfo[0], repoInfo[1])));
+			MainWindow main = MainWindow.Create (new RepositoryManager (session, await session.client.Repository.Get (repoInfo [0], repoInfo [1])));
 
-			main.Show();
+			main.Show ();
 
-			this.Destroy();
-		} catch (Exception ex) {
+			this.Destroy ();
+		} catch (AuthorizationException ex) {
 			MessageDialog md = new MessageDialog (this, 
-				                   DialogFlags.DestroyWithParent, MessageType.Info, 
-				ButtonsType.Close, ex.StackTrace);
+				                    DialogFlags.DestroyWithParent, MessageType.Warning, 
+				                    ButtonsType.Close, "Login Failed: " + ex.Message);
+			md.Run ();
+			md.Destroy ();
+		} catch (Exception ex) {
+			ExceptionDialog md = ExceptionDialog.Create (ex.Message, ex.StackTrace);
 			md.Run ();
 			md.Destroy ();
 		}

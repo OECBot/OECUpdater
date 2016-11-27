@@ -78,6 +78,9 @@
     <EmbeddedResource Include="PullRequestWindow.glade">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExceptionDialog.glade">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="DashboardForm.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="RequestWindow.cs" />
+    <Compile Include="ExceptionDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
