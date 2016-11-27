@@ -23,6 +23,7 @@ namespace OECGUI
 		private static IReadOnlyList<PullRequest> pullRequestList;
 		private static Task<Repository> repo;
 		private Gtk.ListStore requestListStore;
+		public DashboardForm dashboard { get; set; }
 
 		public static RequestWindow Create () {
 			
@@ -67,6 +68,7 @@ namespace OECGUI
 			try
 			{
 				pullRequestList = await MainWindow.manager.getAllPullRequests();
+				dashboard.setPRData(pullRequestList.Count);
 			}
 			catch (Exception ex)
 			{
@@ -107,6 +109,7 @@ namespace OECGUI
 			try{
 				if(currentRow != null){
 					mergePullRequest (Int32.Parse(currentRow));
+					dashboard.subPRData();
 				}
 			} catch (Exception ex){
 				Console.WriteLine(ex);
@@ -128,6 +131,7 @@ namespace OECGUI
 			try{
 				if(currentRow != null){
 					closePullRequest(Int32.Parse(currentRow));
+					dashboard.subPRData();
 				}
 			} catch (Exception ex){
 				Console.WriteLine(ex);

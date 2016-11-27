@@ -2,9 +2,14 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <!-- interface-local-resource-path /home/wannie/workdir1/team06-Project/OECUpdater/OECGUI -->
+  <object class="GtkMenu" id="menu1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
   <object class="GtkWindow" id="MainWindow">
-    <property name="width_request">-1</property>
-    <property name="height_request">-1</property>
+    <property name="width_request">0</property>
+    <property name="height_request">0</property>
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
@@ -39,10 +44,11 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkMenuItem" id="menuitem1">
-                    <property name="width_request">650</property>
+                    <property name="width_request">603</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">HEADER BAR!?</property>
+                    <property name="label" translatable="yes">Lorem ipsum</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -52,6 +58,30 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="menubutton1">
+                <property name="width_request">30</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="popup">menu1</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <object class="GtkImage" id="image2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">Assets/noti.png</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="notificationButton"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>

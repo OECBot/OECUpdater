@@ -19,8 +19,11 @@ namespace OECGUI
 		[UI] Button stopButton;
 		[UI] Button clearButton;
 		[UI] Button forceButton;
+		[UI] Button scheduleButton;
 		[UI] TextView textview1;
 		[UI] ScrolledWindow scrolledwindow1;
+		[UI] Entry entry1;
+		[UI] Entry entry2;
 
 		public static OECBot bot;
 		private Thread botThread;
@@ -62,7 +65,7 @@ namespace OECGUI
 
 			Console.SetOut (new ControlWriter (textview1, scrolledwindow1));
 
-			Serializer.InitPlugins ();
+
 			List<IPlugin> plugins = new List<IPlugin> ();
 			var ps = Serializer.plugins.Values;
 			foreach (IPlugin plugin in ps) {
@@ -75,17 +78,34 @@ namespace OECGUI
 			stopButton.Clicked += Stop_Clicked;
 			clearButton.Clicked += Clear_Clicked;
 			forceButton.Clicked += Force_Clicked;
+			scheduleButton.Clicked += Schedule_Clicked;
 			//ShowAll ();
+		}
+
+		protected void Schedule_Clicked(object sender, EventArgs args) {
+			bot.checkTime = DateTime.Today.AddHours (double.Parse (entry1.Text)).AddMinutes(double.Parse(entry2.Text));
 		}
 
 		protected void Start_Clicked(object sender, EventArgs args)
 		{
-			bot.Start ();
+			if (botThread != null) {
+				if (bot.On) {
+					return;
+				}
+			}
+			botThread = new Thread(new ThreadStart(startRun));
+			botThread.Start ();
 		}
 
 		protected void Stop_Clicked(object sender, EventArgs args)
 		{
-			bot.Stop ();
+			if (botThread != null) {
+				if (bot.On) {
+					bot.Stop ();
+					botThread.Join ();
+					botThread = null;
+				}
+			}
 		}
 
 		protected void Clear_Clicked(object sender, EventArgs args)
@@ -119,9 +139,14 @@ namespace OECGUI
 			a.RetVal = false;
 		}
 
+		private async void startRun() {
+			await bot.Start ();
+			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd hh:mm"), bot.updateCount, bot.total);});
+		}
+
 		private void forceRun() {
 			bot.forceRun ();
-			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yy-MM-dd hh:mm"), bot.updateCount, bot.total);});
+			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd hh:mm"), bot.updateCount, bot.total);});
 		}
 
 

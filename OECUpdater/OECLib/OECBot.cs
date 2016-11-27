@@ -52,7 +52,7 @@ namespace OECLib
             DateTime.TryParse("2016-09-01", out lastCheckTime);
         }
 
-        public void Start()
+        public async Task Start()
         {
             this.On = true;
             
@@ -64,12 +64,12 @@ namespace OECLib
             {
                 lastCheckTime = DateTime.MinValue;
             }
-            scheduleCheck(runChecks);
+            await scheduleCheck(runChecks);
 
 
         }
 
-        private async void scheduleCheck(Func<Task> check)
+        private async Task scheduleCheck(Func<Task> check)
         {
             Logger.WriteLine("Bot scheduled to run in {0}", checkTime - DateTime.Now);
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
@@ -124,7 +124,6 @@ namespace OECLib
 		{
 			Task run = runChecks ();
 			run.Wait ();
-			Console.WriteLine ("Thread done");
 		}
 
         public async Task runChecks()
