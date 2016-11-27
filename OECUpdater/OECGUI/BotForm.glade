@@ -67,7 +67,7 @@
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="width_request">160</property>
-        <property name="height_request">170</property>
+        <property name="height_request">146</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
@@ -77,7 +77,91 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkFixed" id="fixed1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="width_request">44</property>
+                    <property name="height_request">24</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Bot status:</property>
+                  </object>
+                  <packing>
+                    <property name="x">2</property>
+                    <property name="y">-5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="width_request">65</property>
+                    <property name="height_request">20</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Progress:</property>
+                  </object>
+                  <packing>
+                    <property name="x">2</property>
+                    <property name="y">36</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="width_request">70</property>
+                    <property name="height_request">28</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Next check time:</property>
+                  </object>
+                  <packing>
+                    <property name="x">2</property>
+                    <property name="y">76</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="statusLabel">
+                    <property name="width_request">29</property>
+                    <property name="height_request">23</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Off</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="x">1</property>
+                    <property name="y">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="progressLabel">
+                    <property name="width_request">30</property>
+                    <property name="height_request">25</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">0/0</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="x">2</property>
+                    <property name="y">55</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="timeLabel">
+                    <property name="width_request">38</property>
+                    <property name="height_request">26</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">yyyy-MM-dd hh:mm</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="x">2</property>
+                    <property name="y">98</property>
+                  </packing>
+                </child>
+              </object>
             </child>
           </object>
         </child>

@@ -26,12 +26,17 @@ namespace OECLib
 
         public int Workers = 1;
         public bool isFirstRun = false;
+		public bool isRunning = false;
         public Object updateLock = new Object();
         public List<StellarObject> updateList;
         public ConcurrentQueue<StellarObject> commitQueue;
         private int finished;
 		public int updateCount { get; private set; }
 		public int total { get; private set; }
+		public int updatesFound { get; private set; }
+		public int updatesLeft { get; private set; }
+		public String lastRunCondition;
+		private int errorCount;
 
         public List<IPlugin> plugins;
 
@@ -41,14 +46,17 @@ namespace OECLib
         public DateTime lastCheckTime = DateTime.MinValue;
         public DateTime tempTime;
 
+		public delegate void UpdateDelegate();
+		private UpdateDelegate updateDelegate;
+
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
             this.session = new Session(new Credentials(userName, password));
             this.rm = new RepositoryManager(session, repo);
             this.plugins = plugins;
             this.On = false;
-			this.cts = new CancellationTokenSource();
-			this.token = cts.Token;
+			//this.cts = new CancellationTokenSource();
+			//this.token = cts.Token;
             DateTime.TryParse("2016-09-01", out lastCheckTime);
         }
 
@@ -56,6 +64,9 @@ namespace OECLib
         {
             this.On = true;
             
+			if (updateDelegate != null) {
+				this.updateDelegate();
+			}
             if (checkTime < DateTime.Now)
             {
                 checkTime = checkTime.AddDays(1.0);
@@ -71,18 +82,18 @@ namespace OECLib
 
         private async Task scheduleCheck(Func<Task> check)
         {
+			token = cts.Token;
             Logger.WriteLine("Bot scheduled to run in {0}", checkTime - DateTime.Now);
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
-            await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds);
+            await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds, token);
 
-
+			cts = new CancellationTokenSource ();
             try
             {
                 tempTime = DateTime.Now;
                 checkTime = checkTime.AddDays(1.0);
 
                 scheduleCheck(runChecks);
-                token = cts.Token;
                 await check();
             }
             catch (OperationCanceledException oce)
@@ -122,6 +133,10 @@ namespace OECLib
 
 		public void forceRun()
 		{
+			this.On = true;
+			cts = new CancellationTokenSource ();
+			token = cts.Token;
+
 			Task run = runChecks ();
 			run.Wait ();
 		}
@@ -134,6 +149,10 @@ namespace OECLib
 
             List<StellarObject> newData = new List<StellarObject>();
 
+			isRunning = true;
+			if (updateDelegate != null) {
+				this.updateDelegate();
+			}
             DateTime oecStart = DateTime.Now;
             Logger.WriteLine("Begin running plugins.");
             DateTime start = DateTime.Now;
@@ -154,7 +173,8 @@ namespace OECLib
                 List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
-
+			updatesFound = newData.Count;
+			updatesLeft = newData.Count;
             Console.WriteLine("Finished running plugins in: {0} seconds", (DateTime.Now - start).TotalSeconds);
             finished = 0;
 
@@ -190,12 +210,18 @@ namespace OECLib
                         }
                         String newContent = output.ToString();
                         output.Clear();
-						token.ThrowIfCancellationRequested();
+
                         await rm.BeginCommitAndPush("systems/" + update.names[0].MeasurementValue + ".xml", newContent, update.Source, update.isNew);
+						updatesLeft = updateList.Count;
                         updateCount++;
                         limit++;
+						if (updateDelegate != null) {
+							this.updateDelegate();
+						}
+
                         Console.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
                         Logger.WriteLine("Successfully commited data for: {0} ", update.names[0].MeasurementValue);
+						token.ThrowIfCancellationRequested();
                         //60 pushes / min?
                         if (limit >= 35)
                         {
@@ -207,9 +233,17 @@ namespace OECLib
                     }
                     catch (ForbiddenException fex)
                     {
-                        Console.WriteLine("Triggered abuse mechanism? Killing bot. " + fex.Message);
+						Console.WriteLine("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
                         Logger.WriteWarning("Triggered abuse mechanism? Sleeping for 60s. " + fex.Message);
-						return;
+						if (errorCount >= 5) {
+							errorCount = 0;
+							lastRunCondition = "Error: Abuse Mechanism";
+							return;
+						}
+						await Task.Delay (60000, token);
+						commitQueue.Enqueue (update);
+						limit = 0;
+						errorCount++;
                     }
 					catch (OperationCanceledException ex)
 					{
@@ -234,9 +268,13 @@ namespace OECLib
                 }
             }
             Console.WriteLine("Finished running!");
+			lastRunCondition = "Finished";
             Logger.WriteLine("Finished running OECBot in {0} seconds was {1}first run.", (DateTime.Now - oecStart).TotalSeconds, isFirstRun ? "" : "not ");
             Logger.WriteLine("Successfully updated {0} systems out of {1} system updates found.", updateCount, total);
-
+			isRunning = false;
+			if (updateDelegate != null) {
+				this.updateDelegate();
+			}
             if (isFirstRun)
             {
                 isFirstRun = false;
@@ -285,9 +323,10 @@ namespace OECLib
                     {
                         Console.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
 						Logger.WriteLine("Could not find existing system: {0} in OEC. Proceed with addition.", update.names[0].MeasurementValue);
-                        StellarObject baseSys = system[0];
+						StellarObject baseSys = system[0];
                         system.Remove(baseSys);
                         String sources = "";
+						sources += String.Format("[{0}]({1})\n", baseSys.children[0].names[0].MeasurementValue, baseSys.Source);
                         foreach (StellarObject otherPlanet in system)
                         {
                             PlanetMerger.Merge(otherPlanet, baseSys);
@@ -309,6 +348,10 @@ namespace OECLib
             }
             Interlocked.Add(ref finished, 1);
         }
+
+		public void setUpdateDelegate(UpdateDelegate updateDelegate) {
+			this.updateDelegate = updateDelegate;
+		}
 
         /*
         public async Task firstRun(CancellationToken token)
@@ -424,8 +467,10 @@ namespace OECLib
         public void Stop()
         {
             this.On = false;
+			this.lastRunCondition = "Cancelled";
+
             cts.Cancel();
-            //cts.Dispose();
+            cts.Dispose();
         }
     }
 }

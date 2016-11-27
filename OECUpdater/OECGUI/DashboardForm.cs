@@ -51,12 +51,13 @@ namespace OECGUI
 			}
 		}
 
-		public void updateTreeList(String date, int count, int total)
+		public void updateTreeList(String date, int count, int total, String condition)
 		{
-			updateList.AppendValues (date, ""+total, ""+count);
+			updateList.AppendValues (date, ""+total, ""+count, condition);
 			historyValues ["Date"].Add (date);
 			historyValues ["Total"].Add ("" + total);
 			historyValues ["Updated"].Add ("" + count);
+			historyValues ["Condition"].Add (condition);
 
 			saveHistory ();
 
@@ -127,10 +128,19 @@ namespace OECGUI
 			uCountCol.AddAttribute (uCountCell, "text", 2);
 			uCountCol.SetCellDataFunc (uCountCell, new TreeCellDataFunc (renderCol));
 
+			Gtk.TreeViewColumn condiCol = new Gtk.TreeViewColumn ();
+			condiCol.Title = "Run Condition";
+			historyTree.AppendColumn (condiCol);
+
+			Gtk.CellRendererText condiCell = new Gtk.CellRendererText ();
+			condiCol.PackStart (condiCell, true);
+			condiCol.AddAttribute (condiCell, "text", 3);
+			condiCol.SetCellDataFunc (condiCell, new TreeCellDataFunc (renderCol));
+
 
 			loadHistory ();
 			if (updateList == null) {
-				this.updateList = new ListStore (typeof(string), typeof(string), typeof(string));
+				this.updateList = new ListStore (typeof(string), typeof(string), typeof(string), typeof(string));
 			}
 			historyTree.Model = updateList;
 		}
@@ -182,12 +192,13 @@ namespace OECGUI
 				historyValues.Add ("Date", new List<String> ());
 				historyValues.Add ("Total", new List<String> ());
 				historyValues.Add("Updated", new List<String>());
+				historyValues.Add("Condition", new List<String>());
 				return;
 			}
 			this.historyValues = dict;
-			this.updateList = new ListStore (typeof(string), typeof(string), typeof(string));
+			this.updateList = new ListStore (typeof(string), typeof(string), typeof(string), typeof(string));
 			for (int i = 0; i < historyValues ["Date"].Count; i++) {
-				updateList.AppendValues(historyValues["Date"][i], historyValues["Total"][i], historyValues["Updated"][i]);
+				updateList.AppendValues(historyValues["Date"][i], historyValues["Total"][i], historyValues["Updated"][i], historyValues["Condition"][i]);
 			}
 		}
 	}

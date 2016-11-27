@@ -164,38 +164,39 @@
 
 .statusButton1 {
 	background-color: #297fb8;
-	color: #FFFFFF;
+	color: #297fb8;
 	background-image: none;
-	border-image: none;
+	
 	border-radius: 0px;
 	font: DejaVu Sans;
 	border-width: 0px;
-	font-size: 12px;
-	box-shadow: 1px 1px 4px -3px #000;
+	font-size: 11px;
+	box-shadow: 0px 0px 4px -3px #000, inset 0px -60px 0px #FFF;
+	border-image: none;
 }
 
 .statusButton2 {
 	background-color: #94b74f;
-	color: #FFFFFF;
+	color: #94b74f;
 	background-image: none;
 	border-image: none;
 	border-radius: 0px;
 	border-width: 0px;
 	font: DejaVu Sans;
-	font-size: 12px;
-	box-shadow: 1px 1px 4px -3px #000;
+	font-size: 11px;
+	box-shadow: 0px 0px 4px -3px #000, inset 0px -60px 0px #FFF;
 }
 
 .statusButton3 {
 	background-color: #f39712;
-	color: #FFFFFF;
+	color: #f39712;
 	background-image: none;
 	border-image: none;
 	border-radius: 0px;
 	border-width: 0px;
 	font: DejaVu Sans;
-	font-size: 12px;
-	box-shadow: 1px 1px 4px -3px #000;
+	font-size: 11px;
+	box-shadow: 0px 0px 4px -3px #000, inset 0px -60px 0px #FFF;
 }
 
 .statusButton4 {
@@ -206,12 +207,12 @@
 	border-width: 0px;
 	border-radius: 0px;
 	font: DejaVu Sans;
-	font-size: 12px;
-	box-shadow: 1px 1px 4px -3px #000;
+	font-size: 16px;
+	box-shadow: 0px 0px 4px -3px #000;
 }
 
 .statusButton4:hover {
-	box-shadow: inset 0px -30px 0px #FFF;
+	box-shadow: inset 0px -30px 0px #FFF, 0px 0px 4px -3px #000;
 }
 
 .statusButton4:active {
