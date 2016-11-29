@@ -11,7 +11,7 @@ namespace OECLib.Utilities
     public class Logger
     {
 		public static void Initialize() {
-			Trace.Listeners.Add (new TextWriterTraceListener ("test.log"));
+			Trace.Listeners.Add (new TextWriterTraceListener (DateTime.Now.ToString("yyyy-MM-dd hh:mm")+".log"));
 			Trace.AutoFlush = true;
 		}
 

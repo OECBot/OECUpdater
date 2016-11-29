@@ -50,7 +50,7 @@ namespace OECGUI
 			builder.Autoconnect (this);
 			DeleteEvent += OnDeleteEvent;
 
-
+			Serializer.InitPlugins ();
 
 			bf = BotForm.Create ();
 
@@ -103,11 +103,13 @@ namespace OECGUI
 			box3.ShowAll ();
 
 			DashboardForm df = DashboardForm.Create ();
+			RequestWindow rw = RequestWindow.Create ();
 			notebook1.AppendPage (df, box);
+			rw.dashboard = df;
 			bf.dashboard = df;
 			notebook1.AppendPage (bf, box2);
 			notebook1.AppendPage (DashboardForm.Create (), box4);
-			notebook1.AppendPage (RequestWindow.Create(), box3);
+			notebook1.AppendPage (rw, box3);
 
 
 
@@ -120,6 +122,8 @@ namespace OECGUI
 			ApplyCss (this, provider, uint.MaxValue);
 			//ShowAll ();
 		}
+
+
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{

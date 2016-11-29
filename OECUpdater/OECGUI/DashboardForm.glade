@@ -15,6 +15,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Hello, This is a placeholder text!!</property>
+        <property name="xalign">0</property>
         <style>
           <class name="introText"/>
         </style>
@@ -26,58 +27,48 @@
     </child>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="width_request">530</property>
-        <property name="height_request">100</property>
+        <property name="width_request">532</property>
+        <property name="height_request">102</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="resize_mode">queue</property>
         <property name="column_spacing">43</property>
         <child>
-          <object class="GtkButton" id="button1">
-            <property name="label" translatable="yes">x
-plugins
-loaded.</property>
-            <property name="width_request">100</property>
-            <property name="height_request">100</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="xalign">0</property>
-            <property name="yalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="button2">
-            <property name="label" translatable="yes">managing
-x systems.
-x planets, etc</property>
-            <property name="width_request">100</property>
-            <property name="height_request">100</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="xalign">0</property>
-            <property name="yalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="button3">
             <property name="label" translatable="yes">Help</property>
             <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.019999999552965164</property>
+            <style>
+              <class name="statusButton4"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button5">
+            <property name="label" translatable="yes">
+
+
+Updates
+Pending</property>
+            <property name="width_request">100</property>
             <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
+            <style>
+              <class name="statusButton3"/>
+            </style>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -85,10 +76,12 @@ x planets, etc</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button5">
-            <property name="label" translatable="yes">x
-updates
-pending</property>
+          <object class="GtkButton" id="button2">
+            <property name="label" translatable="yes">
+
+
+Managed
+Systems</property>
             <property name="width_request">100</property>
             <property name="height_request">100</property>
             <property name="visible">True</property>
@@ -96,9 +89,35 @@ pending</property>
             <property name="receives_default">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
+            <style>
+              <class name="statusButton2"/>
+            </style>
           </object>
           <packing>
-            <property name="left_attach">3</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button1">
+            <property name="label" translatable="yes">
+
+
+Plugins
+Loaded</property>
+            <property name="width_request">100</property>
+            <property name="height_request">100</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <style>
+              <class name="statusButton1"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
             <property name="top_attach">0</property>
           </packing>
         </child>
@@ -110,20 +129,23 @@ pending</property>
     </child>
     <child>
       <object class="GtkFixed" id="fixed1">
-        <property name="width_request">543</property>
-        <property name="height_request">175</property>
+        <property name="width_request">537</property>
+        <property name="height_request">193</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">baseline</property>
         <child>
           <object class="GtkTreeView" id="historyTree">
-            <property name="width_request">531</property>
-            <property name="height_request">193</property>
+            <property name="width_request">529</property>
+            <property name="height_request">205</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection2"/>
             </child>
+            <style>
+              <class name="table"/>
+            </style>
           </object>
           <packing>
             <property name="x">4</property>
@@ -132,7 +154,74 @@ pending</property>
       </object>
       <packing>
         <property name="x">56</property>
-        <property name="y">182</property>
+        <property name="y">178</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label3">
+        <property name="width_request">95</property>
+        <property name="height_request">24</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">0</property>
+        <property name="xalign">0.05000000074505806</property>
+        <style>
+          <class name="statusText"/>
+        </style>
+      </object>
+      <packing>
+        <property name="x">62</property>
+        <property name="y">66</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label4">
+        <property name="width_request">100</property>
+        <property name="height_request">35</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">0</property>
+        <property name="xalign">0.05000000074505806</property>
+        <style>
+          <class name="statusText"/>
+        </style>
+      </object>
+      <packing>
+        <property name="x">205</property>
+        <property name="y">64</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label5">
+        <property name="width_request">100</property>
+        <property name="height_request">33</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">0</property>
+        <property name="xalign">0.05000000074505806</property>
+        <style>
+          <class name="statusText"/>
+        </style>
+      </object>
+      <packing>
+        <property name="x">348</property>
+        <property name="y">64</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label2">
+        <property name="width_request">100</property>
+        <property name="height_request">27</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">&gt; Go to Wiki</property>
+        <style>
+          <class name="fontRed"/>
+        </style>
+      </object>
+      <packing>
+        <property name="x">488</property>
+        <property name="y">132</property>
       </packing>
     </child>
     <style>
