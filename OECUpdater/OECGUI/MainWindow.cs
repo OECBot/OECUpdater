@@ -104,12 +104,15 @@ namespace OECGUI
 
 			DashboardForm df = DashboardForm.Create ();
 			RequestWindow rw = RequestWindow.Create ();
+			PluginWindow pw = PluginWindow.Create();
 			notebook1.AppendPage (df, box);
 			rw.dashboard = df;
 			bf.dashboard = df;
+			pw.dashboard = df;
 			notebook1.AppendPage (bf, box2);
-			notebook1.AppendPage (DashboardForm.Create (), box4);
+			//notebook1.AppendPage (DashboardForm.Create (), box4);
 			notebook1.AppendPage (rw, box3);
+			notebook1.AppendPage (pw, box4);
 
 
 
