@@ -13,6 +13,7 @@ namespace OECGUI
 	{
 		[UI] Notebook notebook1;
 		[UI] Image image1;
+		[UI] MenuButton menubutton2;
 		private BotForm bf;
 		public static RepositoryManager manager;
 		public static Session session;
@@ -51,6 +52,13 @@ namespace OECGUI
 			DeleteEvent += OnDeleteEvent;
 
 			Serializer.InitPlugins ();
+
+			Menu menu = new Menu ();
+			MenuItem confirm = new MenuItem ("Confirm");
+			menu.Append (confirm);
+			confirm.Activated += OnLogout;
+			menubutton2.Popup = menu;
+			menu.ShowAll ();
 
 			bf = BotForm.Create ();
 
@@ -95,35 +103,25 @@ namespace OECGUI
 			box.PackStart (l2, false, false, 0);
 			l2.StyleContext.AddClass ("fontWhite");
 
-			var box5 = new HBox();
-			Label l5 = new Label("Settings");
-			l5.StyleContext.AddClass ("fontWhite");
-			pixbuffloader = new Gdk.PixbufLoader ("Assets/settings.png", 32, 32);
-			var icon5 = new Image (pixbuffloader.Pixbuf);
-			box5.PackStart (icon5, false, false, 0);
-			box5.PackStart (l5, false, false, 0);
-
-
-
 			pixbuffloader = new Gdk.PixbufLoader ("Assets/logo.png", 110, 40);
 			image1.Pixbuf = pixbuffloader.Pixbuf;
 
 			box.ShowAll ();
 			box2.ShowAll ();
 			box3.ShowAll ();
-			box5.ShowAll ();
 
 			DashboardForm df = DashboardForm.Create ();
 			RequestWindow rw = RequestWindow.Create ();
-			SettingsWindow sw = SettingsWindow.Create ();
-			sw.InitializeSettingsManager(new SettingsManager("settings.ini"));
+			PluginWindow pw = PluginWindow.Create();
 			notebook1.AppendPage (df, box);
 			rw.dashboard = df;
 			bf.dashboard = df;
+			pw.dashboard = df;
 			notebook1.AppendPage (bf, box2);
-			notebook1.AppendPage (DashboardForm.Create (), box4);
+			//notebook1.AppendPage (DashboardForm.Create (), box4);
 			notebook1.AppendPage (rw, box3);
-			notebook1.AppendPage(sw, box5);
+			notebook1.AppendPage (pw, box4);
+
 
 
 
@@ -132,12 +130,15 @@ namespace OECGUI
 			l2.StyleContext.AddProvider (provider, uint.MaxValue);
 			l3.StyleContext.AddProvider (provider, uint.MaxValue);
 			l4.StyleContext.AddProvider (provider, uint.MaxValue);
-			l5.StyleContext.AddProvider (provider, uint.MaxValue);
 			ApplyCss (this, provider, uint.MaxValue);
 			//ShowAll ();
 		}
 
-
+		protected void OnLogout(object sender, EventArgs args) {
+			LoginWindow m = LoginWindow.Create ();
+			m.Show ();
+			this.Hide ();
+		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
