@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkFixed" id="SettingsForm">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Bot Username:</property>
+      </object>
+      <packing>
+        <property name="x">25</property>
+        <property name="y">30</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="usernameField">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="placeholder_text" translatable="yes">OECBot</property>
+      </object>
+      <packing>
+        <property name="x">225</property>
+        <property name="y">25</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Bot Password:</property>
+      </object>
+      <packing>
+        <property name="x">25</property>
+        <property name="y">80</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="passwordField">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="visibility">False</property>
+        <property name="invisible_char">●</property>
+        <property name="placeholder_text" translatable="yes">password</property>
+      </object>
+      <packing>
+        <property name="x">225</property>
+        <property name="y">75</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="timeField">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="placeholder_text" translatable="yes">HH:MM (24 hr clock)</property>
+      </object>
+      <packing>
+        <property name="x">225</property>
+        <property name="y">125</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Auto Check Time:</property>
+      </object>
+      <packing>
+        <property name="x">25</property>
+        <property name="y">130</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="saveButton">
+        <property name="label" translatable="yes">Save</property>
+        <property name="width_request">100</property>
+        <property name="height_request">10</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+      <packing>
+        <property name="x">295</property>
+        <property name="y">315</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="cancelButton">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="name">10-</property>
+        <property name="width_request">100</property>
+        <property name="height_request">-1</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+      <packing>
+        <property name="x">178</property>
+        <property name="y">315</property>
+      </packing>
+    </child>
+  </object>
+</interface>

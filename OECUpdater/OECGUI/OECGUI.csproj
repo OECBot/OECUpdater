@@ -81,6 +81,7 @@
     <EmbeddedResource Include="ExceptionDialog.glade">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="PluginWindow.glade" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="MainWindow.cs" />
     <Compile Include="RequestWindow.cs" />
     <Compile Include="ExceptionDialog.cs" />
+    <Compile Include="PluginWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

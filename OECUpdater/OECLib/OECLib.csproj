@@ -56,6 +56,7 @@
     <Compile Include="Utilities\HTTPRequests.cs" />
     <Compile Include="Interface\IPlugin.cs" />
     <Compile Include="Data\Measurement.cs" />
+    <Compile Include="Utilities\SettingsManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
