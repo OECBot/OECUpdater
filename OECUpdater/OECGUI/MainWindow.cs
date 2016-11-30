@@ -13,6 +13,7 @@ namespace OECGUI
 	{
 		[UI] Notebook notebook1;
 		[UI] Image image1;
+		[UI] MenuButton menubutton2;
 		private BotForm bf;
 		public static RepositoryManager manager;
 		public static Session session;
@@ -51,6 +52,13 @@ namespace OECGUI
 			DeleteEvent += OnDeleteEvent;
 
 			Serializer.InitPlugins ();
+
+			Menu menu = new Menu ();
+			MenuItem confirm = new MenuItem ("Confirm");
+			menu.Append (confirm);
+			confirm.Activated += OnLogout;
+			menubutton2.Popup = menu;
+			menu.ShowAll ();
 
 			bf = BotForm.Create ();
 
@@ -126,7 +134,11 @@ namespace OECGUI
 			//ShowAll ();
 		}
 
-
+		protected void OnLogout(object sender, EventArgs args) {
+			LoginWindow m = LoginWindow.Create ();
+			m.Show ();
+			this.Hide ();
+		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
