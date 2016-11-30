@@ -60,7 +60,7 @@ public partial class SettingsWindow: Gtk.Window
 		manager.ChangeSetting ("username", usernameField.Text);
 		manager.ChangeSetting ("password", passwordField.Text);
 
-		if (timeField.Text.Split (":").Length == 2) {
+		if (timeField.Text.Split (':').Length == 2) {
 			manager.ChangeSetting ("time", timeField.Text);
 		} else {
 			MessageDialog md = new MessageDialog (this.Handle);
