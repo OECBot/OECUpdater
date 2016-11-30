@@ -106,13 +106,25 @@ namespace OECGUI
 			pixbuffloader = new Gdk.PixbufLoader ("Assets/logo.png", 110, 40);
 			image1.Pixbuf = pixbuffloader.Pixbuf;
 
+			var box5 = new HBox();
+			Label l5 = new Label("Settings");
+			l5.StyleContext.AddClass ("fontWhite");
+			pixbuffloader = new Gdk.PixbufLoader ("Assets/settings.png", 32, 32);
+			var icon5 = new Image (pixbuffloader.Pixbuf);
+			box5.PackStart (icon5, false, false, 0);
+			box5.PackStart (l5, false, false, 0);
+
 			box.ShowAll ();
 			box2.ShowAll ();
 			box3.ShowAll ();
+			box5.ShowAll ();
 
 			DashboardForm df = DashboardForm.Create ();
 			RequestWindow rw = RequestWindow.Create ();
 			PluginWindow pw = PluginWindow.Create();
+			SettingsWindow sw = SettingsWindow.Create ();
+			sw.InitializeSettingsManager(new SettingsManager("settings.ini"));
+
 			notebook1.AppendPage (df, box);
 			rw.dashboard = df;
 			bf.dashboard = df;
@@ -121,7 +133,7 @@ namespace OECGUI
 			//notebook1.AppendPage (DashboardForm.Create (), box4);
 			notebook1.AppendPage (rw, box3);
 			notebook1.AppendPage (pw, box4);
-
+			notebook1.AppendPage(sw, box5);
 
 
 
@@ -130,6 +142,7 @@ namespace OECGUI
 			l2.StyleContext.AddProvider (provider, uint.MaxValue);
 			l3.StyleContext.AddProvider (provider, uint.MaxValue);
 			l4.StyleContext.AddProvider (provider, uint.MaxValue);
+			l5.StyleContext.AddProvider (provider, uint.MaxValue);
 			ApplyCss (this, provider, uint.MaxValue);
 			//ShowAll ();
 		}

@@ -14,6 +14,9 @@ namespace OECLib.Utilities
         {
             settings = new Dictionary<string, string>();
             this.path = path;
+			if (!File.Exists (path)) {
+				File.Create (path);
+			}
             string settingsblob = File.ReadAllText(path);
             string line;
             StringReader sr = new StringReader(settingsblob);
