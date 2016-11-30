@@ -36,13 +36,16 @@ public partial class SettingsWindow: Gtk.Window
 		
 	public SettingsWindow (Builder builder, IntPtr handle) : base (handle)
 	{
-		manager = new SettingsManager ("settings.ini");
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		saveButton.Clicked += SaveButton_Clicked;
 		cancelButton.Clicked += CancelButton_Clicked;
+	}
+
+	public void InitializeSettingsManager (SettingsManager manager) {
+		this.manager = manager;
 		loadSettings ();
 	}
 
@@ -53,11 +56,17 @@ public partial class SettingsWindow: Gtk.Window
 	}
 
 	void saveSettings() {
-		//TODO: sanitize input
 		//TODO: don't store plaintext password, that or do't commit settings.ini
 		manager.ChangeSetting ("username", usernameField.Text);
 		manager.ChangeSetting ("password", passwordField.Text);
-		manager.ChangeSetting ("time", timeField.Text);
+
+		if (timeField.Text.Split (":").Length == 2) {
+			manager.ChangeSetting ("time", timeField.Text);
+		} else {
+			MessageDialog md = new MessageDialog (this.Handle);
+			md.Text = "Time parameter not valid, using old setting";
+			md.Show ();
+		}
 	}
 
 	protected void SaveButton_Clicked (object sender, EventArgs e)
