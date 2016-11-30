@@ -19,8 +19,8 @@ namespace OECLib.Utilities
             StringReader sr = new StringReader(settingsblob);
             while((line = sr.ReadLine()) != null)
             {
-                string[] fields = Regex.Split(line, "^([^=;\r\n]+)=([^;\r\n]*)");
-                if (settings.ContainsKey(fields[0]))
+                string[] fields = Regex.Split(line, "=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                if (fields.Length != 2 || settings.ContainsKey(fields[0]))
                     continue;
                 settings.Add(fields[0], fields[1]);
             }
