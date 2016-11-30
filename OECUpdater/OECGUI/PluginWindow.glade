@@ -16,7 +16,7 @@
         <property name="can_focus">False</property>
         <property name="valign">baseline</property>
         <property name="margin_bottom">3</property>
-        <property name="label" translatable="yes">Plugin</property>
+        <property name="label" translatable="yes">Plugins</property>
       </object>
       <packing>
         <property name="x">262</property>
@@ -36,8 +36,8 @@
         </style>
       </object>
       <packing>
-        <property name="x">45</property>
-        <property name="y">345</property>
+        <property name="x">18</property>
+        <property name="y">344</property>
       </packing>
     </child>
     <child>
@@ -50,41 +50,47 @@
         <property name="receives_default">True</property>
       </object>
       <packing>
-        <property name="x">500</property>
-        <property name="y">345</property>
+        <property name="x">506</property>
+        <property name="y">342</property>
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="NasaPluginButton">
-        <property name="label" translatable="yes">Nasa Plugin</property>
-        <property name="width_request">100</property>
-        <property name="height_request">80</property>
+      <object class="GtkTreeView" id="pluginTree">
+        <property name="width_request">268</property>
+        <property name="height_request">275</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="margin_right">24</property>
-        <property name="xalign">0</property>
-        <property name="draw_indicator">True</property>
+        <property name="activate_on_single_click">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeview-selection1"/>
+        </child>
       </object>
       <packing>
-        <property name="x">221</property>
-        <property name="y">109</property>
+        <property name="x">20</property>
+        <property name="y">47</property>
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="EuroExoplanetPlguinButton">
-        <property name="label" translatable="yes">Euro Exoplanet Plugin</property>
-        <property name="width_request">100</property>
-        <property name="height_request">80</property>
+      <object class="GtkScrolledWindow" id="scrolledwindow1">
+        <property name="width_request">335</property>
+        <property name="height_request">275</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="xalign">0</property>
-        <property name="draw_indicator">True</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTextView" id="textview1">
+            <property name="width_request">335</property>
+            <property name="height_request">275</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="editable">False</property>
+            <property name="wrap_mode">word</property>
+          </object>
+        </child>
       </object>
       <packing>
-        <property name="x">221</property>
-        <property name="y">209</property>
+        <property name="x">297</property>
+        <property name="y">47</property>
       </packing>
     </child>
   </object>
