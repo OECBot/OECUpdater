@@ -34,8 +34,9 @@ public partial class SettingsWindow: Gtk.Window
 		}
 	}
 		
-	public SettingsWindow (Builder builder, IntPtr handle, SettingsManager manager) : base (handle)
+	public SettingsWindow (Builder builder, IntPtr handle) : base (handle)
 	{
+		manager = new SettingsManager ("settings.ini");
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
 		ApplyCss (this, provider, uint.MaxValue);
