@@ -24,7 +24,7 @@ namespace OECLib.Utilities
             {
                 string fname = files[i];
                 Assembly assembly = Assembly.LoadFrom(fname);
-                //Console.WriteLine(fname);
+                          
                 Type[] types = assembly.GetTypes();
                 for (int j = 0; j < types.Length; j++)
                 {
@@ -44,15 +44,15 @@ namespace OECLib.Utilities
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Failed to load plugin: " + ex.Message);
+                            Logger.WriteLine("Failed to load plugin: " + ex.Message);
                         }
                     }
                 }
             }
-			Console.WriteLine(plugins.Count + " plugins loaded:");
+			Logger.WriteLine(plugins.Count + " plugins loaded:");
 			foreach (IPlugin plugin in plugins.Values)
 			{
-				Console.WriteLine(plugin.GetName() + ": " + plugin.GetDescription());
+				Logger.WriteLine(plugin.GetName() + ": " + plugin.GetDescription());
 			}
         }
 
@@ -77,7 +77,7 @@ namespace OECLib.Utilities
 				xw.Flush();
 			}
 
-//			Console.WriteLine(output.ToString());
+//			Logger.WriteLine(output.ToString());
 
 		}
 
