@@ -25,7 +25,7 @@ namespace OECLib.Utilities
             while((line = sr.ReadLine()) != null)
             {
                 string[] fields = Regex.Split(line, "=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (fields.Length != 2 || settings.ContainsKey(fields[0]))
+                if (fields.Length != 2)
                     continue;
                 settings[fields[0]] = fields[1];
             }

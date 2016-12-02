@@ -82,12 +82,13 @@ namespace OECLib
 
         private async Task scheduleCheck(Func<Task> check)
         {
+			cts = new CancellationTokenSource ();
 			token = cts.Token;
             Logger.WriteLine("Bot scheduled to run in {0}", checkTime - DateTime.Now);
             Console.WriteLine("Bot will perform check in: {0}", checkTime - DateTime.Now);
             await Task.Delay((int)checkTime.Subtract(DateTime.Now).TotalMilliseconds, token);
 
-			cts = new CancellationTokenSource ();
+
             try
             {
                 

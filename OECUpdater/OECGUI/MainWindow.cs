@@ -130,6 +130,7 @@ namespace OECGUI
 			rw.dashboard = df;
 			bf.dashboard = df;
 			bf.settings = sw;
+			bf.request = rw;
 			pw.dashboard = df;
 			notebook1.AppendPage (bf, box2);
 			//notebook1.AppendPage (DashboardForm.Create (), box4);

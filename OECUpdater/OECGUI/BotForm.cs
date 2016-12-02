@@ -32,6 +32,7 @@ namespace OECGUI
 		private Thread botThread;
 		public DashboardForm dashboard;
 		public SettingsWindow settings;
+		public RequestWindow request;
 
 		public static BotForm Create ()
 		{
@@ -93,6 +94,12 @@ namespace OECGUI
 		private void UpdateLastDate() {
 			Gtk.Application.Invoke(delegate{SettingsWindow.manager.ChangeSetting ("lastCheckDate", bot.actualTime.ToString("yyyy-MM-dd"));});
 			Gtk.Application.Invoke(delegate{settings.updateCalendar(bot.actualTime);});
+			Gtk.Application.Invoke (delegate {
+				request.getAllPullRequest ();
+			});
+			Gtk.Application.Invoke (delegate {
+				SettingsWindow.manager.SaveSettingsToFile ();
+			});
 		}
 
 		protected void Start_Clicked(object sender, EventArgs args)

@@ -141,7 +141,7 @@ Loaded</property>
         </style>
       </object>
       <packing>
-        <property name="x">62</property>
+        <property name="x">59</property>
         <property name="y">66</property>
       </packing>
     </child>
@@ -175,7 +175,7 @@ Loaded</property>
         </style>
       </object>
       <packing>
-        <property name="x">348</property>
+        <property name="x">351</property>
         <property name="y">64</property>
       </packing>
     </child>

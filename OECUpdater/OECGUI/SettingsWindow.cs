@@ -63,6 +63,9 @@ public partial class SettingsWindow: Gtk.Window
 		usernameField.Text = manager.GetSetting ("username");
 		passwordField.Text = manager.GetSetting ("password");
 		timeField.Text = manager.GetSetting ("time");
+		DateTime last = DateTime.Now;
+		DateTime.TryParseExact(manager.GetSetting ("lastCheckDate"), "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out last);
+		calendar1.Date = last;
 	}
 
 	public void updateCalendar(DateTime date) {
