@@ -127,7 +127,7 @@ namespace NASAExoplanetPlugin
                 Planet planet = new Planet();
 
                 planet.AddMeasurement("name", fields[1]);
-				planet.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
+				star.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
 				string detectionMethod = fields [38].ToLower();
 				bool transit = false;

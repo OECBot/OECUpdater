@@ -184,6 +184,7 @@ namespace OECGUI
 			XmlSerializer serializer = new XmlSerializer (typeof(SerializableDictionary<String, List<String>>));
 			TextWriter writer = new StreamWriter("updatehistory.xml");
 			serializer.Serialize (writer, historyValues);
+			//writer.Close();
 		}
 
 		public void subPRData() {
@@ -196,8 +197,9 @@ namespace OECGUI
 			try {
 				TextReader reader = new StreamReader ("updatehistory.xml");
 				dict = serializer.Deserialize (reader) as SerializableDictionary<String, List<String>>;
+				//reader.Close();
 			}
-			catch {
+			catch (Exception ex) {
 				dict = null;
 			}
 			if (dict == null) {

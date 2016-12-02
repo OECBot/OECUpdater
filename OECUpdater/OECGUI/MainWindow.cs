@@ -45,7 +45,7 @@ namespace OECGUI
 		public MainWindow (Builder builder, IntPtr handle, RepositoryManager manager) : base (handle)
 		{
 			//revealer = new Widget (builder.GetObject ("revealer1").Handle);
-
+			this.Title = "Spazio";
 			CssProvider provider = new CssProvider ();
 
 			builder.Autoconnect (this);

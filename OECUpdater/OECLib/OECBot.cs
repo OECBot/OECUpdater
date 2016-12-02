@@ -176,10 +176,12 @@ namespace OECLib
 
             foreach (Task<List<StellarObject>> task in tasks)
             {
+				Console.WriteLine ("waiting");
                 token.ThrowIfCancellationRequested();
                 List<StellarObject> planets = await task;
                 newData.AddRange(planets);
             }
+			Console.WriteLine (newData.Count);
 			updatesFound = newData.Count;
 			updatesLeft = newData.Count;
             Console.WriteLine("Finished running plugins in: {0} seconds", (DateTime.Now - start).TotalSeconds);

@@ -42,7 +42,7 @@ public partial class LoginWindow: Gtk.Window
 	public LoginWindow (Builder builder, IntPtr handle) : base (handle)
 	{
 		//revealer = new Widget (builder.GetObject ("revealer1").Handle);
-
+		this.Title = "Login Window";
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
 		ApplyCss (this, provider, uint.MaxValue);
@@ -128,6 +128,14 @@ public partial class LoginWindow: Gtk.Window
 	protected async void RegisterCallBack ()
 	{
 		spinner1.Active = true;
+		if (!entry3.Text.Contains ("/")) {
+			MessageDialog mw = new MessageDialog (this, 
+				DialogFlags.DestroyWithParent, MessageType.Warning, 
+				ButtonsType.Close, "Invalid repository target." + entry3.Text);
+			mw.Run ();
+			mw.Destroy ();
+			return;
+		}
 		Session session = await Session.CreateOauthSession ();
 		if (session == null) {
 			return;
