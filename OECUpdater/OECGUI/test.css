@@ -98,7 +98,7 @@
 }
 
 .bg {
-	background-image: url("Assets/PxtaE4S.png");
+	background-image: url("Assets/T0CpCEE.png");
 }
 
 .notebook {
@@ -157,7 +157,7 @@
 }
 
 .introText {
-	color: #000;
+	
 	font: DejaVu Sans;
 	font-size: 18;
 }
@@ -245,5 +245,17 @@
 .table header {
 	background: #A2ADD0;
 	background-color: #A2ADD0;
+}
+
+.loadingSpinner {
+	color: #E03C31;
+}
+
+.fontGrey {
+	color: #989898;
+}
+
+.scaleButton {
+	background-image: Url("Assets/plus");
 }
 

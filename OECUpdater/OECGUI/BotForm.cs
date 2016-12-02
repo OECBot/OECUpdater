@@ -19,18 +19,19 @@ namespace OECGUI
 		[UI] Button stopButton;
 		[UI] Button clearButton;
 		[UI] Button forceButton;
-		[UI] Button scheduleButton;
+
 		[UI] TextView textview1;
 		[UI] ScrolledWindow scrolledwindow1;
-		[UI] Entry entry1;
-		[UI] Entry entry2;
 		[UI] Label statusLabel;
 		[UI] Label progressLabel;
 		[UI] Label timeLabel;
+		[UI] SpinButton spinbutton1;
+		[UI] CheckButton firstRunCheck;
 
 		public static OECBot bot;
 		private Thread botThread;
 		public DashboardForm dashboard;
+		public SettingsWindow settings;
 
 		public static BotForm Create ()
 		{
@@ -77,25 +78,27 @@ namespace OECGUI
 			Console.WriteLine ("Connected to repository: {0}/{1}", MainWindow.manager.repo.Owner.Login, MainWindow.manager.repo.Name);
 			bot = new OECBot (plugins, MainWindow.manager.repo);
 			bot.setUpdateDelegate (UpdateCount);
+			bot.setFinishDelegate (UpdateLastDate);
 			statusLabel.UseMarkup = true;
 			statusLabel.Markup = "<span foreground=\"red\">Off</span>";
-			timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd hh:mm");
+			timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd HH:mm");
 
 			startButton.Clicked += Start_Clicked;
 			stopButton.Clicked += Stop_Clicked;
 			clearButton.Clicked += Clear_Clicked;
 			forceButton.Clicked += Force_Clicked;
-			scheduleButton.Clicked += Schedule_Clicked;
 			//ShowAll ();
 		}
 
-		protected void Schedule_Clicked(object sender, EventArgs args) {
-			bot.checkTime = DateTime.Today.AddHours (double.Parse (entry1.Text)).AddMinutes(double.Parse(entry2.Text));
-			timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd hh:mm");
+		private void UpdateLastDate() {
+			Gtk.Application.Invoke(delegate{SettingsWindow.manager.ChangeSetting ("lastCheckDate", bot.actualTime.ToString("yyyy-MM-dd"));});
+			Gtk.Application.Invoke(delegate{settings.updateCalendar(bot.actualTime);});
 		}
 
 		protected void Start_Clicked(object sender, EventArgs args)
 		{
+			bot.Workers = (int) spinbutton1.Value;
+			bot.isFirstRun = firstRunCheck.Active;
 			if (botThread != null) {
 				if (bot.On) {
 					return;
@@ -109,7 +112,7 @@ namespace OECGUI
 		protected void Stop_Clicked(object sender, EventArgs args)
 		{
 			if (botThread != null) {
-				if (bot.On) {
+				if (bot.On || bot.isRunning) {
 					bot.Stop ();
 					botThread.Join ();
 					botThread = null;
@@ -124,6 +127,8 @@ namespace OECGUI
 
 		protected void Force_Clicked(object sender, EventArgs args)
 		{
+			bot.Workers = (int) spinbutton1.Value;
+			bot.isFirstRun = firstRunCheck.Active;
 			textview1.Buffer.Clear ();
 			botThread = new Thread(new ThreadStart(forceRun));
 			botThread.Start ();
@@ -149,14 +154,24 @@ namespace OECGUI
 			a.RetVal = false;
 		}
 
+		public void updateFromSettings() {
+			OECBot.userName = SettingsWindow.manager.GetSetting ("username");
+			OECBot.password = SettingsWindow.manager.GetSetting ("password");
+			String[] time = SettingsWindow.manager.GetSetting ("time").Split(':');
+			bot.checkTime = DateTime.Today.AddHours (double.Parse (time[0])).AddMinutes(double.Parse(time[1]));
+			Console.WriteLine ("Bot credentials set to: {0} - {1}.", OECBot.userName, OECBot.password);
+			timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd HH:mm");
+			DateTime.TryParse (SettingsWindow.manager.GetSetting ("lastCheckDate"), out bot.actualTime);
+		}
+
 		private async void startRun() {
 			await bot.Start ();
-			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd hh:mm"), bot.updateCount, bot.total, bot.lastRunCondition);});
+			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd HH:mm"), bot.updateCount, bot.total, bot.lastRunCondition);});
 		}
 
 		private void forceRun() {
 			bot.forceRun ();
-			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd hh:mm"), bot.updateCount, bot.total, bot.lastRunCondition);});
+			Gtk.Application.Invoke(delegate{dashboard.updateTreeList (DateTime.Now.ToString ("yyyy-MM-dd HH:mm"), bot.updateCount, bot.total, bot.lastRunCondition);});
 		}
 
 		private bool OnIdleStatus() {
@@ -175,8 +190,15 @@ namespace OECGUI
 			Gtk.Application.Invoke(delegate{progressLabel.Text = String.Format ("{0}/{1}  |  {2} Queued", bot.updatesLeft, bot.updatesFound, bot.commitQueue == null ? 0 : bot.commitQueue.Count);});
 			Gtk.Application.Invoke(delegate{OnIdleStatus ();});
 			Gtk.Application.Invoke (delegate {
-				timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd hh:mm");
+				timeLabel.Text = bot.checkTime.ToString ("yyyy-MM-dd HH:mm");
 			});
+		}
+
+		public static void updatePlugins(List<IPlugin> plugins) {
+			bot.plugins = plugins;
+			foreach (IPlugin plugin in plugins) {
+				Console.WriteLine ("Bot loaded plugin: {0}", plugin.GetName ());
+			}
 		}
 	
 	}

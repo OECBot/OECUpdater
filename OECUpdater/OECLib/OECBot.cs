@@ -19,8 +19,8 @@ namespace OECLib
     {
         public Session session;
         public RepositoryManager rm;
-        public const String userName = "OECBot";
-        public const String password = "UoJ84XJTXphgO4F";
+        public static String userName = "OECBot";
+        public static String password = "UoJ84XJTXphgO4F";
         private CancellationTokenSource cts;
         private CancellationToken token;
 
@@ -44,10 +44,13 @@ namespace OECLib
 
         public DateTime checkTime = DateTime.Today.AddHours(12);
         public DateTime lastCheckTime = DateTime.MinValue;
-        public DateTime tempTime;
+		public DateTime actualTime = DateTime.MinValue;
+        private DateTime tempTime;
 
 		public delegate void UpdateDelegate();
 		private UpdateDelegate updateDelegate;
+		public delegate void OnFinishDelegate();
+		private OnFinishDelegate finishDelegate;
 
         public OECBot(List<IPlugin> plugins, Repository repo)
         {
@@ -57,7 +60,7 @@ namespace OECLib
             this.On = false;
 			//this.cts = new CancellationTokenSource();
 			//this.token = cts.Token;
-            DateTime.TryParse("2016-09-01", out lastCheckTime);
+            DateTime.TryParse("2016-09-01", out actualTime);
         }
 
         public async Task Start()
@@ -71,10 +74,7 @@ namespace OECLib
             {
                 checkTime = checkTime.AddDays(1.0);
             }
-            if (isFirstRun)
-            {
-                lastCheckTime = DateTime.MinValue;
-            }
+
             await scheduleCheck(runChecks);
 
 
@@ -90,7 +90,7 @@ namespace OECLib
 			cts = new CancellationTokenSource ();
             try
             {
-                tempTime = DateTime.Now;
+                
                 checkTime = checkTime.AddDays(1.0);
 
                 scheduleCheck(runChecks);
@@ -133,7 +133,7 @@ namespace OECLib
 
 		public void forceRun()
 		{
-			this.On = true;
+			//this.On = true;
 			cts = new CancellationTokenSource ();
 			token = cts.Token;
 
@@ -143,8 +143,14 @@ namespace OECLib
 
         public async Task runChecks()
         {
+			if (isFirstRun) {
+				lastCheckTime = DateTime.MinValue;
+			} else {
+				lastCheckTime = actualTime;
+			}
+			tempTime = DateTime.Now;
 			token.ThrowIfCancellationRequested();
-			Logger.Initialize ();
+
             List<Task<List<StellarObject>>> tasks = new List<Task<List<StellarObject>>>();
 
             List<StellarObject> newData = new List<StellarObject>();
@@ -162,7 +168,7 @@ namespace OECLib
             {
                 Console.WriteLine("Running plugin: {0}", plugin.GetName());
                 Logger.WriteLine("Running plugin: {0}", plugin.GetName());
-				tasks.Add(Task<List<StellarObject>>.Run(() => plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"))));
+				tasks.Add(Task<List<StellarObject>>.Run(() => plugin.Run(lastCheckTime.ToString("yyyy-MM-dd")), token));
 
             }
 
@@ -275,11 +281,16 @@ namespace OECLib
 			if (updateDelegate != null) {
 				this.updateDelegate();
 			}
+
             if (isFirstRun)
             {
                 isFirstRun = false;
             }
             lastCheckTime = tempTime;
+			actualTime = lastCheckTime;
+			if (finishDelegate != null) {
+				this.finishDelegate();
+			}
         }
 			
         public async Task updateWorker()
@@ -292,8 +303,8 @@ namespace OECLib
 
                 Task<String> xmlTask = rm.getFile("systems/" + update.names[0].MeasurementValue + ".xml");
                 
-                    List<String> lastUpdates = new List<string>();
-					token.ThrowIfCancellationRequested();
+                //List<String> lastUpdates = new List<string>();
+				token.ThrowIfCancellationRequested();
 				try
 				{
                     String xml = await xmlTask;
@@ -353,26 +364,9 @@ namespace OECLib
 			this.updateDelegate = updateDelegate;
 		}
 
-        /*
-        public async Task firstRun(CancellationToken token)
-        {
-            var files = await rm.getAllFiles("systems/");
-            Task[] tasks = new Task[Workers];
-            fileQueue =  new Queue<RepositoryContent>();
-            foreach (RepositoryContent file in files)
-            {
-                fileQueue.Enqueue(file);
-            }
-            for (int i = 0; i < tasks.Length; i++)
-            {
-                tasks[i] = runWorker();
-            }
-            foreach (Task task in tasks)
-            {
-                await task;
-            }
-        }
-         */
+		public void setFinishDelegate(OnFinishDelegate finishDelegate) {
+			this.finishDelegate = finishDelegate;
+		}
 
         private List<StellarObject> dequeueUpdate()
         {
@@ -390,75 +384,6 @@ namespace OECLib
 
         }
 
-        /*
-        public async Task runWorker()
-        {
-            while (fileQueue.Count != 0)
-            {
-                var file = this.dequeueFile();
-                if (file == null)
-                {
-                    Console.WriteLine("dequeueFile() return null. Empty queue?");
-                    break;
-                }
-                try
-                {
-                    String content = await rm.getFile("systems/" + file.Name);
-                    String systemName = file.Name.Split('.')[0];
-                    XMLDeserializer xmld = new XMLDeserializer(content, false);
-                    StellarObject system = xmld.ParseXML();
-                    DateTime parsedDate;
-                    List<String> updateDates = system.getLastUpdate();
-                    updateDates.Sort();
-                    String sUpdate = updateDates[0];
-                    if (!DateTime.TryParseExact(sUpdate, "yy/MM/dd", null, DateTimeStyles.None, out parsedDate))
-                    {
-                        Console.WriteLine("Failed to parse lastupdate for file: " + file.Name);
-                        continue;
-                    }
-                    String lastUpdate = parsedDate.ToString("yyyy-MM-dd");
-                    List<StellarObject> systems = new List<StellarObject>();
-                    foreach (IPlugin plugin in plugins)
-                    {
-                        List<StellarObject> newStuff = plugin.Run(lastUpdate, systemName);
-                        if (newStuff.Count != 0)
-                        {
-                            systems.AddRange(newStuff);
-                        }
-                        
-                    }
-                    if (systems.Count == 0)
-                    {
-                        Console.WriteLine("Could not find any updates for system: " + file.Name);
-                        continue;
-                    }
-                    foreach (StellarObject update in systems) {
-                        PlanetMerger.Merge(update, system);
-                    }
-                    StringBuilder output = new StringBuilder();
-                    XmlWriterSettings ws = new XmlWriterSettings();
-                    ws.Indent = true;
-                    ws.OmitXmlDeclaration = true;
-                    using (XmlWriter xw = XmlWriter.Create(output, ws))
-                    {
-                        system.Write(xw);
-                        xw.Flush();
-                    }
-                    String newContent = output.ToString();
-                    output.Clear();
-                    await rm.BeginCommitAndPush("systems/" + file.Name, newContent, "N/A", false);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Failed to update " + file.Name);
-                    Console.WriteLine(ex.Message+ex.StackTrace);
-                    continue;
-                }
-                Console.WriteLine("Updated " + file.Name + " successfully");
-            }
-        }
-         */
-
         private async Task<List<StellarObject>> runPluginAsync(IPlugin plugin)
         {
             return plugin.Run(lastCheckTime.ToString("yyyy-MM-dd"));
@@ -466,9 +391,12 @@ namespace OECLib
 
         public void Stop()
         {
+			this.isRunning = false;
             this.On = false;
 			this.lastRunCondition = "Cancelled";
-
+			if (updateDelegate != null) {
+				this.updateDelegate();
+			}
             cts.Cancel();
             cts.Dispose();
         }

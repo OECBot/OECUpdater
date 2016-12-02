@@ -3,6 +3,11 @@
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <!-- interface-css-provider-path test.css -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkFixed" id="BotForm">
     <property name="width_request">650</property>
     <property name="height_request">400</property>
@@ -227,45 +232,49 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="entry1">
-        <property name="width_request">110</property>
-        <property name="height_request">29</property>
+      <object class="GtkCheckButton" id="firstRunCheck">
+        <property name="label" translatable="yes">First Run</property>
+        <property name="width_request">113</property>
+        <property name="height_request">34</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="width_chars">5</property>
-        <property name="placeholder_text" translatable="yes">Hours</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Check this you want to update all systems. (Sets last check time to min value)</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
       </object>
       <packing>
-        <property name="x">480</property>
-        <property name="y">198</property>
+        <property name="x">478</property>
+        <property name="y">162</property>
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="entry2">
-        <property name="width_request">110</property>
-        <property name="height_request">29</property>
+      <object class="GtkLabel" id="label5">
+        <property name="width_request">74</property>
+        <property name="height_request">23</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="width_chars">5</property>
-        <property name="placeholder_text" translatable="yes">Minutes</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Number of workers:</property>
       </object>
       <packing>
-        <property name="x">480</property>
-        <property name="y">234</property>
+        <property name="x">481</property>
+        <property name="y">194</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="scheduleButton">
-        <property name="label" translatable="yes">Set Schedule</property>
-        <property name="width_request">101</property>
-        <property name="height_request">38</property>
+      <object class="GtkSpinButton" id="spinbutton1">
+        <property name="width_request">104</property>
+        <property name="height_request">29</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
+        <property name="can_focus">False</property>
+        <property name="input_purpose">number</property>
+        <property name="adjustment">adjustment1</property>
+        <property name="climb_rate">1</property>
+        <property name="numeric">True</property>
       </object>
       <packing>
-        <property name="x">484</property>
-        <property name="y">274</property>
+        <property name="x">480</property>
+        <property name="y">218</property>
       </packing>
     </child>
   </object>

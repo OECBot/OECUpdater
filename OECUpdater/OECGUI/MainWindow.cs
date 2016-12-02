@@ -52,6 +52,7 @@ namespace OECGUI
 			DeleteEvent += OnDeleteEvent;
 
 			Serializer.InitPlugins ();
+			SettingsWindow.InitializeSettingsManager(new SettingsManager("settings.ini"));
 
 			Menu menu = new Menu ();
 			MenuItem confirm = new MenuItem ("Confirm");
@@ -123,11 +124,12 @@ namespace OECGUI
 			RequestWindow rw = RequestWindow.Create ();
 			PluginWindow pw = PluginWindow.Create();
 			SettingsWindow sw = SettingsWindow.Create ();
-			sw.InitializeSettingsManager(new SettingsManager("settings.ini"));
-
+			sw.Subscribe (bf.updateFromSettings);
+			sw.notifySubs ();
 			notebook1.AppendPage (df, box);
 			rw.dashboard = df;
 			bf.dashboard = df;
+			bf.settings = sw;
 			pw.dashboard = df;
 			notebook1.AppendPage (bf, box2);
 			//notebook1.AppendPage (DashboardForm.Create (), box4);

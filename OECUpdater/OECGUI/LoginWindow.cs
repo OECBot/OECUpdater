@@ -17,6 +17,7 @@ public partial class LoginWindow: Gtk.Window
 	[UI] Gtk.Entry entry2;
 	[UI] Gtk.Revealer revealer1;
 	[UI] Gtk.Entry entry3;
+	[UI] Spinner spinner1;
 
 	public static LoginWindow Create ()
 	{
@@ -82,10 +83,13 @@ public partial class LoginWindow: Gtk.Window
 			mw.Destroy ();
 			return;
 		}
-		Session session = new Session (uname, password);
-		try {
-			await session.SetCurrentUser ();
 
+
+		try {
+			Session session = new Session (uname, password);
+			spinner1.Active = true;
+			await session.SetCurrentUser ();
+			spinner1.Active = false;
 			MessageDialog md = new MessageDialog (this, 
 				                   DialogFlags.DestroyWithParent, MessageType.Info, 
 				                   ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
@@ -107,10 +111,12 @@ public partial class LoginWindow: Gtk.Window
 				                   ButtonsType.Close, "Login Failed: " + ex.Message);
 			md.Run ();
 			md.Destroy ();
+			spinner1.Active = false;
 		} catch (Exception ex) {
 			ExceptionDialog md = ExceptionDialog.Create (ex.Message, ex.StackTrace);
 			md.Run ();
 			md.Destroy ();
+			spinner1.Active = false;
 		}
 	}
 
@@ -121,7 +127,7 @@ public partial class LoginWindow: Gtk.Window
 
 	protected async void RegisterCallBack ()
 	{
-		
+		spinner1.Active = true;
 		Session session = await Session.CreateOauthSession ();
 		if (session == null) {
 			return;
@@ -129,8 +135,10 @@ public partial class LoginWindow: Gtk.Window
 		try {
 			await session.SetCurrentUser ();
 			if (Session.server.isCancelled) {
+				spinner1.Active = false;
 				return;
 			}
+			spinner1.Active = false;
 			MessageDialog md = new MessageDialog (this, 
 				                   DialogFlags.DestroyWithParent, MessageType.Info, 
 				                   ButtonsType.Close, "Succesfully authenticated as: " + session.current.Login);
@@ -150,10 +158,12 @@ public partial class LoginWindow: Gtk.Window
 				                    ButtonsType.Close, "Login Failed: " + ex.Message);
 			md.Run ();
 			md.Destroy ();
+			spinner1.Active = false;
 		} catch (Exception ex) {
 			ExceptionDialog md = ExceptionDialog.Create (ex.Message, ex.StackTrace);
 			md.Run ();
 			md.Destroy ();
+			spinner1.Active = false;
 		}
 
 	}

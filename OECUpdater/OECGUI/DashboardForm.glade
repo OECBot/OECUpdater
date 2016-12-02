@@ -27,12 +27,13 @@
     </child>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="width_request">532</property>
+        <property name="width_request">547</property>
         <property name="height_request">102</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">2</property>
         <property name="resize_mode">queue</property>
-        <property name="column_spacing">43</property>
+        <property name="column_spacing">47</property>
         <child>
           <object class="GtkButton" id="button3">
             <property name="label" translatable="yes">Help</property>
@@ -123,38 +124,8 @@ Loaded</property>
         </child>
       </object>
       <packing>
-        <property name="x">59</property>
+        <property name="x">51</property>
         <property name="y">61</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFixed" id="fixed1">
-        <property name="width_request">537</property>
-        <property name="height_request">193</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="valign">baseline</property>
-        <child>
-          <object class="GtkTreeView" id="historyTree">
-            <property name="width_request">529</property>
-            <property name="height_request">205</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection2"/>
-            </child>
-            <style>
-              <class name="table"/>
-            </style>
-          </object>
-          <packing>
-            <property name="x">4</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="x">56</property>
-        <property name="y">178</property>
       </packing>
     </child>
     <child>
@@ -222,6 +193,33 @@ Loaded</property>
       <packing>
         <property name="x">488</property>
         <property name="y">132</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow1">
+        <property name="width_request">541</property>
+        <property name="height_request">205</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="historyTree">
+            <property name="width_request">541</property>
+            <property name="height_request">205</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="treeview-selection"/>
+            </child>
+            <style>
+              <class name="table"/>
+            </style>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="x">54</property>
+        <property name="y">177</property>
       </packing>
     </child>
     <style>

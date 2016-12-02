@@ -1,53 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkFixed" id="SettingsForm">
+    <property name="width_request">650</property>
+    <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkLabel">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Bot Username:</property>
-      </object>
-      <packing>
-        <property name="x">25</property>
-        <property name="y">30</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkEntry" id="usernameField">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
+        <property name="width_request">166</property>
+        <property name="height_request">29</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="placeholder_text" translatable="yes">OECBot</property>
       </object>
       <packing>
-        <property name="x">225</property>
-        <property name="y">25</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Bot Password:</property>
-      </object>
-      <packing>
-        <property name="x">25</property>
-        <property name="y">80</property>
+        <property name="x">116</property>
+        <property name="y">22</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="passwordField">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
+        <property name="width_request">166</property>
+        <property name="height_request">29</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="visibility">False</property>
@@ -55,63 +31,102 @@
         <property name="placeholder_text" translatable="yes">password</property>
       </object>
       <packing>
-        <property name="x">225</property>
-        <property name="y">75</property>
+        <property name="x">116</property>
+        <property name="y">58</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="timeField">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
+        <property name="width_request">166</property>
+        <property name="height_request">29</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="placeholder_text" translatable="yes">HH:MM (24 hr clock)</property>
       </object>
       <packing>
-        <property name="x">225</property>
-        <property name="y">125</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="width_request">100</property>
-        <property name="height_request">10</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Auto Check Time:</property>
-      </object>
-      <packing>
-        <property name="x">25</property>
-        <property name="y">130</property>
+        <property name="x">116</property>
+        <property name="y">93</property>
       </packing>
     </child>
     <child>
       <object class="GtkButton" id="saveButton">
         <property name="label" translatable="yes">Save</property>
         <property name="width_request">100</property>
-        <property name="height_request">10</property>
+        <property name="height_request">29</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
       </object>
       <packing>
-        <property name="x">295</property>
-        <property name="y">315</property>
+        <property name="x">256</property>
+        <property name="y">345</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="cancelButton">
-        <property name="label" translatable="yes">Cancel</property>
-        <property name="name">10-</property>
-        <property name="width_request">100</property>
-        <property name="height_request">-1</property>
+      <object class="GtkCalendar" id="calendar1">
+        <property name="width_request">225</property>
+        <property name="height_request">156</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
+        <property name="year">2016</property>
+        <property name="month">11</property>
+        <property name="day">1</property>
       </object>
       <packing>
-        <property name="x">178</property>
-        <property name="y">315</property>
+        <property name="x">398</property>
+        <property name="y">52</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="width_request">100</property>
+        <property name="height_request">22</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Bot password:</property>
+      </object>
+      <packing>
+        <property name="x">9</property>
+        <property name="y">60</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label2">
+        <property name="width_request">100</property>
+        <property name="height_request">24</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Bot username:</property>
+      </object>
+      <packing>
+        <property name="x">8</property>
+        <property name="y">23</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label3">
+        <property name="width_request">100</property>
+        <property name="height_request">23</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Bot schedule:</property>
+      </object>
+      <packing>
+        <property name="x">11</property>
+        <property name="y">94</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label4">
+        <property name="width_request">109</property>
+        <property name="height_request">25</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Last check time:</property>
+      </object>
+      <packing>
+        <property name="x">398</property>
+        <property name="y">23</property>
       </packing>
     </child>
   </object>

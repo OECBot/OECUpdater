@@ -13,10 +13,12 @@ namespace OECLib.Utilities
         public SettingsManager(string path)
         {
             settings = new Dictionary<string, string>();
+			setupDefaults ();
             this.path = path;
 			if (!File.Exists (path)) {
-				File.Create (path);
+				File.Create (path).Close ();
 			}
+
             string settingsblob = File.ReadAllText(path);
             string line;
             StringReader sr = new StringReader(settingsblob);
@@ -25,7 +27,7 @@ namespace OECLib.Utilities
                 string[] fields = Regex.Split(line, "=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 if (fields.Length != 2 || settings.ContainsKey(fields[0]))
                     continue;
-                settings.Add(fields[0], fields[1]);
+                settings[fields[0]] = fields[1];
             }
         }
 
@@ -51,12 +53,13 @@ namespace OECLib.Utilities
         /// <returns>True if the change was successful, false otherwise.</returns>
         public bool ChangeSetting(string key, string value)
         {
-            if (settings.ContainsKey(key))
-            {
-                settings[key] = value;
-                return true;
-            }
-            return false;
+			if (settings.ContainsKey (key)) {
+				settings [key] = value;
+				return true;
+			}
+			settings [key] = value;
+			return true;
+            
         }
 
         /// <summary>
@@ -79,10 +82,15 @@ namespace OECLib.Utilities
             TextWriter newSettings = File.CreateText(path);
             foreach(string key in settings.Keys)
             {
-                newSettings.Write(key + "=" + settings[key]);
+                newSettings.WriteLine(key + "=" + settings[key]);
             }
             newSettings.Flush();
             newSettings.Close();
         }
+
+		private void setupDefaults() {
+			settings ["lastCheckDate"] = DateTime.Now.ToString ("yyyy-MM-dd");
+			settings ["time"] = "12:00";
+		}
     }
 }

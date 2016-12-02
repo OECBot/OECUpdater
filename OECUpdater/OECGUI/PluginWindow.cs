@@ -13,7 +13,6 @@ namespace OECGUI
 	public partial class PluginWindow: Gtk.Widget
 		{
 		[UI] Gtk.Button ApplyButton;
-		[UI] Gtk.Button CancelButton;
 		[UI] TreeView pluginTree;
 		[UI] TextView textview1;
 		//[UI] Gtk.Label listPluginLabel;
@@ -34,7 +33,6 @@ namespace OECGUI
 			builder.Autoconnect (this);
 
 			ApplyButton.Clicked += ApplyButton_Clicked;
-			CancelButton.Clicked += CancelButton_Clicked;
 			pluginTree.RowActivated += OnSelectRow;
 
 			setupTree ();
@@ -42,6 +40,24 @@ namespace OECGUI
 			pluginTree.Model = pluginList;
 			foreach (IPlugin plugin in Serializer.plugins.Values) {
 				pluginList.AppendValues (true, plugin);
+			}
+			loadFromSettings ();
+			ApplyButton_Clicked (null, null);
+		}
+
+		private void loadFromSettings() {
+			Gtk.TreeIter iter;
+			pluginList.GetIterFirst (out iter);
+			while (pluginList.IterIsValid (iter)) {
+				
+				IPlugin plugin = (IPlugin) pluginList.GetValue (iter, 1);
+				bool flag = false;
+
+				bool.TryParse(SettingsWindow.manager.GetSetting (plugin.GetName ()), out flag);
+
+				pluginList.SetValue (iter, 0, flag);
+
+				pluginList.IterNext (ref iter);
 			}
 		}
 
@@ -73,7 +89,7 @@ namespace OECGUI
 			TreeIter iter;
 			pluginList.GetIter (out iter, args.Path);
 			IPlugin plugin = (IPlugin)pluginList.GetValue (iter, 1);
-			textview1.Buffer.Text = String.Format("Name: {0}\nCreated By: {1}\nDescription: {2}", plugin.GetName(), plugin.GetAuthor(), plugin.GetDescription());
+			textview1.Buffer.Text = String.Format("Name: {0}\n\nCreated By: {1}\n\nDescription: {2}", plugin.GetName(), plugin.GetAuthor(), plugin.GetDescription());
 		}
 
 		private void OnToggle(object sender, ToggledArgs args) {
@@ -91,11 +107,6 @@ namespace OECGUI
 			(cell as Gtk.CellRendererText).Text = plugin.GetName ();
 		}
 
-		void CancelButton_Clicked (object sender, EventArgs e)
-		{
-			
-		}
-
 		void ApplyButton_Clicked (object sender, EventArgs e)
 		{
 			Gtk.TreeIter iter;
@@ -103,12 +114,15 @@ namespace OECGUI
 			pluginList.GetIterFirst (out iter);
 			while (pluginList.IterIsValid (iter)) {
 				bool flag = (bool) pluginList.GetValue (iter, 0);
+				IPlugin plugin = (IPlugin) pluginList.GetValue (iter, 1);
 				if (flag) {
-					plugins.Add ((IPlugin)pluginList.GetValue (iter, 1));
+					plugins.Add (plugin);
 				}
+				SettingsWindow.manager.ChangeSetting (plugin.GetName(), ""+flag);
 				pluginList.IterNext (ref iter);
 			}
-
+			BotForm.updatePlugins (plugins);
+			SettingsWindow.manager.SaveSettingsToFile ();
 		}
 
 
