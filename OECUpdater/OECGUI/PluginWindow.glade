@@ -36,22 +36,8 @@
         </style>
       </object>
       <packing>
-        <property name="x">18</property>
+        <property name="x">507</property>
         <property name="y">344</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="CancelButton">
-        <property name="label" translatable="yes">Cancel</property>
-        <property name="width_request">125</property>
-        <property name="height_request">43</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-      </object>
-      <packing>
-        <property name="x">506</property>
-        <property name="y">342</property>
       </packing>
     </child>
     <child>

@@ -28,7 +28,7 @@ namespace OECGUI
 		private ListStore updateList;
 		private SerializableDictionary<String, List<String>> historyValues;
 		private int prCount;
-		private int rowCount = 0;
+		public String gitHubPRAdress = "https://github.com/{0}/{1}/pulls?utf8=✓&q=is%3Apr%20is%3Aopen%20created%3A{2}T{3}..{4}T{5}";
 
 		public static DashboardForm Create ()
 		{
@@ -79,6 +79,7 @@ namespace OECGUI
 			button3.StyleContext.AddProvider (provider, uint.MaxValue);
 			button5.StyleContext.AddProvider (provider, uint.MaxValue);
 			button3.Clicked += Help_Clicked;
+			historyTree.RowActivated += rowClicked;
 
 			historyTree.StyleContext.AddProvider (provider, uint.MaxValue);
 
@@ -87,6 +88,18 @@ namespace OECGUI
 			setPluginData ();
 			setupTree ();
 			//ShowAll ();
+		}
+
+		protected void rowClicked(object sender, RowActivatedArgs args) {
+			TreeIter iter;
+			updateList.GetIter (out iter, args.Path);
+			String time = (String) updateList.GetValue (iter, 0);
+			String[] fields = time.Split (' ');
+			DateTime filter;
+			DateTime.TryParseExact (time, "yyyy-MM-dd HH:mm", null, System.Globalization.DateTimeStyles.None, out filter);
+			filter = filter.AddMinutes(-30).AddHours(5);
+			String address = String.Format (gitHubPRAdress, MainWindow.manager.repo.Owner.Login, MainWindow.manager.repo.Name, filter.ToString("yyyy-MM-dd"), filter.ToString ("HH:mm"), filter.ToString("yyyy-MM-dd"), filter.AddMinutes(32).ToString("HH:mm"));
+			System.Diagnostics.Process.Start (address);
 		}
 
 		private void renderCol(TreeViewColumn column, CellRenderer cell, ITreeModel model, TreeIter iter) {

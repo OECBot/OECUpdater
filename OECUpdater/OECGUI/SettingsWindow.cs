@@ -3,16 +3,20 @@ using Gtk;
 using OECLib.Utilities;
 using UI = Gtk.Builder.ObjectAttribute;
 using OECGUI;
+using System.Collections.Generic;
 
 public partial class SettingsWindow: Gtk.Window
 {
 	[UI] Gtk.Button saveButton;
-	[UI] Gtk.Button cancelButton;
 	[UI] Gtk.Entry usernameField;
 	[UI] Gtk.Entry passwordField;
 	[UI] Gtk.Entry timeField;
+	[UI] Calendar calendar1;
 
-	SettingsManager manager;
+	public delegate void UpdateDelegate();
+	private List<UpdateDelegate> subscribers;
+
+	public static SettingsManager manager;
 
 	public static SettingsWindow Create ()
 	{
@@ -36,48 +40,82 @@ public partial class SettingsWindow: Gtk.Window
 		
 	public SettingsWindow (Builder builder, IntPtr handle) : base (handle)
 	{
+		this.subscribers = new List<UpdateDelegate> ();
 		CssProvider provider = new CssProvider ();
 		provider.LoadFromPath ("test.css");
 		ApplyCss (this, provider, uint.MaxValue);
 		builder.Autoconnect (this);
 		saveButton.Clicked += SaveButton_Clicked;
-		cancelButton.Clicked += CancelButton_Clicked;
-	}
 
-	public void InitializeSettingsManager (SettingsManager manager) {
-		this.manager = manager;
 		loadSettings ();
 	}
 
-	void loadSettings() {
+	public void Subscribe(UpdateDelegate func) {
+		this.subscribers.Add (func);
+	}
+
+	public static void InitializeSettingsManager (SettingsManager manager) {
+		SettingsWindow.manager = manager;
+
+	}
+
+	private void loadSettings() {
 		usernameField.Text = manager.GetSetting ("username");
 		passwordField.Text = manager.GetSetting ("password");
 		timeField.Text = manager.GetSetting ("time");
 	}
 
-	void saveSettings() {
-		//TODO: don't store plaintext password, that or do't commit settings.ini
-		manager.ChangeSetting ("username", usernameField.Text);
-		manager.ChangeSetting ("password", passwordField.Text);
+	public void updateCalendar(DateTime date) {
+		calendar1.Date = date;
+	}
 
-		if (timeField.Text.Split (':').Length == 2) {
-			manager.ChangeSetting ("time", timeField.Text);
-		} else {
-			MessageDialog md = new MessageDialog (this.Handle);
-			md.Text = "Time parameter not valid, using old setting";
+	private void saveSettings() {
+		//TODO: don't store plaintext password, that or do't commit settings.ini
+		try {
+			SettingsWindow.manager.ChangeSetting ("username", usernameField.Text);
+			SettingsWindow.manager.ChangeSetting ("password", passwordField.Text);
+			if (isValidTime(timeField.Text)) {
+				manager.ChangeSetting ("time", timeField.Text);
+			} else {
+				
+				MessageDialog md = new MessageDialog (this.Handle);
+				md.Text = "Time parameter not valid, using old setting";
+				md.Show ();
+			}
+			SettingsWindow.manager.ChangeSetting("lastCheckDate", calendar1.GetDate().ToString("yyyy-MM-dd"));
+
+		}
+		catch (Exception ex) {
+			ExceptionDialog md = ExceptionDialog.Create (ex.Message, ex.StackTrace);
 			md.Show ();
 		}
+	}
+
+	private bool isValidTime(String time) {
+		String[] fields = time.Split (':');
+		if (fields.Length == 2) {
+			double hh;
+			double mm;
+			if (double.TryParse(fields[0], out hh) && double.TryParse(fields[1], out mm)) {
+				if (hh >= 0 && hh <= 23 && mm >= 0 && mm <= 59) {
+					return true;
+				}
+			}
+
+		}
+		return false;
 	}
 
 	protected void SaveButton_Clicked (object sender, EventArgs e)
 	{
 		saveSettings ();
-		manager.SaveSettingsToFile ();
-		this.Close ();
+		notifySubs ();
+		SettingsWindow.manager.SaveSettingsToFile ();
 	}
 
-	public void CancelButton_Clicked (object sender, EventArgs e)
-	{
-		this.Close ();
+	public void notifySubs() {
+		foreach (UpdateDelegate func in subscribers) {
+			func ();
+		}
 	}
 }
