@@ -2,6 +2,7 @@
 
 xbuild /p:Configuration=Release OECUpdater/OECUpdater.sln
 
-mv OECUpdater/OECUpdater/bin/Release .
+mv OECUpdater/OECGUI/bin/Release Release
 
-mono Release/OECUpdater.exe
+cd Release
+mono OECGUI.exe
