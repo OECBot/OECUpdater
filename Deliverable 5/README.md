@@ -24,6 +24,8 @@ The code inspection reports can be found in the directory:
 /Inspection Reports
 ```
 
+The code can be ran by using the script "compileandrun.sh" in the root project directory. Dependencies may need to be installed (a c# compiler) which can be automatically installed by running "dependencies.sh"
+
 
 The report structure is as follows:
 
