@@ -42,9 +42,11 @@ namespace OECLib.Data
 
             foreach (Measurement measurement in measurements)
             {
-                XmlElement element = root.CreateElement(measurement.MeasurementName);
-                element = measurement.WriteXmlTag(element);
-                node.AppendChild(element);
+				if (measurement.MeasurementValue != "") {
+					XmlElement element = root.CreateElement (measurement.MeasurementName);
+					element = measurement.WriteXmlTag (element);
+					node.AppendChild (element);
+				}
             }
         }
 
@@ -138,12 +140,16 @@ namespace OECLib.Data
 			}
 
 			foreach (Measurement entry in measurements) {
+				if (entry.MeasurementValue == "")
+					continue;
+
 				w.WriteStartElement(entry.MeasurementName);
                 if (entry.MeasurementAttributes != null)
                 {
-
 				    foreach (string key in entry.MeasurementAttributes.Keys) {
-					    w.WriteAttributeString (key, entry.MeasurementAttributes [key]);
+						if (entry.MeasurementAttributes [key] != "") {
+							w.WriteAttributeString (key, entry.MeasurementAttributes [key]);
+						}
 				    }
 
                 }
