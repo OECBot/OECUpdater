@@ -47,6 +47,7 @@ namespace ExoplanetEU
                 filter += String.Format(" and \"{0}\" in name", sysName);
             }
             string data = req.RequestAsString(String.Format(baseURL, filter), null);
+
 			starList = updateStars (data);
             StringReader sr = new StringReader(data);
 			string line = sr.ReadLine();
@@ -57,7 +58,7 @@ namespace ExoplanetEU
 				Star star;
 
 				string starName = fields[65];
-
+				Logger.WriteLine (starName);
 				if (starList.ContainsKey(starName))
 					star = starList [starName];
 				else
@@ -72,7 +73,7 @@ namespace ExoplanetEU
 					planet.AddMeasurement("name", name);
                 }
 
-				planet.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
+				star.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
 
 				string detectionMethod = fields [60].ToLower();
 				bool transit = false;
@@ -163,6 +164,7 @@ namespace ExoplanetEU
 				planet.AddMeasurement("lastupdate", (string.Format("{0}/{1}/{2}", time[0].Substring(2, 2), time[1], time[2])));
 				planet.AddMeasurement("discovery", fields[23]);
                 star.AddChild(planet);
+				planets.Add (star);
             }
             return planets;
 		}
