@@ -73,7 +73,7 @@ namespace ExoplanetEU
 					planet.AddMeasurement("name", name);
                 }
 
-				star.Source = string.Format("http://exoplanetarchive.ipac.caltech.edu/cgi-bin/DisplayOverview/nph-DisplayOverview?objname={0}", fields[1].Replace(' ', '+'));
+				star.Source = string.Format("http://exoplanet.eu/catalog/{0}/", fields[1].Replace(' ', '+'));
 
 				string detectionMethod = fields [60].ToLower();
 				bool transit = false;
