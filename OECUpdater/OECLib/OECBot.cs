@@ -19,8 +19,8 @@ namespace OECLib
     {
         public Session session;
         public RepositoryManager rm;
-        public static String userName = "OECBot";
-        public static String password = "UoJ84XJTXphgO4F";
+        public static String userName = "???";
+        public static String password = "???";
         private CancellationTokenSource cts;
         private CancellationToken token;
 
